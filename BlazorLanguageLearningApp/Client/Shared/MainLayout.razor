@@ -1,19 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div>
+        <NavMenu CurrentPage="@NavigationManager.Uri"/>
     </div>
-
+    
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        @* <CultureSelector /> *@
 
-        <article class="bottom-row px-4">
-            <CultureSelector />
-        </article>
-        <article class="content px-4">
+        <article>
             @Body
         </article>
     </main>

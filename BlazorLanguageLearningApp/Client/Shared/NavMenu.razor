@@ -1,49 +1,101 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorLanguageLearningApp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+﻿@inject NavigationManager NavigationManager
+@inject FolderSelectorService FolderSelectorService
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid d-flex">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-target="#navbarMenu" data-bs-toggle="collapse" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
-</div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav w-100">
+                <li class="nav-item">   
+                    <NavLink class="nav-link py-0" href="" Match="NavLinkMatch.All">
+                        <div class="d-lg-none" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                            <span class="oi oi-home my-3" aria-hidden="true"></span> Home
+                        </div>
+                        <div class="d-none d-lg-block">
+                            <span class="oi oi-home my-3" aria-hidden="true"></span> Home
+                        </div>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link py-0" href="counter">
+                        <div class="d-lg-none" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                            <span class="oi oi-plus my-3" aria-hidden="true"></span> Counter
+                        </div>
+                        <div class="d-none d-lg-block">
+                            <span class="oi oi-plus my-3" aria-hidden="true"></span> Counter
+                        </div>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link py-0" href="fetchdata">
+                        <div class="d-lg-none" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                            <span class="oi oi-list-rich my-3" aria-hidden="true"></span> Fetch data
+                        </div>
+                        <div class="d-none d-lg-block">
+                            <span class="oi oi-list-rich my-3" aria-hidden="true"></span> Fetch data
+                        </div>
+                    </NavLink>
+                </li>
+
+                <li class="nav-item dropdown ms-lg-auto my-auto">
+                    <a class="dropdown-toggle nav-link text-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Username
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end py-0">
+                        <li>
+                            <NavLink class="nav-link dropdown-item py-0 text-dark" href="culture-example-1">
+                                <div class="d-lg-none" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    <span class="oi oi-book my-3" aria-hidden="true"></span> Culture Example 1
+                                </div>
+                                <div class="d-none d-lg-block">
+                                    <span class="oi oi-book my-3" aria-hidden="true"></span> Culture Example 1
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link dropdown-item py-0 text-dark" href="culture-example-2">
+                                <div class="d-lg-none" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    <span class="oi oi-book my-3" aria-hidden="true"></span> Culture Example 2
+                                </div>
+                                <div class="d-none d-lg-block">
+                                    <span class="oi oi-book my-3" aria-hidden="true"></span> Culture Example 2
+                                </div>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            @if (CurrentPage == $"{NavigationManager.BaseUri}sets")
+            {
+                <div class="d-lg-none">
+                    <h3 class="text-center text-white mt-3">Folders</h3>
+
+                    <div class="subnav container overflow-auto">
+                        @foreach (Folder folder in FolderSelectorService.Folders)
+                        {
+                            <div class="container justify-content-center" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                <button class="btn btn-light w-100 mb-1" @onclick="@(e => FolderSelectorService.OpenFolder(folder.Id))">@folder.Name</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="culture-example-1">
-                <span class="oi oi-book" aria-hidden="true"></span> Culture Example 1
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="culture-example-2">
-                <span class="oi oi-book" aria-hidden="true"></span> Culture Example 2
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    </div>
+</nav>
+
 
 @code {
-    private bool collapseNavMenu = true;
+    [Parameter]
+    public string CurrentPage { get; set; } = string.Empty;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+    protected override void OnInitialized()
     {
-        collapseNavMenu = !collapseNavMenu;
+        FolderSelectorService.OnChange.Add(StateHasChanged);
     }
 }
