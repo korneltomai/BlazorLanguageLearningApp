@@ -79,8 +79,12 @@
                         <div class="folderSelector overflow-auto">
                             @foreach (Folder folder in FolderSelectorService.Folders)
                             {
-                                <div class="container justify-content-center" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
-                                    <button class="btn btn-primary w-100 mb-1" @onclick="@(e => FolderSelectorService.OpenFolder(folder.Id))">@folder.Name</button>
+                                <div class="container justify-content-center">
+                                    <a class="btn btn-primary w-100 mb-1" href="/sets/@folder.Id">
+                                        <div data-bs-target ="#navbarMenu" data-bs-toggle="collapse">
+                                            @folder.Name
+                                        </div>
+                                    </a>
                                 </div>
                             }
                         </div>

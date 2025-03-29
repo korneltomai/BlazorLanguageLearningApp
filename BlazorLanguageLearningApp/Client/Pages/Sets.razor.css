@@ -14,9 +14,13 @@
     }
 }
 
-.breadcrumb {
-    font-size: 1.25rem;
+@media (width>=992px) {
+    .breadcrumb {
+        font-size: 1.25rem;
+    }
 }
+
+
 
 
 
