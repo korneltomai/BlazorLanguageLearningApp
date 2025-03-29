@@ -72,14 +72,14 @@
 
             @if (CurrentPage == $"{NavigationManager.BaseUri}sets")
             {
-                <div class="d-lg-none">
-                    <h3 class="text-center text-white mt-3">Folders</h3>
+                <div class="subnav d-lg-none bg-light rounded">
+                    <h3 class="text-center mt-3 pt-3">Folders</h3>
 
-                    <div class="subnav container overflow-auto">
+                    <div class="folderSelector container overflow-auto pb-1">
                         @foreach (Folder folder in FolderSelectorService.Folders)
                         {
                             <div class="container justify-content-center" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
-                                <button class="btn btn-light w-100 mb-1" @onclick="@(e => FolderSelectorService.OpenFolder(folder.Id))">@folder.Name</button>
+                                <button class="btn btn-primary w-100 mb-1" @onclick="@(e => FolderSelectorService.OpenFolder(folder.Id))">@folder.Name</button>
                             </div>
                         }
                     </div>

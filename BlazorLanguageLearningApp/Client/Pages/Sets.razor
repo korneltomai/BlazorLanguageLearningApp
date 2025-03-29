@@ -7,13 +7,13 @@
 <PageTitle>Sets</PageTitle>
 
 <div class="row d-lg-flex m-0 p-0">
-    <div class="bg-primary d-none d-lg-block col-lg-3 col-xxl-2">
-        <h3 class="text-center text-white">Folders</h3>
-        <div class="sidebar overflow-auto">
+    <div class="bg-light d-none d-lg-block col-lg-3 col-xxl-2">
+        <h3 class="text-center mt-2">Folders</h3>
+        <div class="sidebar overflow-auto pb-1">
             @foreach (Folder folder in FolderSelectorService.Folders)
             {
                 <div class="container justify-content-center">
-                    <button class="btn btn-light w-100 mb-1" @onclick="@(e => FolderSelectorService.OpenFolder(folder.Id))">@folder.Name</button>
+                    <button class="btn btn-primary w-100 mb-1" @onclick="@(e => FolderSelectorService.OpenFolder(folder.Id))">@folder.Name</button>
                 </div>
             }
         </div>
