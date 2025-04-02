@@ -1,0 +1,59 @@
+﻿.sidebar {
+    height: calc(100vh - 168px);
+}
+
+.folderContent {
+    height: calc(100vh - 54px)
+}
+
+.learntPercantage {
+    height: 2.5rem;
+    width: 2.5rem;
+    color: white;
+}
+
+@media (width<=420px) {
+    .learntPercantage {
+        height: 2.15rem;
+        width: 2.15rem;
+        font-size: 0.90em;
+    }
+}
+
+a[class*="setLink"]:link,
+a[class*="setLink"]:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.form-floating > label::after {
+    background-color: transparent !important;
+}
+
+@media (width<=1185px) {
+    .sidebar {
+        height: calc(100vh - 167px);
+    }
+}
+
+@media (width<=1050px) {
+    .sidebar {
+        height: calc(100vh - 166px);
+    }
+}
+
+@media (width>=992px) {
+    .breadcrumb {
+        font-size: 1.25rem;
+    }
+
+    .folderContent {
+        height: calc(100vh - 64px)
+    }
+}
+
+
+
+
+
+

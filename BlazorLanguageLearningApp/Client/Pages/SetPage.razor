@@ -1,0 +1,37 @@
+﻿@page "/sets/{folderId:int}/{setId:int}"
+
+@using BlazorLanguageLearningApp.Shared
+
+@inject SetService SetService
+@inject NavigationManager Navigation
+
+@if (CurrentSet != null)
+{
+    <PageTitle>@CurrentSet!.Name</PageTitle>
+
+    <h3>@CurrentSet!.Name</h3>
+}
+
+@code {
+    [Parameter]
+    public int FolderId { get; set; }
+
+    [Parameter]
+    public int SetId { get; set; }
+
+    public Set? CurrentSet { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SetService.OnChange.Add(StateHasChanged);
+    }
+
+    protected override void OnParametersSet()
+    {
+        CurrentSet = SetService.GetSet(FolderId, SetId);
+
+        if (CurrentSet == null)
+            Navigation.NavigateTo($"/sets/{FolderId}");
+
+    }
+}
