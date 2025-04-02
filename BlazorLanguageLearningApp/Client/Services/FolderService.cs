@@ -5,6 +5,7 @@ namespace BlazorLanguageLearningApp.Client.Services
     public class FolderService
     {
         private List<Folder> Folders { get; set; } = new List<Folder>();
+        public Folder? CurrentFolder { get; private set; }
         public List<Action> OnChange = new List<Action>();
 
         public FolderService()
@@ -84,7 +85,8 @@ namespace BlazorLanguageLearningApp.Client.Services
 
         public Folder? GetFolder(int id)
         {
-            return Folders.Where(f => f.Id == id).FirstOrDefault();
+            CurrentFolder = Folders.Where(f => f.Id == id).FirstOrDefault();
+            return CurrentFolder;
         }
 
         public List<Folder> GetAllFolders()

@@ -1,5 +1,8 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using System.Text.RegularExpressions;
+
+@inject NavigationManager Navigation
 @inject FolderService FolderService
+@inject SetService SetService
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid d-flex">
@@ -70,7 +73,7 @@
                 </li>
             </ul>
 
-            @if (CurrentPage.Contains($"{NavigationManager.BaseUri}sets"))
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets(/\d+)?$"))
             {
                 <div class="subnav d-lg-none bg-light rounded">
                     <div>
@@ -100,6 +103,35 @@
                     </div>
                 </div>
             }
+            else if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+(/(practice|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
+            {
+                <div class="d-lg-none">
+                    <hr class="text-white" />
+                    <ul class="navbar-nav w-100">
+                        <li class="nav-item">
+                            <a class="nav-link p-0" href="/sets/@FolderService.CurrentFolder.Id/@SetService.CurrentSet.Id">
+                                <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    View set
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0" href="/sets/@FolderService.CurrentFolder.Id/@SetService.CurrentSet.Id/practice">
+                                <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    Practice
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0" href="/sets/@FolderService.CurrentFolder.Id/@SetService.CurrentSet.Id/exercises">
+                                <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    Exercises
+                                </div>
+                            </a>
+                        </li>
+                    </ul>  
+                </div>
+            }
         </div>
     </div>
 </nav>
@@ -112,5 +144,6 @@
     protected override void OnInitialized()
     {
         FolderService.OnChange.Add(StateHasChanged);
+        SetService.OnChange.Add(StateHasChanged);
     }
 }

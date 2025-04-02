@@ -43,10 +43,17 @@ else
             </div>
         </div>
 
-        <div class="folderContent d-flex flex-column col-lg-9 col-xxl-10">
+        <div class="content d-flex flex-column col-lg-9 col-xxl-10">
             @if (FolderId == default)
             {
                 <div class="container-fluid">
+                    <div class="mt-lg-2">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="sets">Sets</a></li>
+                            </ol>
+                        </nav>
+                    </div>
                     <p>No folder open</p>
                 </div>
             }
@@ -109,8 +116,8 @@ else
                     </div>
                 </div>
                 <div class="container-fluid overflow-auto">
-                    <div class="d-flex flex-column">
-                        @foreach (Set set in CurrentFolder.Sets)
+                    <div class="d-flex flex-column pb-4">
+                        @foreach (BlazorLanguageLearningApp.Shared.Set set in CurrentFolder.Sets)
                         {
                             <a class="setLink me-2 mt-2" href="/sets/@FolderId/@set.Id">
                                 <div class="d-flex border border-black rounded-3 row">

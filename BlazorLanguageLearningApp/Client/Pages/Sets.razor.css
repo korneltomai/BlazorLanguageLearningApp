@@ -2,8 +2,12 @@
     height: calc(100vh - 168px);
 }
 
-.folderContent {
-    height: calc(100vh - 54px)
+.content {
+    height: calc(100vh - 64px)
+}
+
+.breadcrumb {
+    font-size: 1.15rem;
 }
 
 .learntPercantage {
@@ -32,23 +36,13 @@ a[class*="setLink"]:visited {
 
 @media (width<=1185px) {
     .sidebar {
-        height: calc(100vh - 167px);
-    }
-}
-
-@media (width<=1050px) {
-    .sidebar {
-        height: calc(100vh - 166px);
+        height: calc(100vh - 168px);
     }
 }
 
 @media (width>=992px) {
     .breadcrumb {
         font-size: 1.25rem;
-    }
-
-    .folderContent {
-        height: calc(100vh - 64px)
     }
 }
 

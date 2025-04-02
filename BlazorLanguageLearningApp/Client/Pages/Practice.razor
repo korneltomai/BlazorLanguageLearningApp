@@ -1,0 +1,54 @@
+﻿@page "/sets/{folderId:int}/{setId:int}/practice"
+
+@inject FolderService FolderService
+@inject SetService SetService
+@inject NavigationManager Navigation
+
+@if (CurrentSet == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <PageTitle>Practice</PageTitle>
+
+    <div class="row d-lg-flex m-0 p-0">
+        <SetsSubNavigation FolderId="@FolderId" SetId="@SetId" />
+
+        <div class="content d-flex flex-column col-lg-9 col-xxl-10">
+            <div class="container-fluid mt-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="sets">Sets</a></li>
+                        <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder!.Name</a></li>
+                        <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@CurrentSet.Id">@CurrentSet.Name</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Practice</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int FolderId { get; set; }
+
+    [Parameter]
+    public int SetId { get; set; }
+
+    public BlazorLanguageLearningApp.Shared.Set? CurrentSet { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SetService.OnChange.Add(StateHasChanged);
+    }
+
+    protected override void OnParametersSet()
+    {
+        CurrentSet = SetService.GetSet(FolderId, SetId);
+
+        if (CurrentSet == null)
+            Navigation.NavigateTo($"/sets/{FolderId}");
+    }
+}
