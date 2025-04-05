@@ -1,9 +1,9 @@
-.subnav {
-    height: calc(100vh - 256px);
+.folderSelectorContainer {
+    height: calc(100vh - 196px);
 }
 
 .folderSelector {
-    height: calc(100vh - 366px);
+    height: calc(100vh - 302px);
 }
 
 
