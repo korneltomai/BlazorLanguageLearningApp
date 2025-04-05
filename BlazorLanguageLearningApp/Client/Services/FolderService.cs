@@ -10,14 +10,35 @@ namespace BlazorLanguageLearningApp.Client.Services
 
         public FolderService()
         {
+            List<Card> cards1 = new List<Card>
+            {
+                new Card(1, "Dog", "Kutya", "english", "hungarian", 100),
+                new Card(2, "Capybara", "Vizidisznó", "english", "hungarian", 90),
+                new Card(3, "Cat", "Macska", "english", "hungarian", 80),
+                new Card(4, "Cow", "Tehén", "english", "hungarian", 70),
+                new Card(5, "Bull", "Bika", "english", "hungarian", 60),
+                new Card(6, "Hamster", "Hörcsög", "english", "hungarian", 50),
+                new Card(7, "Mouse", "Egér", "english", "hungarian", 40),
+                new Card(8, "Rat", "Patkány", "english", "hungarian", 30),
+                new Card(9, "Worm", "Féreg", "english", "hungarian", 20),
+                new Card(10, "Bee", "Méh", "english", "hungarian", 10),
+                new Card(11, "Ant", "Hangya", "english", "hungarian", 0),
+            };
+
+            List<Card> cards2 = new List<Card>
+            {
+                new Card(12, "Football", "Focilabda", "english", "hungarian", 100),
+                new Card(13, "Basketball", "Kosárlabda", "english", "hungarian", 90)
+            };
+
             List<Set> sets1 = new List<Set>
             {
-                new Set(1, "Allatok", "Csomag az allatokhoz", 78),
+                new Set(1, "Allatok", "Csomag az allatokhoz", 78, cards1),
                 new Set(2, "Allatok2", "Csomag az allatokhoz csak sokkal nagyobb", 50),
                 new Set(3, "Set3", "This is set3 with an extremely long description. " +
                 "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large." +
                 "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large." +
-                "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", 30),
+                "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", 30, cards2),
                 new Set(4, "Set4", "This is set4", 0),
                 new Set(5, "Set5 with a long name", "Csomag az allatokhoz", 12),
                 new Set(6, "Set6 with a really really long name", "Csomag az allatokhoz", 33),

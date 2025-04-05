@@ -9,6 +9,19 @@
         public string TermsLanguage { get; set; }
         public string DefinitionsLanguage { get; set; }
         public int LearntPercantage { get; set; }
+        public List<Card> Cards { get; set; }
+
+        public Set(int id, string name, string description, int learntPercantage, List<Card> cards)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            Visibility = Visibility.Private;
+            TermsLanguage = "english";
+            DefinitionsLanguage = "hungarian";
+            LearntPercantage = learntPercantage;
+            Cards = cards;
+        }
 
         public Set(int id, string name, string description, int learntPercantage)
         {
@@ -19,6 +32,7 @@
             TermsLanguage = "english";
             DefinitionsLanguage = "hungarian";
             LearntPercantage = learntPercantage;
+            Cards = new List<Card>();
         }
     }
 }
