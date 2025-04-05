@@ -135,9 +135,6 @@
   <data name="CreateNewSet" xml:space="preserve">
     <value>Create new set</value>
   </data>
-  <data name="ShowPerfectSets" xml:space="preserve">
-    <value>Show perfect sets</value>
-  </data>
   <data name="OrderBy" xml:space="preserve">
     <value>Order by</value>
   </data>
