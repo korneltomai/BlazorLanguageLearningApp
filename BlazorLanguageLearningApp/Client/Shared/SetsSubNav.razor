@@ -1,0 +1,23 @@
+﻿@inject IStringLocalizer<SetsSubNav> Localization
+
+<div class="bg-light d-none d-lg-block col-3 col-xl-2">
+    <div class="sidebar overflow-auto pb-1">
+        <div class="container justify-content-center mt-3">
+            <a class="btn btn-primary w-100 mb-1" href="/sets/@FolderId/@SetId" active>@Localization["ViewSet"]</a>
+        </div>
+        <div class="container justify-content-center">
+            <a class="btn btn-primary w-100 mb-1" href="/sets/@FolderId/@SetId/practice">@Localization["Practice"]</a>
+        </div>
+        <div class="container justify-content-center">
+            <a class="btn btn-primary w-100 mb-1" href="/sets/@FolderId/@SetId/exercises">@Localization["Exercises"]</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int FolderId { get; set; }
+
+    [Parameter]
+    public int SetId { get; set; }
+}

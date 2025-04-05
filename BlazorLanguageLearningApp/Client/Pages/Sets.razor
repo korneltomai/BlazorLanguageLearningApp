@@ -5,6 +5,7 @@
 
 @inject FolderService FolderService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<Sets> Localization
 
 @if (FolderId != default && CurrentFolder == null)
 {
@@ -21,7 +22,7 @@ else
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
                         <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z" />
                     </svg>
-                    Folders
+                    @Localization["Folders"]
                 </h3>
                 <div class="sidebar overflow-auto pb-1">
                     @foreach (Folder folder in FolderService.GetAllFolders())
@@ -38,7 +39,7 @@ else
                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
                     </svg>
-                    Create new folder
+                    @Localization["CreateNewFolder"]
                 </button>
             </div>
         </div>
@@ -50,7 +51,7 @@ else
                     <div class="mt-lg-2">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="sets">Sets</a></li>
+                                <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
                             </ol>
                         </nav>
                     </div>
@@ -63,7 +64,7 @@ else
                     <div class="mt-lg-2">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-2">
-                                <li class="breadcrumb-item"><a href="sets">Sets</a></li>
+                                <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">@CurrentFolder.Name</li>
                             </ol>
                         </nav>
@@ -78,13 +79,13 @@ else
                                 @CurrentFolder.Description
                             </div>
                         </div>
-                        <div class="align-items-center col-12 col-sm-3 col-md-2 col-lg-3 col-xl-2 p-sm-0">
-                            <div class="row p-0 m-0">
-                                <div class="d-flex justify-content-center col-6 col-sm-12 p-0">
-                                    <button class="btn btn-primary d-block w-100 me-2 me-sm-0" type="button">Edit</button>
+                        <div class="d-flex align-items-center col-12 col-sm-3 col-md-2 col-lg-3 col-xl-2 ps-sm-0">
+                            <div class="d-flex d-sm-block w-100 p-0 m-0">
+                                <div class="col-6 col-sm-12 p-0">
+                                    <button class="btn btn-primary d-block w-100 me-2 me-sm-0" type="button">@Localization["Edit"]</button>
                                 </div>
-                                <div class="d-flex justify-content-center col-6 col-sm-12 mt-sm-1 p-0">
-                                    <button class="btn btn-danger d-block w-100 ms-2 ms-sm-0" type="button">Delete</button>
+                                <div class="col-6 col-sm-12 mt-sm-1 p-0">
+                                    <button class="btn btn-danger d-block w-100 ms-2 ms-sm-0" type="button">@Localization["Delete"]</button>
                                 </div>
                             </div>
                         </div>
@@ -93,22 +94,22 @@ else
                 <hr />
                 <div class="container-fluid mb-3">
                     <div class="d-flex align-items-center flex-wrap">
-                        <div class="me-auto col-12 col-sm-auto mb-2 mb-sm-0">
-                            <button class="btn btn-primary d-block w-100" type="button">Create new set</button>
+                        <div class="col-12 col-md-auto me-auto mb-2 mb-md-0">
+                            <button class="btn btn-primary d-block w-100" type="button">@Localization["CreateNewSet"]</button>
                         </div>
-                        <div class="d-flex align-items-center col-12 col-sm-auto ">
-                            <div class="form-check me-auto me-sm-3">
+                        <div class="d-flex align-items-center col-12 col-md-auto">
+                            <div class="form-check me-auto me-md-3">
                                 <input type="checkbox" class="form-check-input" id="showPerfectCheck">
-                                <label class="form-check-label" for="showPerfectCheck">Show perfect sets</label>
+                                <label class="form-check-label" for="showPerfectCheck">@Localization["ShowPerfectSets"]</label>
                             </div>
                             <div class="form-floating">
                                 <select class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by">
-                                    <option selected value="nameIncreasing">Name (a-z)</option>
-                                    <option value="nameDecreasing">Name (z-a)</option>
-                                    <option value="scoreIncreasing">Score increasing</option>
-                                    <option value="scoreDecreasing">Score decreasing</option>
+                                    <option selected value="nameIncreasing">@Localization["NameAZ"]</option>
+                                    <option value="nameDecreasing">@Localization["NameZA"]</option>
+                                    <option value="scoreIncreasing">@Localization["ScoreIncreasing"]</option>
+                                    <option value="scoreDecreasing">@Localization["ScoreDecreasing"]</option>
                                 </select>
-                                <label class="text-light" for="orderBySelect"><small>Order by</small></label>
+                                <label class="text-light" for="orderBySelect"><small>@Localization["OrderBy"]</small></label>
                             </div>
                         </div>
                     </div>

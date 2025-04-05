@@ -3,6 +3,7 @@
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<Set> Localization
 
 @if (CurrentSet == null)
 {
@@ -13,21 +14,21 @@ else
     <PageTitle>CurrentSet.Name</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
-        <SetsSubNavigation FolderId="@FolderId" SetId="@SetId" />
+        <SetsSubNav FolderId="@FolderId" SetId="@SetId" />
 
-        <div class="content d-flex flex-column col-lg-9 col-xxl-10">
+        <div class="content d-flex flex-column col-lg-9 col-xl-10">
             <div class="container-fluid">
                 <div class="mt-lg-2">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-2">
-                            <li class="breadcrumb-item"><a href="sets">Sets</a></li>
+                            <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
                             <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder!.Name</a></li>
                             <li class="breadcrumb-item active" aria-current="page">@CurrentSet.Name</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="d-flex flex-wrap flex-sm-nowrap">
-                    <div class="col-12 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                    <div class="col-12 col-sm-9 col-xxl-10">
                         <div class="d-flex align-items-center">
                             <span class="h2 mb-0">@CurrentSet.Name</span>
                             <span class="ms-3 text-secondary"><small>@CurrentSet.Visibility</small></span>
@@ -35,17 +36,17 @@ else
                         <div class="mb-2">
                             <small class="text-secondary">@CurrentSet.TermsLanguage - @CurrentSet.DefinitionsLanguage</small>
                         </div>
-                        <div class="description mb-3 mb-sm-0 me-sm-4 overflow-auto">
+                        <div class="description mb-3 mb-sm-0 me-sm-4 overflow-auto pe-2">
                             @CurrentSet.Description
                         </div>
                     </div>
-                    <div class="align-items-center col-12 col-sm-3 col-md-2 col-lg-3 col-xl-2 p-sm-0">
-                        <div class="row p-0 m-0">
-                            <div class="d-flex justify-content-center col-6 col-sm-12 p-0">
-                                <button class="btn btn-primary d-block w-100 me-2 me-sm-0" type="button">Edit</button>
+                    <div class="d-flex align-items-center col-12 col-sm-3 col-xxl-2 p-sm-0">
+                        <div class="d-flex d-sm-block w-100 p-0 m-0">
+                            <div class="col-6 col-sm-12 p-0">
+                                <button class="btn btn-primary d-block w-100 me-2 me-sm-0" type="button">@Localization["Edit"]</button>
                             </div>
-                            <div class="d-flex justify-content-center col-6 col-sm-12 mt-sm-1 p-0">
-                                <button class="btn btn-danger d-block w-100 ms-2 ms-sm-0" type="button">Delete</button>
+                            <div class="col-6 col-sm-12 mt-sm-1 p-0">
+                                <button class="btn btn-danger d-block w-100 ms-2 ms-sm-0" type="button">@Localization["Delete"]</button>
                             </div>
                         </div>
                     </div>
@@ -55,28 +56,28 @@ else
             <div class="container-fluid mb-3">
                 <div class="d-flex align-items-center flex-wrap">
                     <div class="col-12 col-sm-auto mb-2 mb-sm-0 me-0 me-sm-2">
-                        <button class="btn btn-primary d-block w-100" type="button">Create new card</button>
+                        <button class="btn btn-primary d-block w-100" type="button">@Localization["CreateNewCard"]</button>
                     </div>
-                    <div class="me-auto col-12 col-sm-auto mb-2 mb-sm-0 ">
+                    <div class="me-auto col-12 col-sm-auto mb-2 mb-sm-0">
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle d-block w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Import cards
+                                @Localization["ImportCards"]
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">From google sheets</a></li>
-                                <li><a class="dropdown-item" href="#">From another set</a></li>
+                                <li><a class="dropdown-item" href="#">@Localization["FromGoogleSheets"]</a></li>
+                                <li><a class="dropdown-item" href="#">@Localization["FromAnotherSet"]</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-12 col-sm-auto">
                         <div class="form-floating">
                             <select class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by">
-                                <option selected value="nameIncreasing">Name (a-z)</option>
-                                <option value="nameDecreasing">Name (z-a)</option>
-                                <option value="scoreIncreasing">Score increasing</option>
-                                <option value="scoreDecreasing">Score decreasing</option>
+                                <option selected value="nameIncreasing">@Localization["NameAZ"]</option>
+                                <option value="nameDecreasing">@Localization["NameZA"]</option>
+                                <option value="scoreIncreasing">@Localization["ScoreIncreasing"]</option>
+                                <option value="scoreDecreasing">@Localization["ScoreDecreasing"]</option>
                             </select>
-                            <label class="text-light" for="orderBySelect"><small>Order by</small></label>
+                            <label class="text-light" for="orderBySelect"><small>@Localization["OrderBy"]</small></label>
                         </div>
                     </div>
                 </div>

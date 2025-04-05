@@ -3,6 +3,7 @@
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<Practice> Localization
 
 @if (CurrentSet == null)
 {
@@ -13,16 +14,16 @@ else
     <PageTitle>Practice</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
-        <SetsSubNavigation FolderId="@FolderId" SetId="@SetId" />
+        <SetsSubNav FolderId="@FolderId" SetId="@SetId" />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10">
             <div class="container-fluid mt-lg-2">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="sets">Sets</a></li>
+                        <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
                         <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder!.Name</a></li>
                         <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@CurrentSet.Id">@CurrentSet.Name</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Practice</li>
+                        <li class="breadcrumb-item active" aria-current="page">@Localization["Practice"]</li>
                     </ol>
                 </nav>
             </div>
