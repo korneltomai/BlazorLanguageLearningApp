@@ -46,6 +46,12 @@ a[class*="setLink"]:visited {
     }
 }
 
+@media (width>=576px) {
+    .setContainer {
+        overflow: auto;
+    }
+}
+
 
 
 

@@ -135,25 +135,25 @@
                     <hr class="text-white" />
                     <ul class="navbar-nav w-100">
                         <li class="nav-item">
-                            <a class="nav-link p-0" href="/sets/@FolderService.CurrentFolder.Id/@SetService.CurrentSet.Id">
+                            <NavLink class="nav-link p-0" href="@($"/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}")" Match="NavLinkMatch.All">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Localization["ViewSet"]
                                 </div>
-                            </a>
+                            </NavLink>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-0" href="/sets/@FolderService.CurrentFolder.Id/@SetService.CurrentSet.Id/practice">
+                            <NavLink class="nav-link p-0" href="@($"/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/practice")">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Localization["Practice"]
                                 </div>
-                            </a>
+                            </NavLink>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-0" href="/sets/@FolderService.CurrentFolder.Id/@SetService.CurrentSet.Id/exercises">
+                            <NavLink class="nav-link p-0" href="@($"/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/exercises")">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Localization["Exercises"]
                                 </div>
-                            </a>
+                            </NavLink>
                         </li>
                     </ul>  
                 </div>

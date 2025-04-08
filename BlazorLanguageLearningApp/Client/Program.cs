@@ -10,6 +10,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddBlazorBootstrap();
 builder.Services.AddSingleton<FolderService>();
 builder.Services.AddSingleton<SetService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");

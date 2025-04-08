@@ -2,12 +2,11 @@
 @inject NavigationManager NavigationManager
 
 <div class="page">
-    <div>
-        <NavMenu CurrentPage="@NavigationManager.Uri"/>
-    </div>
+
+    <NavMenu CurrentPage="@NavigationManager.Uri"/>
     
     <main>
-        <article>
+        <article class="p-0">
             @Body
         </article>
     </main>
