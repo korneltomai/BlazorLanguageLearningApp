@@ -159,4 +159,7 @@
   <data name="Public" xml:space="preserve">
     <value>Public</value>
   </data>
+  <data name="SetsInFolder" xml:space="preserve">
+    <value>{0} set(s) in folder</value>
+  </data>
 </root>

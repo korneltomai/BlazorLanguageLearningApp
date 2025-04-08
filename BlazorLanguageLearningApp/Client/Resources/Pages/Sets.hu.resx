@@ -159,4 +159,7 @@
   <data name="Public" xml:space="preserve">
     <value>Publikus</value>
   </data>
+  <data name="SetsInFolder" xml:space="preserve">
+    <value>{0} kártya a mappában</value>
+  </data>
 </root>

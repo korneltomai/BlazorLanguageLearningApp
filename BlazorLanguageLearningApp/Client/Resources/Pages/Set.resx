@@ -153,4 +153,7 @@
   <data name="ScoreDecreasing" xml:space="preserve">
     <value>Score (decreasing)</value>
   </data>
+  <data name="CardsInSet" xml:space="preserve">
+    <value>{0} card(s) in set</value>
+  </data>
 </root>

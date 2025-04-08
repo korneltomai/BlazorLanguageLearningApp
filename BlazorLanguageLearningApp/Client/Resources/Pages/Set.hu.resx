@@ -153,4 +153,7 @@
   <data name="ScoreDecreasing" xml:space="preserve">
     <value>Pont szerint (csökkenő)</value>
   </data>
+  <data name="CardsInSet" xml:space="preserve">
+    <value>{0} kártya a csomagban</value>
+  </data>
 </root>

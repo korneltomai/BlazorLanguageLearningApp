@@ -2,10 +2,6 @@
     height: calc(100vh - 56px)
 }
 
-.description {
-    max-height: 100px;
-}
-
 .learntPercantage {
     height: 2.5rem;
     width: 2.5rem;

@@ -65,17 +65,17 @@ else
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-2">
                                 <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">@CurrentFolder.Name</li>
+                                <li class="breadcrumb-item active" aria-current="page">@CurrentFolder!.Name</li>
                             </ol>
                         </nav>
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-9 col-xxl-10">
                             <div class="d-flex align-items-center">
-                                <span class="h2">@CurrentFolder.Name</span>
-                                <span class="ms-2"><small>@CurrentFolder.Visibility</small></span>
+                                <span class="h2 mb-0">@CurrentFolder.Name</span>
+                                <span class="text-secondary ms-2 me-auto"><small>@CurrentFolder.Visibility</small></span>
                             </div>
-                            <div class="description mb-3 mb-sm-0 me-sm-4">
+                            <div class="mb-3 mb-sm-0 me-sm-4 pe-2">
                                 @CurrentFolder.Description
                             </div>
                         </div>
@@ -123,8 +123,11 @@ else
                             <label class="text-white" for="orderBySelect"><small>@Localization["OrderBy"]</small></label>
                         </div>
                     </div>
+                    <div class="d-flex flex-row-reverse w-100">
+                        <span class="h5 mt-2 mb-0">@String.Format($"{Localization["SetsInFolder"]}", @CurrentFolder.Sets.Count())</span>
+                    </div>
                 </div>
-                <div class="container-fluid overflow-auto">
+                <div class="container-fluid">
                     <div class="d-flex flex-column pb-3">
                         @foreach (BlazorLanguageLearningApp.Shared.Set set in CurrentFolder.Sets)
                         {

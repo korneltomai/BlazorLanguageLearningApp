@@ -27,16 +27,16 @@ else
                         </ol>
                     </nav>
                 </div>
-                <div class="d-flex flex-wrap flex-sm-nowrap">
+                <div class="row">
                     <div class="col-12 col-sm-9 col-xxl-10">
                         <div class="d-flex align-items-center">
                             <span class="h2 mb-0">@CurrentSet.Name</span>
-                            <span class="ms-3 text-secondary"><small>@CurrentSet.Visibility</small></span>
+                            <span class="text-secondary ms-3 me-auto"><small>@CurrentSet.Visibility</small></span>
                         </div>
                         <div class="mb-2">
                             <small class="text-secondary">@CurrentSet.TermsLanguage - @CurrentSet.DefinitionsLanguage</small>
                         </div>
-                        <div class="description mb-3 mb-sm-0 me-sm-4 overflow-auto pe-2">
+                        <div class="mb-3 mb-sm-0 me-sm-4 pe-2">
                             @CurrentSet.Description
                         </div>
                     </div>
@@ -100,8 +100,11 @@ else
                         </div>
                     </div>
                 </div>
+                <div class="d-flex flex-row-reverse w-100">
+                    <span class="h5 mt-2 mb-0">@String.Format($"{Localization["CardsInSet"]}", @CurrentSet.Cards.Count())</span>
+                </div>
             </div>
-            <div class="container-fluid overflow-auto">
+            <div class="container-fluid">
                 <div class="d-flex flex-column pb-3">
                     @foreach (Card card in CurrentSet.Cards)
                     {

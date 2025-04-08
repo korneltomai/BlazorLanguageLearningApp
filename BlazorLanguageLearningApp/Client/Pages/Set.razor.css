@@ -2,18 +2,6 @@
     height: calc(100vh - 64px)
 }
 
-@media (width<=767px) {
-    .description {
-        max-height: 200px;
-    }
-}
-
-@media (width<=575px) {
-    .description {
-        max-height: 100px;
-    }
-}
-
 .form-floating > label::after {
     background-color: transparent !important;
 }
