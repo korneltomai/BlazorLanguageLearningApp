@@ -2,6 +2,8 @@
 {
     public enum Visibility
     {
-        Private
+        Private,
+        FriendsOnly,
+        Public
     }
 }

@@ -162,4 +162,22 @@
   <data name="SetsInFolder" xml:space="preserve">
     <value>{0} set(s) in folder</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EnterFolderName" xml:space="preserve">
+    <value>Enter folder name</value>
+  </data>
+  <data name="EnterFolderDescription" xml:space="preserve">
+    <value>Enter folder description</value>
+  </data>
 </root>

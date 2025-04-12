@@ -104,10 +104,28 @@ namespace BlazorLanguageLearningApp.Client.Services
             Folders.Add(new Folder(30, "Folder30", "This is Folder30"));
         }
 
+        public void AddFolder(Folder folder)
+        {
+            Folders.Add(folder);
+            NotifyStateChanged();
+        }
+
+        public void RemoveFolder(Folder folder) 
+        { 
+            Folders.Remove(folder);
+            NotifyStateChanged();
+        }
+
+        public void UpdateFolder(int id, Folder folder)
+        {
+            Folder oldFolder = Folders.FirstOrDefault(f => f.Id == id)!;
+            oldFolder = folder;
+            NotifyStateChanged();
+        }
+
         public Folder? GetFolder(int id)
         {
-            CurrentFolder = Folders.Where(f => f.Id == id).FirstOrDefault();
-            return CurrentFolder;
+            return Folders.FirstOrDefault(f => f.Id == id);
         }
 
         public List<Folder> GetAllFolders()
