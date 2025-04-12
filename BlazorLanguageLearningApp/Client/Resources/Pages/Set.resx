@@ -156,4 +156,43 @@
   <data name="CardsInSet" xml:space="preserve">
     <value>{0} card(s) in set</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="FriendsOnly" xml:space="preserve">
+    <value>Friends only</value>
+  </data>
+  <data name="EnterSetName" xml:space="preserve">
+    <value>Enter set name</value>
+  </data>
+  <data name="EnterSetDescription" xml:space="preserve">
+    <value>Enter set description</value>
+  </data>
+  <data name="EditSet" xml:space="preserve">
+    <value>Edit set</value>
+  </data>
+  <data name="DeleteSet" xml:space="preserve">
+    <value>Delete set</value>
+  </data>
+  <data name="DeleteEmptySetText" xml:space="preserve">
+    <value>Are you sure you want to delete set '{0}'?</value>
+  </data>
+  <data name="DeleteFolderText" xml:space="preserve">
+    <value>'{0}' contains {1} sets. Are you sure you want to delete it?</value>
+  </data>
+  <data name="CreateNewSet" xml:space="preserve">
+    <value>Create new set</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
 </root>

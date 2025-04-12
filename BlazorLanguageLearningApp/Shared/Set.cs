@@ -1,15 +1,21 @@
-﻿namespace BlazorLanguageLearningApp.Shared
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BlazorLanguageLearningApp.Shared
 {
     public class Set
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+
+        [Required(ErrorMessage = "Folder name is required.")]
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Folder visibility is required.")]
         public Visibility Visibility { get; set; }
-        public string TermsLanguage { get; set; }
-        public string DefinitionsLanguage { get; set; }
+        public string TermsLanguage { get; set; } = "unknown";
+        public string DefinitionsLanguage { get; set; } = "unknown";
         public int LearntPercantage { get; set; }
-        public List<Card> Cards { get; set; }
+        public List<Card> Cards { get; set; } = new List<Card>();
 
         public Set(int id, string name, string description, int learntPercantage, List<Card> cards)
         {
@@ -32,7 +38,8 @@
             TermsLanguage = "english";
             DefinitionsLanguage = "hungarian";
             LearntPercantage = learntPercantage;
-            Cards = new List<Card>();
         }
+
+        public Set() { }
     }
 }

@@ -156,4 +156,43 @@
   <data name="CardsInSet" xml:space="preserve">
     <value>{0} kártya a csomagban</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Publikus</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Privát</value>
+  </data>
+  <data name="FriendsOnly" xml:space="preserve">
+    <value>Csak barátok</value>
+  </data>
+  <data name="EnterSetName" xml:space="preserve">
+    <value>Csomag neve</value>
+  </data>
+  <data name="EnterSetDescription" xml:space="preserve">
+    <value>Csomag leírása</value>
+  </data>
+  <data name="EditSet" xml:space="preserve">
+    <value>Csomag módosítása</value>
+  </data>
+  <data name="DeleteSet" xml:space="preserve">
+    <value>Csomag törlése</value>
+  </data>
+  <data name="DeleteEmptySetText" xml:space="preserve">
+    <value>Biztosan törölni szeretné a(z) '{0}' csomagot?</value>
+  </data>
+  <data name="DeleteFolderText" xml:space="preserve">
+    <value>'{0}' tartalmaz {1} kártyát. Biztosan törölni szeretné?</value>
+  </data>
+  <data name="CreateNewSet" xml:space="preserve">
+    <value>Új csomag létrehozása</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Létrehozás</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Elfogad</value>
+  </data>
 </root>
