@@ -1,15 +1,19 @@
 ﻿using BlazorLanguageLearningApp.Shared;
+using Microsoft.AspNetCore.Components;
 
 namespace BlazorLanguageLearningApp.Client.Services
 {
     public class FolderService
     {
+        private readonly NavigationManager _navigationManager;
         private List<Folder> Folders { get; set; } = new List<Folder>();
         public Folder? CurrentFolder { get; private set; }
         public List<Action> OnChange = new List<Action>();
 
-        public FolderService()
+        public FolderService(NavigationManager navigationManager)
         {
+            _navigationManager = navigationManager;
+
             List<Card> cards1 = new List<Card>
             {
                 new Card(1, "Dog", "Kutya", "english", "hungarian", 100),
@@ -107,25 +111,30 @@ namespace BlazorLanguageLearningApp.Client.Services
         public void AddFolder(Folder folder)
         {
             Folders.Add(folder);
-            NotifyStateChanged();
+
+            CurrentFolder = folder;
+            _navigationManager.NavigateTo($"/sets/{folder.Id}");
         }
 
         public void RemoveFolder(Folder folder) 
         { 
             Folders.Remove(folder);
-            NotifyStateChanged();
+
+            CurrentFolder = null;
+            _navigationManager.NavigateTo("/sets");
         }
 
-        public void UpdateFolder(int id, Folder folder)
+        public void UpdateFolder(Folder folder)
         {
-            Folder oldFolder = Folders.FirstOrDefault(f => f.Id == id)!;
+            Folder oldFolder = Folders.FirstOrDefault(f => f.Id == folder.Id)!;
             oldFolder = folder;
             NotifyStateChanged();
         }
 
-        public Folder? GetFolder(int id)
+        public Folder? GetFolder(int? id)
         {
-            return Folders.FirstOrDefault(f => f.Id == id);
+            CurrentFolder = Folders.FirstOrDefault(f => f.Id == id);
+            return CurrentFolder;
         }
 
         public List<Folder> GetAllFolders()

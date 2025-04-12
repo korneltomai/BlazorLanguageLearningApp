@@ -15,7 +15,7 @@ namespace BlazorLanguageLearningApp.Client.Services
 
         public Set? GetSet(int folderId, int setId)
         {
-            CurrentSet = _folderService.GetFolder(folderId)?.Sets.Where(s => s.Id == setId).FirstOrDefault();
+            CurrentSet = _folderService.GetFolder(folderId)?.Sets.FirstOrDefault(s => s.Id == setId);
             return CurrentSet;
         }
 

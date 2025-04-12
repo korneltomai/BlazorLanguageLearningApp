@@ -180,4 +180,19 @@
   <data name="EnterFolderDescription" xml:space="preserve">
     <value>Enter folder description</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Edit folder</value>
+  </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>Delete folder</value>
+  </data>
+  <data name="DeleteFolderText" xml:space="preserve">
+    <value>'{0}' contains {1} sets. Are you sure you want to delete it?</value>
+  </data>
+  <data name="DeleteEmptyFolderText" xml:space="preserve">
+    <value>Are you sure you want to delete folder '{0}'?</value>
+  </data>
 </root>

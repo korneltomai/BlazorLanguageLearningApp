@@ -180,4 +180,19 @@
   <data name="EnterFolderDescription" xml:space="preserve">
     <value>Mappa leírása</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Elfogad</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Mappa módosítása</value>
+  </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>Mappa törlése</value>
+  </data>
+  <data name="DeleteFolderText" xml:space="preserve">
+    <value>'{0}' tartalmaz {1} csomagot. Biztosan törölni szeretné?</value>
+  </data>
+  <data name="DeleteEmptyFolderText" xml:space="preserve">
+    <value>Biztosan törölni szeretné a(z) '{0}' mappát?</value>
+  </data>
 </root>
