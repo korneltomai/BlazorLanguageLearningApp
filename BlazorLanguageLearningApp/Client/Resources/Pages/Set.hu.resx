@@ -195,4 +195,19 @@
   <data name="Apply" xml:space="preserve">
     <value>Elfogad</value>
   </data>
+  <data name="EditCard" xml:space="preserve">
+    <value>Kártya módosítása</value>
+  </data>
+  <data name="Term" xml:space="preserve">
+    <value>Kifejezés</value>
+  </data>
+  <data name="TermLanguage" xml:space="preserve">
+    <value>Kifejezés nyelve</value>
+  </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Jelentés</value>
+  </data>
+  <data name="DefinitionLanguage" xml:space="preserve">
+    <value>Jelentés nyelve</value>
+  </data>
 </root>

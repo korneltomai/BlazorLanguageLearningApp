@@ -4,7 +4,7 @@
 @inject SetService SetService
 @inject IStringLocalizer<Pages.Set> Loc
 
-<Modal @ref="modal" Title="@Title" IsVerticallyCentered="true">
+<Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHiddenAsync">
     <BodyTemplate>
         <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
             <DataAnnotationsValidator />
@@ -136,6 +136,11 @@ else
     }
 
     private void UpdateVisibility(Visibility visibility) => set.Visibility = visibility;
+
+    private async Task OnModalHiddenAsync()
+    {
+        set = new();
+    }
 
     private async Task OnShowModalClick()
     {

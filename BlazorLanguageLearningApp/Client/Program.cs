@@ -13,6 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddSingleton<FolderService>();
 builder.Services.AddSingleton<SetService>();
+builder.Services.AddSingleton<CardService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 var host = builder.Build();

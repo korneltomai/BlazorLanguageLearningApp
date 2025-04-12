@@ -1,7 +1,8 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
-@inject FolderService FolderService
-@inject IStringLocalizer<Pages.Sets> Loc
+@inject SetService SetService
+@inject CardService CardService
+@inject IStringLocalizer<Pages.Set> Loc
 
 <Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHiddenAsync">
     <BodyTemplate>
@@ -9,41 +10,33 @@
             <DataAnnotationsValidator />
 
             <div class="form-group mb-3 container">
-                <label>@Loc["Name"]: <span class="text-danger">*</span></label>
+                <label>@Loc["Term"]: <span class="text-danger">*</span></label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@folder.Name" Placeholder="@Loc["EnterFolderName"]" MaxLength="25" />
-                    <ValidationMessage For="@(() => folder.Name)" />
+                    <TextInput @bind-Value="@card.Term" Placeholder="@Loc["EnterTerm"]" MaxLength="25" />
+                    <ValidationMessage For="@(() => card.Term)" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
-                <label>@Loc["Description"]:</label>
+                <label>@Loc["Definition"]: <span class="text-danger">*</span></label>
                 <div class="w-100">
-                    <TextAreaInput @bind-Value="@folder.Description" Rows="5" Placeholder="@Loc["EnterFolderDescription"]" MaxLength="500" />
+                    <TextInput @bind-Value="@card.Definition" Placeholder="@Loc["EnterDefinition"]" MaxLength="25" />
+                    <ValidationMessage For="@(() => card.Definition)" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
-                <InputRadioGroup @bind-Value="folder.Visibility">
-                    <div>
-                        <label>
-                            <InputRadio Value="Visibility.Private"/> 
-                            @Loc["Private"]
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <InputRadio Value="Visibility.FriendsOnly" /> 
-                            @Loc["FriendsOnly"]
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <InputRadio Value="Visibility.Public" /> 
-                            @Loc["Public"]
-                        </label>
-                    </div>
-                </InputRadioGroup>
+                <label>@Loc["TermLanguage"]:</label>
+                <div class="w-100">
+                    <TextInput @bind-Value="@card.TermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" />
+                </div>
+            </div>
+
+            <div class="form-group mb-3 container">
+                <label>@Loc["DefinitionLanguage"]:</label>
+                <div class="w-100">
+                    <TextInput @bind-Value="@card.DefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" />
+                </div>
             </div>
 
             <div class="row">
@@ -60,20 +53,22 @@
                         }
                     </Button>
                     <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="OnHideModalClick">@Loc["Close"]</Button>
+                    @if (Editing)
+                    {
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Class="float-start" @onclick="DeleteCard">@Loc["Delete"]</Button>
+                    }
+                    
                 </div>
             </div>
         </EditForm>
     </BodyTemplate>
 </Modal>
 
-@if (Editing) 
+@if (Editing)
 {
-    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100" @onclick="OnShowModalClick">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
-        </svg>
-        @Loc["Edit"]
-    </Button>
+    <button class="cardLink mb-3 btn p-0" @onclick="OnShowModalClick">
+        @ChildContent
+    </button>
 }
 else
 {
@@ -82,30 +77,38 @@ else
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
         </svg>
-        @Loc["CreateNewFolder"]
+        @Loc["CreateNewCard"]
     </Button>
 }
 
 @code {
     [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
     public bool Editing { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
     private string? Title { get; set; }
 
     private Modal modal;
-    private Folder folder = new();
+    private BlazorLanguageLearningApp.Shared.Card card = new();
     private EditContext? editContext;
 
     protected override void OnInitialized()
     {
         if (Editing)
         {
-            Title = Loc["EditFolder"];
-            folder = FolderService.CurrentFolder!;
+            Title = Loc["EditCard"];
+            card = CardService.GetCard(Id)!;
         }
         else
-            Title = Loc["CreateNewFolder"];
+            Title = Loc["CreateNewCard"];
 
-        editContext = new EditContext(folder);
+
+        editContext = new EditContext(card);
         base.OnInitialized();
     }
 
@@ -115,28 +118,32 @@ else
         {
             if (Editing)
             {
-                FolderService.UpdateFolder(folder);
+                CardService.UpdateCard(card);
             }
             else
             {
                 // Sets the id for the testing data
-                if (FolderService.GetAllFolders().Count > 0)
-                    folder.Id = FolderService.GetAllFolders().Max(f => f.Id) + 1;
+                if (SetService.CurrentSet!.Cards.Count > 0)
+                    card.Id = SetService.CurrentSet!.Cards.Max(c => c.Id) + 1;
                 else
-                    folder.Id = 1;
+                    card.Id = 1;
 
-                FolderService.AddFolder(folder);
+                CardService.AddCard(card);
             }
 
             await modal?.HideAsync();
         }
     }
 
-    private void UpdateVisibility(Visibility visibility) => folder.Visibility = visibility;
+    public async void DeleteCard()
+    {
+        CardService.RemoveCard(card);
+        await modal?.HideAsync();
+    }
 
     private async Task OnModalHiddenAsync()
     {
-        folder = new();
+        card = new();
     }
 
     private async Task OnShowModalClick()

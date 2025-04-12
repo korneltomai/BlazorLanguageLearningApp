@@ -195,4 +195,19 @@
   <data name="Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="EditCard" xml:space="preserve">
+    <value>Edit card</value>
+  </data>
+  <data name="Term" xml:space="preserve">
+    <value>Term</value>
+  </data>
+  <data name="TermLanguage" xml:space="preserve">
+    <value>Term language</value>
+  </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="DefinitionLanguage" xml:space="preserve">
+    <value>Defitiniton language</value>
+  </data>
 </root>

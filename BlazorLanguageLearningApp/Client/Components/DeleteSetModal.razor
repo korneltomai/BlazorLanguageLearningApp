@@ -34,7 +34,7 @@
 @code {
     private Modal modal;
 
-    private async Task DeleteSet()
+    private async void DeleteSet()
     {
         SetService.RemoveSet(SetService.CurrentSet!);
         await modal?.HideAsync();

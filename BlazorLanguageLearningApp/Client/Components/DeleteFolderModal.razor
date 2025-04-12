@@ -34,7 +34,7 @@
 @code {
     private Modal modal;
 
-    private async Task DeleteFolder()
+    private async void DeleteFolder()
     {
         FolderService.RemoveFolder(FolderService.CurrentFolder!);
         await modal?.HideAsync();
