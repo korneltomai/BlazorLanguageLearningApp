@@ -75,12 +75,14 @@ else
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">
-                            <select class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by">
-                                <option selected value="nameIncreasing">@Localization["NameAZ"]</option>
-                                <option value="nameDecreasing">@Localization["NameZA"]</option>
-                                <option value="scoreIncreasing">@Localization["ScoreIncreasing"]</option>
-                                <option value="scoreDecreasing">@Localization["ScoreDecreasing"]</option>
-                            </select>
+                            <InputSelect class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by" TValue="CardOrdering" Value="Ordering" ValueChanged="OrderSets" ValueExpression="@(() => Ordering)">
+                                <option value="@CardOrdering.TermIncreasing">@Localization["TermIncreasing"]</option>
+                                <option value="@CardOrdering.TermDecreasing">@Localization["TermDecreasing"]</option>
+                                <option value="@CardOrdering.DefinitionIncreasing">@Localization["DefinitionIncreasing"]</option>
+                                <option value="@CardOrdering.DefinitionDecreasing">@Localization["DefinitionDecreasing"]</option>
+                                <option value="@CardOrdering.ScoreIncreasing">@Localization["ScoreIncreasing"]</option>
+                                <option value="@CardOrdering.ScoreDecreasing">@Localization["ScoreDecreasing"]</option>
+                            </InputSelect>
                             <label class="text-light" for="orderBySelect"><small>@Localization["OrderBy"]</small></label>
                         </div>
                     </div>
@@ -139,6 +141,7 @@ else
     public int SetId { get; set; }
 
     public BlazorLanguageLearningApp.Shared.Set? CurrentSet { get; set; }
+    private CardOrdering Ordering { get; set; }
 
     protected override void OnInitialized()
     {
@@ -152,5 +155,23 @@ else
 
         if (CurrentSet == null)
             Navigation.NavigateTo($"/sets/{FolderId}");
+
+        CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Term).ToList();
+    }
+
+    private void OrderSets(CardOrdering selectedOrdering)
+    {
+        if (selectedOrdering == CardOrdering.TermIncreasing)
+            CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Term).ToList();
+        else if (selectedOrdering == CardOrdering.TermDecreasing)
+            CurrentSet!.Cards = CurrentSet.Cards.OrderByDescending(s => s.Term).ToList();
+        else if (selectedOrdering == CardOrdering.DefinitionIncreasing)
+            CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Definition).ToList();
+        else if (selectedOrdering == CardOrdering.DefinitionDecreasing)
+            CurrentSet!.Cards = CurrentSet.Cards.OrderByDescending(s => s.Definition).ToList();
+        else if (selectedOrdering == CardOrdering.ScoreIncreasing)
+            CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.LearntPercantage).ToList();
+        else if (selectedOrdering == CardOrdering.ScoreDecreasing)
+            CurrentSet!.Cards = CurrentSet.Cards.OrderByDescending(s => s.LearntPercantage).ToList();
     }
 }

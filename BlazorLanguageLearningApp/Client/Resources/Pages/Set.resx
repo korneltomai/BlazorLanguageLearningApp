@@ -210,4 +210,16 @@
   <data name="DefinitionLanguage" xml:space="preserve">
     <value>Defitiniton language</value>
   </data>
+  <data name="TermIncreasing" xml:space="preserve">
+    <value>Term (increasing)</value>
+  </data>
+  <data name="TermDecreasing" xml:space="preserve">
+    <value>Term (decreasing)</value>
+  </data>
+  <data name="DefinitionIncreasing" xml:space="preserve">
+    <value>Definition (increasing)</value>
+  </data>
+  <data name="DefinitionDecreasing" xml:space="preserve">
+    <value>Definition (decreasing)</value>
+  </data>
 </root>

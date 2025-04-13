@@ -31,8 +31,8 @@ else
                 <div class="col-6 col-sm-auto pe-2">
                     <div class="form-floating w-100 h-100">
                         <InputSelect class="form-select bg-primary text-light h-100" id="sideSelect" aria-label="Ask for term or definition select" @bind-Value="AskedSide">
-                            <option selected value="@CardSides.Definition">@Loc["Definition"]</option>
-                            <option value="@CardSides.Term">@Loc["Term"]</option>
+                            <option selected value="@CardSide.Definition">@Loc["Definition"]</option>
+                            <option value="@CardSide.Term">@Loc["Term"]</option>
                         </InputSelect>
                         <label class="text-light" for="sideSelect"><small>@Loc["AskFor"]</small></label>
                     </div>
@@ -119,14 +119,14 @@ else
     private int CurrentIndex { get; set; }
     private BlazorLanguageLearningApp.Shared.Card CurrentCard => CurrentSet!.Cards[CurrentIndex];
 
-    private CardSides AskedSide = CardSides.Definition;
+    private CardSide AskedSide = CardSide.Definition;
     private bool CardIsFlipped;
     private string FlipAnimationClass => CardIsFlipped ? string.Empty : "flip-term-container";
 
-    private string CardText => AskedSide == CardSides.Term ? CurrentCard.Term : CurrentCard.Definition;
-    private string CardBackText => AskedSide == CardSides.Term ? CurrentCard.Definition : CurrentCard.Term;
-    private string CardLanguage => AskedSide == CardSides.Term ? CurrentCard.TermLanguage : CurrentCard.DefinitionLanguage;
-    private string CardBackLanguage => AskedSide == CardSides.Term ? CurrentCard.DefinitionLanguage : CurrentCard.TermLanguage;
+    private string CardText => AskedSide == CardSide.Term ? CurrentCard.Term : CurrentCard.Definition;
+    private string CardBackText => AskedSide == CardSide.Term ? CurrentCard.Definition : CurrentCard.Term;
+    private string CardLanguage => AskedSide == CardSide.Term ? CurrentCard.TermLanguage : CurrentCard.DefinitionLanguage;
+    private string CardBackLanguage => AskedSide == CardSide.Term ? CurrentCard.DefinitionLanguage : CurrentCard.TermLanguage;
 
     protected override void OnInitialized()
     {
@@ -164,5 +164,5 @@ else
         CardIsFlipped = false;
     }
 
-    private enum CardSides { Term, Definition }
+    private enum CardSide { Term, Definition }
 }

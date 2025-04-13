@@ -145,10 +145,10 @@
     <value>Név szerint (z-a)</value>
   </data>
   <data name="ScoreIncreasing" xml:space="preserve">
-    <value>Pont szerint (csökkenő)</value>
+    <value>Pont szerint (növekvő)</value>
   </data>
   <data name="ScoreDecreasing" xml:space="preserve">
-    <value>Pont szerint (növekvő)</value>
+    <value>Pont szerint (csökkenő)</value>
   </data>
   <data name="Private" xml:space="preserve">
     <value>Privát</value>

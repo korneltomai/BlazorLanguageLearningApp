@@ -210,4 +210,16 @@
   <data name="DefinitionLanguage" xml:space="preserve">
     <value>Jelentés nyelve</value>
   </data>
+  <data name="TermIncreasing" xml:space="preserve">
+    <value>Kifejezés szerint (növekvő)</value>
+  </data>
+  <data name="TermDecreasing" xml:space="preserve">
+    <value>Kifejezés szerint (csökkenő)</value>
+  </data>
+  <data name="DefinitionIncreasing" xml:space="preserve">
+    <value>Jelentés szerint (növekvő)</value>
+  </data>
+  <data name="DefinitionDecreasing" xml:space="preserve">
+    <value>Jelentés szerint (csökkenő)</value>
+  </data>
 </root>

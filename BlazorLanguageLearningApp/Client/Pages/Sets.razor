@@ -92,12 +92,12 @@ else
                             <SetModal />
                         </div>
                         <div class="form-floating col-12 col-sm-auto ms-auto p-0">
-                            <select class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by">
-                                <option selected value="nameIncreasing">@Localization["NameAZ"]</option>
-                                <option value="nameDecreasing">@Localization["NameZA"]</option>
-                                <option value="scoreIncreasing">@Localization["ScoreIncreasing"]</option>
-                                <option value="scoreDecreasing">@Localization["ScoreDecreasing"]</option>
-                            </select>
+                            <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" TValue="SetOrdering" Value="Ordering" ValueChanged="OrderFolders" ValueExpression="@(() => Ordering)">
+                                <option selected value="@SetOrdering.NameIncreasing">@Localization["NameAZ"]</option>
+                                <option value="@SetOrdering.NameDecreasing">@Localization["NameZA"]</option>
+                                <option value="@SetOrdering.ScoreIncreasing">@Localization["ScoreIncreasing"]</option>
+                                <option value="@SetOrdering.ScoreDecreasing">@Localization["ScoreDecreasing"]</option>
+                            </InputSelect>
                             <label class="text-white" for="orderBySelect"><small>@Localization["OrderBy"]</small></label>
                         </div>
                     </div>
@@ -139,6 +139,7 @@ else
     public int FolderId { get; set; }
 
     private Folder? CurrentFolder { get; set; }
+    private SetOrdering Ordering { get; set; }
 
     protected override void OnInitialized()
     {
@@ -151,6 +152,21 @@ else
         if (FolderId != default)
         {
             CurrentFolder = FolderService.GetFolder(FolderId);
+            CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.Name).ToList();
         }
+    }
+
+    private void OrderFolders(SetOrdering selectedOrdering)
+    {
+        Console.WriteLine();
+
+        if (selectedOrdering == SetOrdering.NameIncreasing)
+            CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.Name).ToList();
+        else if (selectedOrdering == SetOrdering.NameDecreasing)
+            CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.Name).ToList();
+        else if (selectedOrdering == SetOrdering.ScoreIncreasing)
+            CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.LearntPercantage).ToList();
+        else if (selectedOrdering == SetOrdering.ScoreDecreasing)
+            CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.LearntPercantage).ToList();
     }
 }
