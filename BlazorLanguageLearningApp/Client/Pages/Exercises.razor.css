@@ -6,10 +6,6 @@
     height: calc(100vh - 64px)
 }
 
-.breadcrumb {
-    font-size: 1.15rem;
-}
-
 @media (width<=1185px) {
     .sidebar {
         height: calc(100vh - 167px);
@@ -19,11 +15,5 @@
 @media (width<=1050px) {
     .sidebar {
         height: calc(100vh - 166px);
-    }
-}
-
-@media (width>=992px) {
-    .breadcrumb {
-        font-size: 1.25rem;
     }
 }

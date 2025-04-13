@@ -118,9 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Sets" xml:space="preserve">
-    <value>Csomagok</value>
+    <value>Sets</value>
   </data>
-  <data name="Practice" xml:space="preserve">
-    <value>Gyakorlás</value>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Flashcards</value>
+  </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="DefinitionLanguage" xml:space="preserve">
+    <value>Defitiniton language</value>
+  </data>
+  <data name="Term" xml:space="preserve">
+    <value>Term</value>
+  </data>
+  <data name="TermLanguage" xml:space="preserve">
+    <value>Term language</value>
+  </data>
+  <data name="AskFor" xml:space="preserve">
+    <value>Ask for</value>
+  </data>
+  <data name="ShuffleCards" xml:space="preserve">
+    <value>Shuffle cards</value>
   </data>
 </root>

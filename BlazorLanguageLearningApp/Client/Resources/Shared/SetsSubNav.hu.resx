@@ -120,10 +120,10 @@
   <data name="ViewSet" xml:space="preserve">
     <value>Csomag megtekintése</value>
   </data>
-  <data name="Practice" xml:space="preserve">
-    <value>Gyakorlás</value>
-  </data>
   <data name="Exercises" xml:space="preserve">
     <value>Feladatok</value>
+  </data>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Tanulókártyák</value>
   </data>
 </root>

@@ -3,7 +3,7 @@
 @inject FolderService FolderService
 @inject IStringLocalizer<Pages.Sets> Loc
 
-<Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHiddenAsync">
+<Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHidden">
     <BodyTemplate>
         <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
             <DataAnnotationsValidator />
@@ -134,7 +134,7 @@ else
 
     private void UpdateVisibility(Visibility visibility) => folder.Visibility = visibility;
 
-    private async Task OnModalHiddenAsync()
+    private void OnModalHidden()
     {
         folder = new();
     }

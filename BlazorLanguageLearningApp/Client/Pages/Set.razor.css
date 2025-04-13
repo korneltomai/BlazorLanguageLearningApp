@@ -34,16 +34,6 @@ a[class*="cardLink"]:visited {
     color: black;
 }
 
-.breadcrumb {
-    font-size: 1.15rem;
-}
-
-@media (width>=992px) {
-    .breadcrumb {
-        font-size: 1.25rem;
-    }
-}
-
 .sidebar {
     height: calc(100vh - 168px);
 }

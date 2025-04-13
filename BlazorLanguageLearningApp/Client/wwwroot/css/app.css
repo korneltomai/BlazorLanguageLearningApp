@@ -95,3 +95,13 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+.breadcrumb {
+    font-size: 1.15rem;
+}
+
+@media (width>=992px) {
+    .breadcrumb {
+        font-size: 1.25rem;
+    }
+}

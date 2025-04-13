@@ -36,16 +36,6 @@ a[class*="setLink"]:visited {
     }
 }
 
-.breadcrumb {
-    font-size: 1.15rem;
-}
-
-@media (width>=992px) {
-    .breadcrumb {
-        font-size: 1.25rem;
-    }
-}
-
 @media (width>=576px) {
     .setContainer {
         overflow: auto;

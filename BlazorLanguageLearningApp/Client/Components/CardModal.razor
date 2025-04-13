@@ -4,7 +4,7 @@
 @inject CardService CardService
 @inject IStringLocalizer<Pages.Set> Loc
 
-<Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHiddenAsync">
+<Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHidden">
     <BodyTemplate>
         <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
             <DataAnnotationsValidator />
@@ -141,7 +141,7 @@ else
         await modal?.HideAsync();
     }
 
-    private async Task OnModalHiddenAsync()
+    private void OnModalHidden()
     {
         card = new();
     }

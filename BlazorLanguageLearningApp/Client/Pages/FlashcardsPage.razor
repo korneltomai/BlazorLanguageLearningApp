@@ -1,0 +1,168 @@
+﻿@page "/sets/{folderId:int}/{setId:int}/flashcards"
+
+@inject FolderService FolderService
+@inject SetService SetService
+@inject NavigationManager Navigation
+@inject IStringLocalizer<FlashcardsPage> Loc
+
+@if (CurrentSet == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <PageTitle>Practice</PageTitle>
+
+    <div class="row d-lg-flex m-0 p-0">
+        <SetsSubNav FolderId="@FolderId" SetId="@SetId" />
+
+        <div class="content d-flex flex-column col-lg-9 col-xl-10">
+            <div class="container-fluid mt-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="sets">@Loc["Sets"]</a></li>
+                        <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder!.Name</a></li>
+                        <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@CurrentSet.Id">@CurrentSet.Name</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@Loc["Flashcards"]</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="container-fluid d-flex mt-2">
+                <div class="col-6 col-sm-auto pe-2">
+                    <div class="form-floating w-100 h-100">
+                        <InputSelect class="form-select bg-primary text-light h-100" id="sideSelect" aria-label="Ask for term or definition select" @bind-Value="AskedSide">
+                            <option selected value="@CardSides.Definition">@Loc["Definition"]</option>
+                            <option value="@CardSides.Term">@Loc["Term"]</option>
+                        </InputSelect>
+                        <label class="text-light" for="sideSelect"><small>@Loc["AskFor"]</small></label>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-auto ps-2">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="ShuffleCards">
+                        @Loc["ShuffleCards"]
+                    </Button>
+                </div>
+            </div>
+            <div class="container-fluid flex-grow-1 align-content-center mb-5 pb-5 px-0">
+                <div class="d-flex justify-content-center">
+                    <div class="d-flex">
+                        <div class="d-none d-md-flex align-items-center">
+                            <div class="arrow-container me-2 ">
+                                <Button Type="ButtonType.Button" @onclick="DecreaseIndex" Class="h-100 w-100 border border-black rounded-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                    </svg>
+                                </Button>
+                            </div>
+                        </div>
+                        <div class="term-container mx-4">
+                            <Button Type="ButtonType.Button" Class="w-100 h-100 p-0" @onclick="() => CardIsFlipped = !CardIsFlipped">
+                                <div class="term-container-inner @FlipAnimationClass d-flex align-items-center justify-content-center border border-black rounded-3">
+                                    <div class="term-container-front">
+                                        <div class="h4 mb-0">@CardText</div>
+                                        <small class="text-secondary">@CardLanguage</small>
+                                    </div>
+                                    <div class="term-container-back">
+                                        <div class="h4 mb-0">@CardBackText</div>
+                                        <small class="text-secondary">@CardBackLanguage</small>
+                                    </div>
+                                </div>
+                            </Button>
+                        </div>
+                        <div class="d-none d-md-flex align-items-center">
+                            <div class="arrow-container ms-2">
+                                <Button Type="ButtonType.Button" @onclick="IncreaseIndex" Class="h-100 w-100 border border-black rounded-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                                    </svg>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <p class="fs-3">@(CurrentIndex + 1)/@CurrentSet.Cards.Count</p>
+                </div>
+
+                <div class="d-flex d-md-none justify-content-center mt-3">
+                    <div class="arrow-container me-2 ">
+                        <Button Type="ButtonType.Button" @onclick="DecreaseIndex" Class="h-100 w-100 border border-black rounded-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                            </svg>
+                        </Button>
+                    </div>
+                    <div class="arrow-container ms-2">
+                        <Button Type="ButtonType.Button" @onclick="IncreaseIndex" Class="h-100 w-100 border border-black rounded-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                            </svg>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int FolderId { get; set; }
+
+    [Parameter]
+    public int SetId { get; set; }
+
+    private Random random = new Random();
+
+    private BlazorLanguageLearningApp.Shared.Set? CurrentSet { get; set; }
+    private int CurrentIndex { get; set; }
+    private BlazorLanguageLearningApp.Shared.Card CurrentCard => CurrentSet!.Cards[CurrentIndex];
+
+    private CardSides AskedSide = CardSides.Definition;
+    private bool CardIsFlipped;
+    private string FlipAnimationClass => CardIsFlipped ? string.Empty : "flip-term-container";
+
+    private string CardText => AskedSide == CardSides.Term ? CurrentCard.Term : CurrentCard.Definition;
+    private string CardBackText => AskedSide == CardSides.Term ? CurrentCard.Definition : CurrentCard.Term;
+    private string CardLanguage => AskedSide == CardSides.Term ? CurrentCard.TermLanguage : CurrentCard.DefinitionLanguage;
+    private string CardBackLanguage => AskedSide == CardSides.Term ? CurrentCard.DefinitionLanguage : CurrentCard.TermLanguage;
+
+    protected override void OnInitialized()
+    {
+        SetService.OnChange.Add(StateHasChanged);
+    }
+
+    protected override void OnParametersSet()
+    {
+        CurrentSet = SetService.GetSet(FolderId, SetId);
+
+        if (CurrentSet == null)
+            Navigation.NavigateTo($"/sets/{FolderId}");
+    }
+
+    private void IncreaseIndex()
+    {
+        CurrentIndex++;
+        if (CurrentIndex >= CurrentSet!.Cards.Count)
+            CurrentIndex = 0;
+        CardIsFlipped = false;
+    }
+
+    private void DecreaseIndex()
+    {
+        CurrentIndex--;
+        if (CurrentIndex < 0)
+            CurrentIndex = CurrentSet!.Cards.Count - 1;
+        CardIsFlipped = false;
+    }
+
+    private void ShuffleCards()
+    {
+        CurrentSet!.Cards = CurrentSet!.Cards.OrderBy(c => random.Next()).ToList();
+        CurrentIndex = 0;
+        CardIsFlipped = false;
+    }
+
+    private enum CardSides { Term, Definition }
+}
