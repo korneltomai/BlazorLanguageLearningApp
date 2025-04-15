@@ -95,36 +95,7 @@
                 </li>
             </ul>
 
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets(/\d+)?$"))
-            {
-                <div class="folderSelectorContainer d-lg-none bg-light rounded mt-3 mb-1">
-                    <div>
-                        <h3 class="text-center pt-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
-                                <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z" />
-                            </svg>
-                            @Localization["Folders"]
-                        </h3>
-
-                        <div class="folderSelector overflow-auto">
-                            @foreach (Folder folder in FolderService.GetAllFolders())
-                            {
-                                <div class="container justify-content-center">
-                                    <a class="btn btn-primary w-100 mb-1" href="/sets/@folder.Id">
-                                        <div data-bs-target ="#navbarMenu" data-bs-toggle="collapse">
-                                            @folder.Name
-                                        </div>
-                                    </a>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="px-2 my-2">
-                        <FolderModal />
-                    </div>
-                </div>
-            }
-            else if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+(/(flashcards$|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+(/(flashcards$|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
             {
                 <div class="d-lg-none">
                     <hr class="text-white" />

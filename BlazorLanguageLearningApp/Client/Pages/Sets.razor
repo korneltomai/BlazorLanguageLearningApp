@@ -7,7 +7,7 @@
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
-@inject IStringLocalizer<Sets> Localization
+@inject IStringLocalizer<Sets> Loc
 
 @if (FolderId != default && CurrentFolder == null)
 {
@@ -24,9 +24,9 @@ else
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
                         <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z" />
                     </svg>
-                    @Localization["Folders"]
+                    @Loc["Folders"]
                 </h3>
-                <div class="sidebar overflow-auto pb-1">
+                <div class="sidebar overflow-auto py-1">
                     @foreach (Folder folder in FolderService.GetAllFolders())
                     {
                         <div class="container justify-content-center">
@@ -42,6 +42,23 @@ else
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
             <BreadcrumbNavigation CurrentPage="@Navigation.Uri"/>
+
+            <div class="d-flex container-fluid d-lg-none">
+                <div class="form-floating col-9 pe-2">
+                    <InputSelect class="form-select bg-primary text-white h-100" id="folderSelect" aria-label="Change selected folder" @bind-Value:get="FolderId" @bind-Value:set="ChangeFolder">
+                        <option value="0">@Loc["SelectAFolder"]</option>
+                        @foreach (Folder folder in FolderService.GetAllFolders())
+                        {
+                            <option value="@folder.Id">@folder.Name</option>
+                        }
+                    </InputSelect>
+                    <label class="text-white" for="folderSelect"><small>@Loc["Folders"]</small></label>
+                </div>
+                <div class="col-3">
+                    <FolderModal />
+                </div>
+            </div>
+            <hr class="d-lg-none mb-2" />
 
             @if (FolderId == default)
             {
@@ -82,16 +99,16 @@ else
                         </div>
                         <div class="form-floating col-12 col-sm-auto ms-auto p-0">
                             <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderFolders">
-                                <option value="@SetOrdering.NameIncreasing">@Localization["NameAZ"]</option>
-                                <option value="@SetOrdering.NameDecreasing">@Localization["NameZA"]</option>
-                                <option value="@SetOrdering.ScoreIncreasing">@Localization["ScoreIncreasing"]</option>
-                                <option value="@SetOrdering.ScoreDecreasing">@Localization["ScoreDecreasing"]</option>
+                                <option value="@SetOrdering.NameIncreasing">@Loc["NameAZ"]</option>
+                                <option value="@SetOrdering.NameDecreasing">@Loc["NameZA"]</option>
+                                <option value="@SetOrdering.ScoreIncreasing">@Loc["ScoreIncreasing"]</option>
+                                <option value="@SetOrdering.ScoreDecreasing">@Loc["ScoreDecreasing"]</option>
                             </InputSelect>
-                            <label class="text-white" for="orderBySelect"><small>@Localization["OrderBy"]</small></label>
+                            <label class="text-white" for="orderBySelect"><small>@Loc["OrderBy"]</small></label>
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse w-100">
-                        <span class="fs-5 mt-2 mb-0">@String.Format($"{Localization["SetsInFolder"]}", @CurrentFolder.Sets.Count())</span>
+                        <span class="fs-5 mt-2 mb-0">@String.Format($"{Loc["SetsInFolder"]}", @CurrentFolder.Sets.Count())</span>
                     </div>
                 </div>
                 <div class="setContainer container-fluid">
@@ -161,6 +178,11 @@ else
 
     private void ChangeFolder(int folderId)
     {
-        Navigation.NavigateTo($"/sets/{FolderId}");
+        FolderId = folderId;
+
+        if (FolderId == 0)
+            Navigation.NavigateTo($"/sets");
+        else
+            Navigation.NavigateTo($"/sets/{FolderId}");
     }
 }

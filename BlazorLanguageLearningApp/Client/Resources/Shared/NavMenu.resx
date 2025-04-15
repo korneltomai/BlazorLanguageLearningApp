@@ -129,12 +129,6 @@
   <data name="UserSettings" xml:space="preserve">
     <value>User Settings</value>
   </data>
-  <data name="Folders" xml:space="preserve">
-    <value>Folders</value>
-  </data>
-  <data name="CreateNewFolder" xml:space="preserve">
-    <value>Create new folder</value>
-  </data>
   <data name="ViewSet" xml:space="preserve">
     <value>View set</value>
   </data>

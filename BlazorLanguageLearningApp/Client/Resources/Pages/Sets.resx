@@ -192,4 +192,7 @@
   <data name="DeleteEmptyFolderText" xml:space="preserve">
     <value>Are you sure you want to delete folder '{0}'?</value>
   </data>
+  <data name="SelectAFolder" xml:space="preserve">
+    <value>Select a folder</value>
+  </data>
 </root>

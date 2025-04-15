@@ -129,12 +129,6 @@
   <data name="UserSettings" xml:space="preserve">
     <value>Felhasználói beállítások</value>
   </data>
-  <data name="Folders" xml:space="preserve">
-    <value>Mappák</value>
-  </data>
-  <data name="CreateNewFolder" xml:space="preserve">
-    <value>Új mappa létrehozása</value>
-  </data>
   <data name="ViewSet" xml:space="preserve">
     <value>Csomag megtekintése</value>
   </data>

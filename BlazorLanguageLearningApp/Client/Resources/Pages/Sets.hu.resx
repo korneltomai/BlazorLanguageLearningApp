@@ -192,4 +192,7 @@
   <data name="DeleteEmptyFolderText" xml:space="preserve">
     <value>Biztosan törölni szeretné a(z) '{0}' mappát?</value>
   </data>
+  <data name="SelectAFolder" xml:space="preserve">
+    <value>Válasszon egy mappát</value>
+  </data>
 </root>
