@@ -17,16 +17,8 @@ else
         <SetsSubNav FolderId="@FolderId" SetId="@SetId" />
 
         <div class="content d-flex flex-column col-lg-9 col-xl-10">
-            <div class="container-fluid mt-2">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="sets">@Loc["Sets"]</a></li>
-                        <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder!.Name</a></li>
-                        <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@CurrentSet.Id">@CurrentSet.Name</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">@Loc["Flashcards"]</li>
-                    </ol>
-                </nav>
-            </div>
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri"/>
+
             <div class="container-fluid d-flex mt-2">
                 <div class="col-6 col-sm-auto pe-2">
                     <div class="form-floating w-100 h-100">

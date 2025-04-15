@@ -41,28 +41,17 @@ else
         </div>
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri"/>
+
             @if (FolderId == default)
             {
-                <div class="container-fluid">
-                    <div class="mt-2">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
-                            </ol>
-                        </nav>
-                    </div>
+                <div class="container-fluid mt-2">
                     <p>No folder open</p>
                 </div>
             }
             else
             {
                 <div class="container-fluid mt-2">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-2">
-                            <li class="breadcrumb-item"><a href="sets">@Localization["Sets"]</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">@CurrentFolder!.Name</li>
-                        </ol>
-                    </nav>
                     <div class="row">
                         <div class="col-12 col-sm-9 col-xxl-10">
                             <div class="d-flex align-items-center">
@@ -168,5 +157,10 @@ else
             CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.LearntPercantage).ToList();
         else if (Ordering == SetOrdering.ScoreDecreasing)
             CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.LearntPercantage).ToList();
+    }
+
+    private void ChangeFolder(int folderId)
+    {
+        Navigation.NavigateTo($"/sets/{FolderId}");
     }
 }

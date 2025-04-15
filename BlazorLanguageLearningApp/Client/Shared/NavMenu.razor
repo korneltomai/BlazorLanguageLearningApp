@@ -124,7 +124,7 @@
                     </div>
                 </div>
             }
-            else if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+(/(practice|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
+            else if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+(/(flashcards$|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
             {
                 <div class="d-lg-none">
                     <hr class="text-white" />

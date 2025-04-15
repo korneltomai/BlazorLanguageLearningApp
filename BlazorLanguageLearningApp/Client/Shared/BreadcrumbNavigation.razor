@@ -1,0 +1,38 @@
+﻿@using System.Text.RegularExpressions;
+
+@inject FolderService FolderService
+@inject SetService SetService
+@inject NavigationManager Navigation
+@inject IStringLocalizer<BreadcrumbNavigation> Loc
+
+<div class="container-fluid mt-2">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-2">
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets(/\d+)?"))
+            {
+                <li class="breadcrumb-item"><a href="sets">@Loc["Sets"]</a></li>
+            }
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+"))
+            {
+                <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder.Name</a></li>
+            }
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+"))
+            {
+                <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@SetService.CurrentSet!.Id">@SetService.CurrentSet.Name</a></li>
+            }
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+/flashcards"))
+            {
+                <li class="breadcrumb-item active" aria-current="page">@Loc["Flashcards"]</li>
+            }
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+/exercises"))
+            {
+                <li class="breadcrumb-item active" aria-current="page">@Loc["Exercises"]</li>
+            }
+        </ol>
+    </nav>
+</div>
+
+@code {
+    [Parameter]
+    public string CurrentPage { get; set; } = string.Empty;
+}
