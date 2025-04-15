@@ -75,7 +75,7 @@ else
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">
-                            <InputSelect class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by" TValue="CardOrdering" Value="Ordering" ValueChanged="OrderSets" ValueExpression="@(() => Ordering)">
+                            <InputSelect class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering"@bind-Value:set="OrderSets">
                                 <option value="@CardOrdering.TermIncreasing">@Localization["TermIncreasing"]</option>
                                 <option value="@CardOrdering.TermDecreasing">@Localization["TermDecreasing"]</option>
                                 <option value="@CardOrdering.DefinitionIncreasing">@Localization["DefinitionIncreasing"]</option>
@@ -156,11 +156,13 @@ else
         if (CurrentSet == null)
             Navigation.NavigateTo($"/sets/{FolderId}");
 
-        CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Term).ToList();
+        OrderSets(CardOrdering.TermIncreasing);
     }
 
     private void OrderSets(CardOrdering selectedOrdering)
     {
+        Ordering = selectedOrdering;
+
         if (selectedOrdering == CardOrdering.TermIncreasing)
             CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Term).ToList();
         else if (selectedOrdering == CardOrdering.TermDecreasing)

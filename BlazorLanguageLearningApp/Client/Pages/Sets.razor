@@ -92,8 +92,8 @@ else
                             <SetModal />
                         </div>
                         <div class="form-floating col-12 col-sm-auto ms-auto p-0">
-                            <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" TValue="SetOrdering" Value="Ordering" ValueChanged="OrderFolders" ValueExpression="@(() => Ordering)">
-                                <option selected value="@SetOrdering.NameIncreasing">@Localization["NameAZ"]</option>
+                            <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderFolders">
+                                <option value="@SetOrdering.NameIncreasing">@Localization["NameAZ"]</option>
                                 <option value="@SetOrdering.NameDecreasing">@Localization["NameZA"]</option>
                                 <option value="@SetOrdering.ScoreIncreasing">@Localization["ScoreIncreasing"]</option>
                                 <option value="@SetOrdering.ScoreDecreasing">@Localization["ScoreDecreasing"]</option>
@@ -152,21 +152,21 @@ else
         if (FolderId != default)
         {
             CurrentFolder = FolderService.GetFolder(FolderId);
-            CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.Name).ToList();
+            OrderFolders(SetOrdering.NameIncreasing);
         }
     }
 
     private void OrderFolders(SetOrdering selectedOrdering)
     {
-        Console.WriteLine();
+        Ordering = selectedOrdering;
 
-        if (selectedOrdering == SetOrdering.NameIncreasing)
+        if (Ordering == SetOrdering.NameIncreasing)
             CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.Name).ToList();
-        else if (selectedOrdering == SetOrdering.NameDecreasing)
+        else if (Ordering == SetOrdering.NameDecreasing)
             CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.Name).ToList();
-        else if (selectedOrdering == SetOrdering.ScoreIncreasing)
+        else if (Ordering == SetOrdering.ScoreIncreasing)
             CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.LearntPercantage).ToList();
-        else if (selectedOrdering == SetOrdering.ScoreDecreasing)
+        else if (Ordering == SetOrdering.ScoreDecreasing)
             CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.LearntPercantage).ToList();
     }
 }
