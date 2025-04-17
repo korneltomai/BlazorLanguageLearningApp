@@ -11,20 +11,20 @@
             <div class="form-group mb-3 container">
                 <label>@Loc["Name"]: <span class="text-danger">*</span></label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@folder.Name" Placeholder="@Loc["EnterFolderName"]" MaxLength="25" />
-                    <ValidationMessage For="@(() => folder.Name)" />
+                    <TextInput @bind-Value="@Folder.Name" Placeholder="@Loc["EnterFolderName"]" MaxLength="25" />
+                    <ValidationMessage For="@(() => Folder.Name)" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
                 <label>@Loc["Description"]:</label>
                 <div class="w-100">
-                    <TextAreaInput @bind-Value="@folder.Description" Rows="5" Placeholder="@Loc["EnterFolderDescription"]" MaxLength="500" />
+                    <TextAreaInput @bind-Value="@Folder.Description" Rows="5" Placeholder="@Loc["EnterFolderDescription"]" MaxLength="500" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
-                <InputRadioGroup @bind-Value="folder.Visibility">
+                <InputRadioGroup @bind-Value="Folder.Visibility">
                     <div>
                         <label>
                             <InputRadio Value="Visibility.Private"/> 
@@ -97,10 +97,14 @@ else
 @code {
     [Parameter]
     public bool Editing { get; set; }
+
+    [Parameter]
+    public Folder Folder { get; set; } = new();
+
     private string? Title { get; set; }
 
     private Modal modal;
-    private Folder folder = new();
+    
     private EditContext? editContext;
 
     protected override void OnInitialized()
@@ -108,12 +112,12 @@ else
         if (Editing)
         {
             Title = Loc["EditFolder"];
-            folder = FolderService.CurrentFolder!;
+            Folder = FolderService.CurrentFolder!;
         }
         else
             Title = Loc["CreateNewFolder"];
 
-        editContext = new EditContext(folder);
+        editContext = new EditContext(Folder);
         base.OnInitialized();
     }
 
@@ -123,28 +127,29 @@ else
         {
             if (Editing)
             {
-                FolderService.UpdateFolder(folder);
+                FolderService.UpdateFolder(Folder);
             }
             else
             {
                 // Sets the id for the testing data
                 if (FolderService.GetAllFolders().Count > 0)
-                    folder.Id = FolderService.GetAllFolders().Max(f => f.Id) + 1;
+                    Folder.Id = FolderService.GetAllFolders().Max(f => f.Id) + 1;
                 else
-                    folder.Id = 1;
+                    Folder.Id = 1;
 
-                FolderService.AddFolder(folder);
+                FolderService.AddFolder(Folder);
             }
 
             await modal?.HideAsync();
         }
     }
 
-    private void UpdateVisibility(Visibility visibility) => folder.Visibility = visibility;
+    private void UpdateVisibility(Visibility visibility) => Folder.Visibility = visibility;
 
     private void OnModalHidden()
     {
-        folder = new();
+        if (!Editing)
+            Folder = new();
     }
 
     private async Task OnShowModalClick()
