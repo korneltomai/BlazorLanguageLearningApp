@@ -81,31 +81,31 @@ namespace BlazorLanguageLearningApp.Client.Services
                 "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large." +
                 "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large." +
                 "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large."));
-            Folders.Add(new Folder(6, "Folder6", "This is Folder6"));
-            Folders.Add(new Folder(7, "Folder7", "This is Folder7"));
-            Folders.Add(new Folder(8, "Folder8", "This is Folder8"));
-            Folders.Add(new Folder(9, "Folder9", "This is Folder9"));
-            Folders.Add(new Folder(10, "Folder10", "This is Folder10"));
-            Folders.Add(new Folder(11, "Folder11", "This is Folder11"));
-            Folders.Add(new Folder(12, "Folder12", "This is Folder12"));
-            Folders.Add(new Folder(13, "Folder13", "This is Folder13"));
-            Folders.Add(new Folder(14, "Folder14", "This is Folder14"));
-            Folders.Add(new Folder(15, "Folder15", "This is Folder15"));
-            Folders.Add(new Folder(16, "Folder16", "This is Folder16"));
-            Folders.Add(new Folder(17, "Folder17", "This is Folder17"));
-            Folders.Add(new Folder(18, "Folder18", "This is Folder18"));
-            Folders.Add(new Folder(19, "Folder19", "This is Folder19"));
-            Folders.Add(new Folder(20, "Folder20", "This is Folder20"));
-            Folders.Add(new Folder(21, "Folder21", "This is Folder21"));
-            Folders.Add(new Folder(22, "Folder22", "This is Folder22"));
-            Folders.Add(new Folder(23, "Folder23", "This is Folder23"));
-            Folders.Add(new Folder(24, "Folder24", "This is Folder24"));
-            Folders.Add(new Folder(25, "Folder25", "This is Folder25"));
-            Folders.Add(new Folder(26, "Folder26", "This is Folder26"));
-            Folders.Add(new Folder(27, "Folder27", "This is Folder27"));
-            Folders.Add(new Folder(28, "Folder28", "This is Folder28"));
-            Folders.Add(new Folder(29, "Folder29", "This is Folder29"));
-            Folders.Add(new Folder(30, "Folder30", "This is Folder30"));
+            //Folders.Add(new Folder(6, "Folder6", "This is Folder6"));
+            //Folders.Add(new Folder(7, "Folder7", "This is Folder7"));
+            //Folders.Add(new Folder(8, "Folder8", "This is Folder8"));
+            //Folders.Add(new Folder(9, "Folder9", "This is Folder9"));
+            //Folders.Add(new Folder(10, "Folder10", "This is Folder10"));
+            //Folders.Add(new Folder(11, "Folder11", "This is Folder11"));
+            //Folders.Add(new Folder(12, "Folder12", "This is Folder12"));
+            //Folders.Add(new Folder(13, "Folder13", "This is Folder13"));
+            //Folders.Add(new Folder(14, "Folder14", "This is Folder14"));
+            //Folders.Add(new Folder(15, "Folder15", "This is Folder15"));
+            //Folders.Add(new Folder(16, "Folder16", "This is Folder16"));
+            //Folders.Add(new Folder(17, "Folder17", "This is Folder17"));
+            //Folders.Add(new Folder(18, "Folder18", "This is Folder18"));
+            //Folders.Add(new Folder(19, "Folder19", "This is Folder19"));
+            //Folders.Add(new Folder(20, "Folder20", "This is Folder20"));
+            //Folders.Add(new Folder(21, "Folder21", "This is Folder21"));
+            //Folders.Add(new Folder(22, "Folder22", "This is Folder22"));
+            //Folders.Add(new Folder(23, "Folder23", "This is Folder23"));
+            //Folders.Add(new Folder(24, "Folder24", "This is Folder24"));
+            //Folders.Add(new Folder(25, "Folder25", "This is Folder25"));
+            //Folders.Add(new Folder(26, "Folder26", "This is Folder26"));
+            //Folders.Add(new Folder(27, "Folder27", "This is Folder27"));
+            //Folders.Add(new Folder(28, "Folder28", "This is Folder28"));
+            //Folders.Add(new Folder(29, "Folder29", "This is Folder29"));
+            //Folders.Add(new Folder(30, "Folder30", "This is Folder30"));
         }
 
         public void AddFolder(Folder folder)

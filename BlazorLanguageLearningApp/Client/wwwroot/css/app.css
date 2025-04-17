@@ -105,3 +105,37 @@ a, .btn-link {
         font-size: 1.25rem;
     }
 }
+
+.content {
+    height: calc(100vh - 56px)
+}
+
+.sidebar {
+    height: calc(100vh - 168px);
+}
+
+.learntPercantage {
+    height: 2.5rem;
+    width: 2.5rem;
+    color: white;
+}
+
+@media (width<=420px) {
+    .learntPercantage {
+        height: 2.15rem;
+        width: 2.15rem;
+        font-size: 0.9em;
+    }
+}
+
+@media (width<=360px) {
+    .learntPercantage {
+        height: 2rem;
+        width: 2rem;
+        font-size: 0.8em;
+    }
+}
+
+.form-floating > label::after {
+    background-color: transparent !important;
+}
