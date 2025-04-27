@@ -138,4 +138,10 @@
   <data name="Exercises" xml:space="preserve">
     <value>Exercises</value>
   </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
 </root>

@@ -16,6 +16,12 @@ builder.Services.AddSingleton<SetService>();
 builder.Services.AddSingleton<CardService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+builder.Services.AddOidcAuthentication(options =>
+{
+    builder.Configuration.Bind("Auth0", options.ProviderOptions);
+    options.ProviderOptions.ResponseType = "code";
+});
+
 var host = builder.Build();
 
 const string defaultCulture = "en-US";

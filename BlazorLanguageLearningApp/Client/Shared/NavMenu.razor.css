@@ -1,0 +1,5 @@
+﻿a[class*="loginLink"]:link,
+a[class*="loginLink"]:visited {
+    text-decoration: none;
+    color: black;
+}
