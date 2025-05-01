@@ -1,5 +1,5 @@
-﻿@page "/sets"
-@page "/sets/{folderId:int}"
+﻿@page "/{username}/sets"
+@page "/{username}/sets/{folderId:int}"
 
 @using BlazorLanguageLearningApp.Shared
 @using BlazorLanguageLearningApp.Client.Components
@@ -30,7 +30,7 @@ else
                     @foreach (Folder folder in FolderService.GetAllFolders())
                     {
                         <div class="container justify-content-center">
-                            <a class="btn btn-primary w-100 mb-1" href="/sets/@folder.Id">@folder.Name</a>
+                            <btn class="btn btn-primary w-100 mb-1" @onclick="() => ChangeFolder(folder.Id)">@folder.Name</btn>
                         </div>
                     }
                 </div>
@@ -41,7 +41,7 @@ else
         </div>
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri"/>
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" />
 
             <div class="d-flex container-fluid d-lg-none">
                 <div class="form-floating col-9 pe-2">
@@ -98,7 +98,7 @@ else
                             <SetModal />
                         </div>
                         <div class="form-floating col-12 col-sm-auto ms-auto p-0">
-                            <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderFolders">
+                            <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderSets">
                                 <option value="@SetOrdering.NameIncreasing">@Loc["NameAZ"]</option>
                                 <option value="@SetOrdering.NameDecreasing">@Loc["NameZA"]</option>
                                 <option value="@SetOrdering.ScoreIncreasing">@Loc["ScoreIncreasing"]</option>
@@ -115,7 +115,7 @@ else
                     <div class="d-flex flex-column pb-3">
                         @foreach (BlazorLanguageLearningApp.Shared.Set set in CurrentFolder.Sets)
                         {
-                            <a class="setLink mb-3" href="/sets/@FolderId/@set.Id">
+                            <a class="setLink mb-3" href="@($"{Username}/sets/{FolderId}/{set.Id}")">
                                 <div class="d-flex row border border-black rounded-3 mx-0">
                                     <div class="col-10 col-md-11 my-3 pe-0">
                                         <div class="d-flex justify-content-center px-1">
@@ -142,6 +142,9 @@ else
 
 @code {
     [Parameter]
+    public required string Username { get; set; }
+
+    [Parameter]
     public int FolderId { get; set; }
 
     private Folder? CurrentFolder { get; set; }
@@ -152,17 +155,20 @@ else
         FolderService.OnChange.Add(StateHasChanged);
         SetService.OnChange.Add(StateHasChanged);
     }
-
+      
     protected override void OnParametersSet()
     {
         if (FolderId != default)
         {
             CurrentFolder = FolderService.GetFolder(FolderId);
-            OrderFolders(SetOrdering.NameIncreasing);
+            if (CurrentFolder == null)
+                Navigation.NavigateTo("/page-not-found");
+            else
+                OrderSets(SetOrdering.NameIncreasing);
         }
     }
 
-    private void OrderFolders(SetOrdering selectedOrdering)
+    private void OrderSets(SetOrdering selectedOrdering)
     {
         Ordering = selectedOrdering;
 
@@ -181,8 +187,8 @@ else
         FolderId = folderId;
 
         if (FolderId == 0)
-            Navigation.NavigateTo($"/sets");
+            Navigation.NavigateTo($"{Username}/sets");
         else
-            Navigation.NavigateTo($"/sets/{FolderId}");
+            Navigation.NavigateTo($"{Username}/sets/{FolderId}");
     }
 }

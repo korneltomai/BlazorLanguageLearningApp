@@ -1,4 +1,4 @@
-﻿@page "/sets/{folderId:int}/{setId:int}/flashcards"
+﻿@page "/{username}/sets/{folderId:int}/{setId:int}/flashcards"
 
 @inject FolderService FolderService
 @inject SetService SetService
@@ -14,10 +14,10 @@ else
     <PageTitle>Practice</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
-        <SetsSubNav FolderId="@FolderId" SetId="@SetId" />
+        <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username"/>
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri"/>
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" />
 
             <div class="container-fluid d-flex mt-2">
                 <div class="col-6 col-sm-auto pe-2">
@@ -100,6 +100,9 @@ else
 
 @code {
     [Parameter]
+    public required string Username { get; set; }
+
+    [Parameter]
     public int FolderId { get; set; }
 
     [Parameter]
@@ -128,9 +131,8 @@ else
     protected override void OnParametersSet()
     {
         CurrentSet = SetService.GetSet(FolderId, SetId);
-
         if (CurrentSet == null)
-            Navigation.NavigateTo($"/sets/{FolderId}");
+            Navigation.NavigateTo("/page-not-found");
     }
 
     private void IncreaseIndex()

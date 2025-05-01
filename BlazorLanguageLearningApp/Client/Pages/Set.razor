@@ -1,4 +1,4 @@
-﻿@page "/sets/{folderId:int}/{setId:int}"
+﻿@page "/{username}/sets/{folderId:int}/{setId:int}"
 
 @using BlazorLanguageLearningApp.Client.Components
 
@@ -17,10 +17,10 @@ else
     <PageTitle>CurrentSet.Name</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
-        <SetsSubNav FolderId="@FolderId" SetId="@SetId" />
+        <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username" />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri"/>
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" />
             
             <div class="container-fluid mt-2">
                 <div class="row">
@@ -70,7 +70,7 @@ else
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">
-                            <InputSelect class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering"@bind-Value:set="OrderSets">
+                            <InputSelect class="form-select bg-primary text-light" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderCards">
                                 <option value="@CardOrdering.TermIncreasing">@Loc["TermIncreasing"]</option>
                                 <option value="@CardOrdering.TermDecreasing">@Loc["TermDecreasing"]</option>
                                 <option value="@CardOrdering.DefinitionIncreasing">@Loc["DefinitionIncreasing"]</option>
@@ -130,6 +130,9 @@ else
 
 @code {
     [Parameter]
+    public required string Username { get; set; }
+
+    [Parameter]
     public int FolderId { get; set; }
 
     [Parameter]
@@ -147,14 +150,13 @@ else
     protected override void OnParametersSet()
     {
         CurrentSet = SetService.GetSet(FolderId, SetId);
-
         if (CurrentSet == null)
-            Navigation.NavigateTo($"/sets/{FolderId}");
-
-        OrderSets(CardOrdering.TermIncreasing);
+            Navigation.NavigateTo("/page-not-found");
+        else
+            OrderCards(CardOrdering.TermIncreasing);
     }
 
-    private void OrderSets(CardOrdering selectedOrdering)
+    private void OrderCards(CardOrdering selectedOrdering)
     {
         Ordering = selectedOrdering;
 

@@ -16,7 +16,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end border-0 py-0 py-lg-1 bg-primary">
                 <li>
-                    <NavLink class="nav-link dropdown-item bg-primary py-2" href="profile">
+                    <NavLink class="nav-link dropdown-item bg-primary py-2" href="@($"{context.User.Claims.Where(c => c.Type.Equals("username")).Select(c => c.Value).FirstOrDefault()}/profile")">
                         <div class="d-lg-none ps-3" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
@@ -61,11 +61,16 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        <a class="nav-link" href="authentication/login">@Loc["LogIn"]</a>
+        <a class="nav-link" href="#" @onclick="BeginSignIn">@Loc["LogIn"]</a>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
+
+    private void BeginSignIn()
+    {
+        Navigation.NavigateToLogin("authentication/login");
+    }
 
     private void BeginSignOut()
     {

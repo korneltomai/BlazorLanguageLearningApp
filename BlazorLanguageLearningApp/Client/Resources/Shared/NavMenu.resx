@@ -132,8 +132,8 @@
   <data name="ViewSet" xml:space="preserve">
     <value>View set</value>
   </data>
-  <data name="Practice" xml:space="preserve">
-    <value>Practice</value>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Flashcards</value>
   </data>
   <data name="Exercises" xml:space="preserve">
     <value>Exercises</value>

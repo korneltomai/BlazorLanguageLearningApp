@@ -8,23 +8,27 @@
 <div class="container-fluid mt-2">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-2">
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets(/\d+)?"))
+            @if (Username is not null)
+            {
+                <li class="breadcrumb-item"><a href="@($"{Username}/profile")">@Username</a></li>
+            }
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets(/\d+)?"))
             {
                 <li class="breadcrumb-item"><a href="sets">@Loc["Folders"]</a></li>
             }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+"))
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+"))
             {
                 <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder.Name</a></li>
             }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+"))
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+"))
             {
                 <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@SetService.CurrentSet!.Id">@SetService.CurrentSet.Name</a></li>
             }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+/flashcards"))
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/flashcards"))
             {
                 <li class="breadcrumb-item active" aria-current="page">@Loc["Flashcards"]</li>
             }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+/exercises"))
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/exercises"))
             {
                 <li class="breadcrumb-item active" aria-current="page">@Loc["Exercises"]</li>
             }
@@ -34,5 +38,8 @@
 
 @code {
     [Parameter]
-    public string CurrentPage { get; set; } = string.Empty;
+    public required string CurrentPage { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Username { get; set; } = string.Empty;
 }

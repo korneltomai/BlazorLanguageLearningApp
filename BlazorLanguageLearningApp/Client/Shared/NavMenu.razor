@@ -1,6 +1,7 @@
 ﻿@using System.Text.RegularExpressions;
 @using BlazorLanguageLearningApp.Client.Components
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 @inject FolderService FolderService
 @inject SetService SetService
@@ -33,49 +34,53 @@
                         </div>
                     </NavLink>
                 </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link py-0" href="sets">
-                        <div class="d-lg-none py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
-                            </svg>
-                            @Loc["Sets"]
-                        </div>
-                        <div class="d-none d-lg-block py-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
-                            </svg>
-                            @Loc["Sets"]
-                        </div>
-                    </NavLink>
-                </li>
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link py-0" href="@($"{context.User.Claims.Where(c => c.Type.Equals("username")).Select(c => c.Value).FirstOrDefault()}/sets")">
+                                <div class="d-lg-none py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                                    </svg>
+                                    @Loc["Sets"]
+                                </div>
+                                <div class="d-none d-lg-block py-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                                    </svg>
+                                    @Loc["Sets"]
+                                </div>
+                            </NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
 
                 <li class="nav-item ms-lg-auto my-auto">
                     <AccessControl />
                 </li>
             </ul>
 
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+/\d+(/(flashcards$|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(flashcards|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
             {
                 <div class="d-lg-none">
                     <hr class="text-white" />
                     <ul class="navbar-nav w-100">
                         <li class="nav-item">
-                            <NavLink class="nav-link p-0" href="@($"/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}")" Match="NavLinkMatch.All">
+                            <NavLink class="nav-link p-0" href="@($"{username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}")" Match="NavLinkMatch.All">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Loc["ViewSet"]
                                 </div>
                             </NavLink>
                         </li>
                         <li class="nav-item">
-                            <NavLink class="nav-link p-0" href="@($"/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/practice")">
+                            <NavLink class="nav-link p-0" href="@($"{username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/flashcards")">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
-                                    @Loc["Practice"]
+                                    @Loc["Flashcards"]
                                 </div>
                             </NavLink>
                         </li>
                         <li class="nav-item">
-                            <NavLink class="nav-link p-0" href="@($"/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/exercises")">
+                            <NavLink class="nav-link p-0" href="@($"{username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/exercises")">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Loc["Exercises"]
                                 </div>
@@ -94,6 +99,17 @@
 @code {
     [Parameter]
     public string CurrentPage { get; set; } = string.Empty;
+
+    private string? username;
+
+    protected override void OnParametersSet()
+    {
+        if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(flashcards$|exercises))?$"))
+        {
+            username = CurrentPage.Split('/')[3];
+        }
+        
+    }
 
     protected override void OnInitialized()
     {

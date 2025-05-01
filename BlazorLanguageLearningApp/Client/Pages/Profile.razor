@@ -1,9 +1,16 @@
-﻿@page "/profile"
+﻿@page "/{username}/profile"
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Profile</PageTitle>
 
 <h3>Profile</h3>
 
+<p>@Username</p>
+
 @code {
+
+    [Parameter]
+    public required string Username { get; set; }
 
 }

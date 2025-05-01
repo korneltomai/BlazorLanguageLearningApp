@@ -2,17 +2,20 @@
 
 <div class="bg-light d-none d-lg-block col-3 col-xxl-2">
     <div class="container justify-content-center mt-3">
-        <a class="btn btn-primary w-100 mb-1" href="/sets/@FolderId/@SetId" active>@Loc["ViewSet"]</a>
+        <a class="btn btn-primary w-100 mb-1" href="@($"{Username}/sets/{FolderId}/{SetId}")" active>@Loc["ViewSet"]</a>
     </div>
     <div class="container justify-content-center">
-        <a class="btn btn-primary w-100 mb-1" href="/sets/@FolderId/@SetId/flashcards">@Loc["Flashcards"]</a>
+        <a class="btn btn-primary w-100 mb-1" href="@($"{Username}/sets/{FolderId}/{SetId}/flashcards")">@Loc["Flashcards"]</a>
     </div>
     <div class="container justify-content-center">
-        <a class="btn btn-primary w-100 mb-1" href="/sets/@FolderId/@SetId/exercises">@Loc["Exercises"]</a>
+        <a class="btn btn-primary w-100 mb-1" href="@($"{Username}/sets/{FolderId}/{SetId}/exercises")">@Loc["Exercises"]</a>
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public string Username { get; set; }
+
     [Parameter]
     public int FolderId { get; set; }
 
