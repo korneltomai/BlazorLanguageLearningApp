@@ -10,7 +10,7 @@
         <ol class="breadcrumb mb-2">
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets(/\d+)?"))
             {
-                <li class="breadcrumb-item"><a href="sets">@Loc["Sets"]</a></li>
+                <li class="breadcrumb-item"><a href="sets">@Loc["Folders"]</a></li>
             }
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}sets/\d+"))
             {
