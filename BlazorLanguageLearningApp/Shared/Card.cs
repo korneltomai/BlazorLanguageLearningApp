@@ -4,13 +4,13 @@ namespace BlazorLanguageLearningApp.Shared
 {
     public class Card
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Term is required.")]
         public string Term { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Definition is required.")]
         public string Definition { get; set; } = string.Empty;
+
+        public int Id { get; set; }
         public string TermLanguage { get; set; } = "unknown";
         public string DefinitionLanguage { get; set; } = "unknown";
         public int LearntPercantage { get; set; }

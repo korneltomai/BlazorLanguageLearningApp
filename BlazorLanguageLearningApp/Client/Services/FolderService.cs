@@ -38,12 +38,12 @@ namespace BlazorLanguageLearningApp.Client.Services
 
             List<Set> sets1 = new List<Set>
             {
-                new Set(1, "Allatok", "Csomag az állatokhoz", 78, cards1)
+                new Set(1, "Allatok", "Csomag az állatokhoz", cards1)
             };
 
             List<Set> sets2 = new List<Set>
             {
-                new Set(2, "Sportok", "", 0, cards2)
+                new Set(2, "Sportok", "", cards2)
             };
 
             Folders.Add(new Folder(1, "Allatos mappa", "Ebben a mappában vannak az állatos csomagok", sets1));
