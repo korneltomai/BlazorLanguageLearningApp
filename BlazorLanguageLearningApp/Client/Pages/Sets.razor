@@ -9,9 +9,9 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Sets> Loc
 
-@if (FolderId != default && CurrentFolder == null)
+@if (FolderId != default && FolderService.CurrentFolder == null)
 {
-    <NotFoundPage />
+    <p><em>Loading...</em></p>
 }
 else
 {
@@ -27,7 +27,7 @@ else
                     @Loc["Folders"]
                 </h3>
                 <div class="sidebar overflow-auto py-1">
-                    @foreach (Folder folder in FolderService.GetAllFolders())
+                    @foreach (Folder folder in folders)
                     {
                         <div class="container justify-content-center">
                             <btn class="btn btn-primary w-100 mb-1" @onclick="() => ChangeFolder(folder.Id)">@folder.Name</btn>
@@ -36,7 +36,7 @@ else
                 </div>
             </div>
             <div class="mt-2 my-2">
-                <FolderModal />
+                <FolderModal Username="@Username"/>
             </div>
         </div>
 
@@ -47,7 +47,7 @@ else
                 <div class="form-floating col-9 pe-2">
                     <InputSelect class="form-select bg-primary text-white h-100" id="folderSelect" aria-label="Change selected folder" @bind-Value:get="FolderId" @bind-Value:set="ChangeFolder">
                         <option value="0">@Loc["SelectAFolder"]</option>
-                        @foreach (Folder folder in FolderService.GetAllFolders())
+                        @foreach (Folder folder in folders)
                         {
                             <option value="@folder.Id">@folder.Name</option>
                         }
@@ -55,7 +55,7 @@ else
                     <label class="text-white" for="folderSelect"><small>@Loc["Folders"]</small></label>
                 </div>
                 <div class="col-3">
-                    <FolderModal />
+                    <FolderModal Username="@Username"/>
                 </div>
             </div>
             <hr class="d-lg-none mb-2" />
@@ -72,20 +72,20 @@ else
                     <div class="row">
                         <div class="col-12 col-sm-9 col-xxl-10">
                             <div class="d-flex align-items-center">
-                                <h1 class="fs-3 mb-0">@CurrentFolder.Name</h1>
-                                <span class="text-secondary ms-2 me-auto"><small>@CurrentFolder.Visibility</small></span>
+                                <h1 class="fs-3 mb-0">@FolderService.CurrentFolder.Name</h1>
+                                <span class="text-secondary ms-2 me-auto"><small>@FolderService.CurrentFolder.Visibility</small></span>
                             </div>
                             <div class="mb-3 mb-sm-0 me-sm-4 pe-2">
-                                @CurrentFolder.Description
+                                @FolderService.CurrentFolder.Description
                             </div>
                         </div>
                         <div class="d-flex align-items-center col-12 col-sm-3 col-xxl-2 ps-sm-0">
                             <div class="d-flex d-sm-block w-100 p-0 m-0">
                                 <div class="col-6 col-sm-12 pe-2 pe-sm-0">
-                                    <FolderModal Editing="true" Folder="CurrentFolder"/>
+                                    <FolderModal Editing="true" Folder="@FolderService.CurrentFolder"/>
                                 </div>
                                 <div class="col-6 col-sm-12 mt-sm-1 p-0 ps-2 ps-sm-0">
-                                    <DeleteFolderModal />
+                                    <DeleteFolderModal Username="@Username"/>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +95,7 @@ else
                 <div class="container-fluid mb-3">
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="col-12 col-sm-auto me-auto mb-2 mb-sm-0">
-                            <SetModal />
+                            <SetModal Username="@Username"/>
                         </div>
                         <div class="form-floating col-12 col-sm-auto ms-auto p-0">
                             <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderSets">
@@ -108,12 +108,12 @@ else
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse w-100">
-                        <span class="fs-5 mt-2 mb-0">@String.Format($"{Loc["SetsInFolder"]}", @CurrentFolder.Sets.Count())</span>
+                        <span class="fs-5 mt-2 mb-0">@String.Format($"{Loc["SetsInFolder"]}", @FolderService.CurrentFolder.Sets.Count())</span>
                     </div>
                 </div>
                 <div class="setContainer container-fluid">
                     <div class="d-flex flex-column pb-3">
-                        @foreach (BlazorLanguageLearningApp.Shared.Set set in CurrentFolder.Sets)
+                        @foreach (BlazorLanguageLearningApp.Shared.Set set in FolderService.CurrentFolder.Sets)
                         {
                             <a class="setLink mb-3" href="@($"{Username}/sets/{FolderId}/{set.Id}")">
                                 <div class="d-flex row border border-black rounded-3 mx-0">
@@ -147,7 +147,7 @@ else
     [Parameter]
     public int FolderId { get; set; }
 
-    private Folder? CurrentFolder { get; set; }
+    private List<Folder> folders = new();
     private SetOrdering Ordering { get; set; }
 
     protected override void OnInitialized()
@@ -155,17 +155,20 @@ else
         FolderService.OnChange.Add(StateHasChanged);
         SetService.OnChange.Add(StateHasChanged);
     }
-      
-    protected override void OnParametersSet()
+
+    protected async override Task OnParametersSetAsync()
     {
+        var result = await FolderService.GetAllFoldersForUser(Username);
+        if (result is not null)
+            folders = result;
+
         if (FolderId != default)
         {
-            CurrentFolder = FolderService.GetFolder(FolderId);
-            if (CurrentFolder == null)
-                Navigation.NavigateTo("/page-not-found");
-            else
-                OrderSets(SetOrdering.NameIncreasing);
-        }
+            FolderService.CurrentFolder = folders.FirstOrDefault(f => f.Id == FolderId);
+
+            if (FolderService.CurrentFolder is null)
+                Navigation.NavigateTo("page-not-found");
+        }  
     }
 
     private void OrderSets(SetOrdering selectedOrdering)
@@ -173,22 +176,17 @@ else
         Ordering = selectedOrdering;
 
         if (Ordering == SetOrdering.NameIncreasing)
-            CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.Name).ToList();
+            FolderService.CurrentFolder!.Sets = FolderService.CurrentFolder.Sets.OrderBy(s => s.Name).ToList();
         else if (Ordering == SetOrdering.NameDecreasing)
-            CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.Name).ToList();
+            FolderService.CurrentFolder!.Sets = FolderService.CurrentFolder.Sets.OrderByDescending(s => s.Name).ToList();
         else if (Ordering == SetOrdering.ScoreIncreasing)
-            CurrentFolder!.Sets = CurrentFolder.Sets.OrderBy(s => s.LearntPercantage).ToList();
+            FolderService.CurrentFolder!.Sets = FolderService.CurrentFolder.Sets.OrderBy(s => s.LearntPercantage).ToList();
         else if (Ordering == SetOrdering.ScoreDecreasing)
-            CurrentFolder!.Sets = CurrentFolder.Sets.OrderByDescending(s => s.LearntPercantage).ToList();
+            FolderService.CurrentFolder!.Sets = FolderService.CurrentFolder.Sets.OrderByDescending(s => s.LearntPercantage).ToList();
     }
 
     private void ChangeFolder(int folderId)
     {
-        FolderId = folderId;
-
-        if (FolderId == 0)
-            Navigation.NavigateTo($"{Username}/sets");
-        else
-            Navigation.NavigateTo($"{Username}/sets/{FolderId}");
+        Navigation.NavigateTo($"{Username}/sets/{folderId}");
     }
 }

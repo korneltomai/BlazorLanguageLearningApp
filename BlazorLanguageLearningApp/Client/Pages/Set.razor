@@ -8,7 +8,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Set> Loc
 
-@if (CurrentSet == null)
+@if (SetService.CurrentSet == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -26,23 +26,23 @@ else
                 <div class="row">
                     <div class="col-12 col-sm-9 col-xxl-10">
                         <div class="d-flex align-items-center">
-                            <h1 class="fs-3 mb-0">@CurrentSet.Name</h1>
-                            <span class="text-secondary ms-3 me-auto"><small>@CurrentSet.Visibility</small></span>
+                            <h1 class="fs-3 mb-0">@SetService.CurrentSet.Name</h1>
+                            <span class="text-secondary ms-3 me-auto"><small>@SetService.CurrentSet.Visibility</small></span>
                         </div>
                         <div class="mb-2">
-                            <small class="text-secondary">@CurrentSet.TermsLanguage - @CurrentSet.DefinitionsLanguage</small>
+                            <small class="text-secondary">@SetService.CurrentSet.TermsLanguage - @SetService.CurrentSet.DefinitionsLanguage</small>
                         </div>
                         <div class="mb-3 mb-sm-0 me-sm-4 pe-2">
-                            @CurrentSet.Description
+                            @SetService.CurrentSet.Description
                         </div>
                     </div>
                     <div class="d-flex align-items-center col-12 col-sm-3 col-xxl-2 ps-sm-0">
                         <div class="d-flex d-sm-block w-100 p-0 m-0">
                             <div class="col-6 col-sm-12 pe-2 pe-sm-0">
-                                <SetModal Editing="true"/>
+                                <SetModal Editing="true" Set="@SetService.CurrentSet"/>
                             </div>
                             <div class="col-6 col-sm-12 mt-sm-1 ps-2 ps-sm-0">
-                                <DeleteSetModal />
+                                <DeleteSetModal Username="@Username"/>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@ else
             <div class="container-fluid mb-3">
                 <div class="d-flex align-items-center flex-wrap">
                     <div class="col-12 col-md-auto mb-2 mb-md-0 me-0 me-md-2">
-                        <CardModal />
+                        <CardModal SetId="@SetId" UpdateSetList="@(() => StateHasChanged())"/>
                     </div>
                     <div class="me-auto col-12 col-md-auto mb-2 mb-md-0">
                         <div class="dropdown">
@@ -83,14 +83,14 @@ else
                     </div>
                 </div>
                 <div class="d-flex flex-row-reverse w-100">
-                    <span class="fs-5 mt-2 mb-0">@String.Format($"{Loc["CardsInSet"]}", @CurrentSet.Cards.Count())</span>
+                    <span class="fs-5 mt-2 mb-0">@String.Format($"{Loc["CardsInSet"]}", @SetService.CurrentSet.Cards.Count())</span>
                 </div>
             </div>
             <div class="cardContainer container-fluid">
                 <div class="d-flex flex-column pt-3">
-                    @foreach (BlazorLanguageLearningApp.Shared.Card card in CurrentSet.Cards)
+                    @foreach (BlazorLanguageLearningApp.Shared.Card card in SetService.CurrentSet.Cards)
                     {
-                        <CardModal Editing="true" Id="@card.Id">
+                        <CardModal Editing="true" Card="@card" SetId="@SetId" UpdateSetList="@(() => StateHasChanged())">
                             <div class="d-flex row border border-black rounded-3 mx-0">
                                 <div class="row g-0 col-10 col-md-11 me-auto">
                                     <div class="col-12 col-md-6 p-3 pe-0 pe-md-3 pb-0 pb-md-3">
@@ -138,22 +138,28 @@ else
     [Parameter]
     public int SetId { get; set; }
 
-    public BlazorLanguageLearningApp.Shared.Set? CurrentSet { get; set; }
     private CardOrdering Ordering { get; set; }
 
     protected override void OnInitialized()
     {
         SetService.OnChange.Add(StateHasChanged);
-        CardService.OnChange.Add(StateHasChanged);
     }
 
-    protected override void OnParametersSet()
+    protected async override Task OnParametersSetAsync()
     {
-        CurrentSet = SetService.GetSet(FolderId, SetId);
-        if (CurrentSet == null)
-            Navigation.NavigateTo("/page-not-found");
-        else
-            OrderCards(CardOrdering.TermIncreasing);
+        try
+        {
+            await FolderService.GetFolderById(FolderId);
+            if (FolderService.CurrentFolder!.Owner != Username) 
+                throw new HttpRequestException();
+            await SetService.GetSetById(SetId);
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("page-not-found");
+        }
+
+        OrderCards(CardOrdering.TermIncreasing);
     }
 
     private void OrderCards(CardOrdering selectedOrdering)
@@ -161,16 +167,16 @@ else
         Ordering = selectedOrdering;
 
         if (selectedOrdering == CardOrdering.TermIncreasing)
-            CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Term).ToList();
+            SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderBy(s => s.Term).ToList();
         else if (selectedOrdering == CardOrdering.TermDecreasing)
-            CurrentSet!.Cards = CurrentSet.Cards.OrderByDescending(s => s.Term).ToList();
+            SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderByDescending(s => s.Term).ToList();
         else if (selectedOrdering == CardOrdering.DefinitionIncreasing)
-            CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.Definition).ToList();
+            SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderBy(s => s.Definition).ToList();
         else if (selectedOrdering == CardOrdering.DefinitionDecreasing)
-            CurrentSet!.Cards = CurrentSet.Cards.OrderByDescending(s => s.Definition).ToList();
+            SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderByDescending(s => s.Definition).ToList();
         else if (selectedOrdering == CardOrdering.ScoreIncreasing)
-            CurrentSet!.Cards = CurrentSet.Cards.OrderBy(s => s.LearntPercantage).ToList();
+            SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderBy(s => s.LearntPercantage).ToList();
         else if (selectedOrdering == CardOrdering.ScoreDecreasing)
-            CurrentSet!.Cards = CurrentSet.Cards.OrderByDescending(s => s.LearntPercantage).ToList();
+            SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderByDescending(s => s.LearntPercantage).ToList();
     }
 }

@@ -222,4 +222,10 @@
   <data name="DefinitionDecreasing" xml:space="preserve">
     <value>Definition (decreasing)</value>
   </data>
+  <data name="EnterTerm" xml:space="preserve">
+    <value>Enter term</value>
+  </data>
+  <data name="EnterDefinition" xml:space="preserve">
+    <value>Enter definition</value>
+  </data>
 </root>

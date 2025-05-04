@@ -157,7 +157,7 @@
     <value>Publikus</value>
   </data>
   <data name="SetsInFolder" xml:space="preserve">
-    <value>{0} kártya a mappában</value>
+    <value>{0} csomag a mappában</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Mégse</value>

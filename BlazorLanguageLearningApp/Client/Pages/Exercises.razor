@@ -5,7 +5,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Exercises> Loc
 
-@if (CurrentSet == null)
+@if (SetService.CurrentSet == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -25,7 +25,7 @@ else
 
 @code {
     [Parameter]
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     [Parameter]
     public int FolderId { get; set; }
@@ -33,17 +33,23 @@ else
     [Parameter]
     public int SetId { get; set; }
 
-    public BlazorLanguageLearningApp.Shared.Set? CurrentSet { get; set; }
-
     protected override void OnInitialized()
     {
         SetService.OnChange.Add(StateHasChanged);
     }
 
-    protected override void OnParametersSet()
+    protected async override Task OnParametersSetAsync()
     {
-        CurrentSet = SetService.GetSet(FolderId, SetId);
-        if (CurrentSet == null)
-            Navigation.NavigateTo("/page-not-found");
+        try
+        {
+            await FolderService.GetFolderById(FolderId);
+            if (FolderService.CurrentFolder!.Owner != Username)
+                throw new HttpRequestException();
+            await SetService.GetSetById(SetId);
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("page-not-found");
+        }
     }
 }

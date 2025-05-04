@@ -12,30 +12,30 @@
             <div class="form-group mb-3 container">
                 <label>@Loc["Term"]: <span class="text-danger">*</span></label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@card.Term" Placeholder="@Loc["EnterTerm"]" MaxLength="25" />
-                    <ValidationMessage For="@(() => card.Term)" />
+                    <TextInput @bind-Value="@Card.Term" Placeholder="@Loc["EnterTerm"]" MaxLength="25" />
+                    <ValidationMessage For="@(() => Card.Term)" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
                 <label>@Loc["Definition"]: <span class="text-danger">*</span></label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@card.Definition" Placeholder="@Loc["EnterDefinition"]" MaxLength="25" />
-                    <ValidationMessage For="@(() => card.Definition)" />
+                    <TextInput @bind-Value="@Card.Definition" Placeholder="@Loc["EnterDefinition"]" MaxLength="25" />
+                    <ValidationMessage For="@(() => Card.Definition)" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
                 <label>@Loc["TermLanguage"]:</label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@card.TermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" />
+                    <TextInput @bind-Value="@Card.TermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
                 <label>@Loc["DefinitionLanguage"]:</label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@card.DefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" />
+                    <TextInput @bind-Value="@Card.DefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" />
                 </div>
             </div>
 
@@ -89,12 +89,18 @@ else
     public bool Editing { get; set; }
 
     [Parameter]
-    public int Id { get; set; }
+    public BlazorLanguageLearningApp.Shared.Card Card { get; set; } = new();
+
+    [Parameter]
+    public required int SetId { get; set; }
+
+    [Parameter]
+    public required Action UpdateSetList { get; set; }
 
     private string? Title { get; set; }
 
     private Modal modal;
-    private BlazorLanguageLearningApp.Shared.Card card = new();
+
     private EditContext? editContext;
 
     protected override void OnInitialized()
@@ -102,14 +108,11 @@ else
         if (Editing)
         {
             Title = Loc["EditCard"];
-            card = CardService.GetCard(Id)!;
         }
         else
             Title = Loc["CreateNewCard"];
 
-
-        editContext = new EditContext(card);
-        base.OnInitialized();
+        editContext = new EditContext(Card);
     }
 
     public async void HandleOnValidSubmit()
@@ -117,19 +120,12 @@ else
         if (editContext!.Validate())
         {
             if (Editing)
-            {
-                CardService.UpdateCard(card);
-            }
+                await CardService.UpdateCard(Card);
             else
-            {
-                // Sets the id for the testing data
-                if (SetService.CurrentSet!.Cards.Count > 0)
-                    card.Id = SetService.CurrentSet!.Cards.Max(c => c.Id) + 1;
-                else
-                    card.Id = 1;
+                await CardService.CreateCard(Card, SetService.CurrentSet!.Id);
 
-                CardService.AddCard(card);
-            }
+            await SetService.GetSetById(SetId);
+            UpdateSetList.Invoke();
 
             await modal?.HideAsync();
         }
@@ -137,13 +133,18 @@ else
 
     public async void DeleteCard()
     {
-        CardService.RemoveCard(card);
+        await CardService.DeleteCard(Card.Id);
+
+        await SetService.GetSetById(SetId);
+        UpdateSetList.Invoke();
+
         await modal?.HideAsync();
     }
 
     private void OnModalHidden()
     {
-        card = new();
+        if (!Editing)
+            Card = new();
     }
 
     private async Task OnShowModalClick()

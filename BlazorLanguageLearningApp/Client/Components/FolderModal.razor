@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
 @inject FolderService FolderService
+@inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Sets> Loc
 
 <Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHidden">
@@ -29,12 +30,6 @@
                         <label>
                             <InputRadio Value="Visibility.Private"/> 
                             @Loc["Private"]
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <InputRadio Value="Visibility.FriendsOnly" /> 
-                            @Loc["FriendsOnly"]
                         </label>
                     </div>
                     <div>
@@ -101,19 +96,19 @@ else
     [Parameter]
     public Folder Folder { get; set; } = new();
 
+    [Parameter]
+    public string? Username { get; set; }
+
     private string? Title { get; set; }
 
     private Modal modal;
-    
+
     private EditContext? editContext;
 
     protected override void OnInitialized()
     {
         if (Editing)
-        {
             Title = Loc["EditFolder"];
-            Folder = FolderService.CurrentFolder!;
-        }
         else
             Title = Loc["CreateNewFolder"];
 
@@ -126,21 +121,17 @@ else
         if (editContext!.Validate())
         {
             if (Editing)
-            {
-                FolderService.UpdateFolder(Folder);
-            }
+                await FolderService.UpdateFolder(Folder);
             else
             {
-                // Sets the id for the testing data
-                if (FolderService.GetAllFolders().Count > 0)
-                    Folder.Id = FolderService.GetAllFolders().Max(f => f.Id) + 1;
-                else
-                    Folder.Id = 1;
-
-                FolderService.AddFolder(Folder);
+                Folder.Owner = Username;
+                await FolderService.CreateFolder(Folder);
             }
 
             await modal?.HideAsync();
+
+            if (!Editing)
+                Navigation.NavigateTo($"{Username}/sets/{FolderService.CurrentFolder!.Id}");
         }
     }
 

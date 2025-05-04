@@ -2,6 +2,7 @@
 
 @inject FolderService FolderService
 @inject SetService SetService
+@inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Set> Loc
 
 <Modal @ref="modal" Title="@Title" IsVerticallyCentered="true" OnHidden="OnModalHidden">
@@ -12,30 +13,24 @@
             <div class="form-group mb-3 container">
                 <label>@Loc["Name"]: <span class="text-danger">*</span></label>
                 <div class="w-100">
-                    <TextInput @bind-Value="@set.Name" Placeholder="@Loc["EnterSetName"]" MaxLength="25" />
-                    <ValidationMessage For="@(() => set.Name)" />
+                    <TextInput @bind-Value="@Set.Name" Placeholder="@Loc["EnterSetName"]" MaxLength="25" />
+                    <ValidationMessage For="@(() => Set.Name)" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
                 <label>@Loc["Description"]:</label>
                 <div class="w-100">
-                    <TextAreaInput @bind-Value="@set.Description" Rows="5" Placeholder="@Loc["EnterSetDescription"]" MaxLength="500" />
+                    <TextAreaInput @bind-Value="@Set.Description" Rows="5" Placeholder="@Loc["EnterSetDescription"]" MaxLength="500" />
                 </div>
             </div>
 
             <div class="form-group mb-3 container">
-                <InputRadioGroup @bind-Value="set.Visibility">
+                <InputRadioGroup @bind-Value="Set.Visibility">
                     <div>
                         <label>
                             <InputRadio Value="Visibility.Private" />
                             @Loc["Private"]
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <InputRadio Value="Visibility.FriendsOnly" />
-                            @Loc["FriendsOnly"]
                         </label>
                     </div>
                     <div>
@@ -90,24 +85,29 @@ else
 @code {
     [Parameter]
     public bool Editing { get; set; }
+
+    [Parameter]
+    public Set Set { get; set; } = new();
+
+    [Parameter]
+    public string? Username { get; set; }
+
     private string? Title { get; set; }
 
     private Modal modal;
-    private Set set = new();
+    
+
     private EditContext? editContext;
 
     protected override void OnInitialized()
     {
         if (Editing)
-        {
             Title = Loc["EditSet"];
-            set = SetService.CurrentSet!;
-        }
         else
             Title = Loc["CreateNewSet"];
 
 
-        editContext = new EditContext(set);
+        editContext = new EditContext(Set);
         base.OnInitialized();
     }
 
@@ -116,30 +116,23 @@ else
         if (editContext!.Validate())
         {
             if (Editing)
-            {
-                SetService.UpdateSet(set);
-            }
+                await SetService.UpdateSet(Set);
             else
-            {
-                // Sets the id for the testing data
-                if (FolderService.CurrentFolder!.Sets.Count > 0)
-                    set.Id = FolderService.CurrentFolder!.Sets.Max(s => s.Id) + 1; 
-                else
-                    set.Id = 1;
-
-                SetService.AddSet(set);
-            }
-
+                await SetService.CreateSet(Set, FolderService.CurrentFolder!.Id);
 
             await modal?.HideAsync();
+
+            if (!Editing)
+                Navigation.NavigateTo($"{Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}");
         }
     }
 
-    private void UpdateVisibility(Visibility visibility) => set.Visibility = visibility;
+    private void UpdateVisibility(Visibility visibility) => Set.Visibility = visibility;
 
     private void OnModalHidden()
     {
-        set = new();
+        if (!Editing)
+            Set = new();
     }
 
     private async Task OnShowModalClick()

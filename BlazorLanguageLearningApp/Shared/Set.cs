@@ -4,30 +4,20 @@ namespace BlazorLanguageLearningApp.Shared
 {
     public class Set
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Folder name is required.")]
+        [StringLength(25, MinimumLength = 3)]
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Folder visibility is required.")]
         public Visibility Visibility { get; set; }
 
-        public int Id { get; set; }
+        [StringLength(500)]
         public string Description { get; set; } = string.Empty;
-        public string TermsLanguage { get; set; } = "unknown";
-        public string DefinitionsLanguage { get; set; } = "unknown";
-        public int LearntPercantage => Cards.Sum(c => c.LearntPercantage) / Cards.Count;
-        public List<Card> Cards { get; set; } = new List<Card>();
-
-        public Set(int id, string name, string description, List<Card> cards)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            Visibility = Visibility.Private;
-            TermsLanguage = "english";
-            DefinitionsLanguage = "hungarian";
-            Cards = cards;
-        }
-
-        public Set() { }
+        public string TermsLanguage { get; set; } = "unkown";
+        public string DefinitionsLanguage { get; set; } = "unkown"; 
+        public int LearntPercantage { get; set; }
+        public ICollection<Card> Cards { get; set; } = new List<Card>();
     }
 }

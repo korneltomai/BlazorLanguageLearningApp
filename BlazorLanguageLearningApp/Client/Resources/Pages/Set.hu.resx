@@ -222,4 +222,10 @@
   <data name="DefinitionDecreasing" xml:space="preserve">
     <value>Jelentés szerint (csökkenő)</value>
   </data>
+  <data name="EnterTerm" xml:space="preserve">
+    <value>Kifejezés</value>
+  </data>
+  <data name="EnterDefinition" xml:space="preserve">
+    <value>Jelentés</value>
+  </data>
 </root>

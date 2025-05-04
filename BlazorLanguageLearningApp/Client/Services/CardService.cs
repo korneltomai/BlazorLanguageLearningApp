@@ -1,42 +1,30 @@
 ﻿using BlazorLanguageLearningApp.Shared;
-using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 
 namespace BlazorLanguageLearningApp.Client.Services
 {
     public class CardService
     {
-        private readonly SetService _setService;
-        public List<Action> OnChange = new List<Action>();
+        private readonly HttpClient _httpClient;
 
-        public CardService(SetService setService)
+        public CardService(HttpClient httpClient)
         {
-            _setService = setService;
+            _httpClient = httpClient;
         }
 
-        public void AddCard(Card card)
+        public async Task CreateCard(Card card, int setId)
         {
-            _setService.CurrentSet!.Cards.Add(card);
-            NotifyStateChanged();
+            await _httpClient.PostAsJsonAsync($"api/cards/{setId}", card);
         }
 
-        public void RemoveCard(Card card)
+        public async Task UpdateCard(Card card)
         {
-            _setService.CurrentSet!.Cards.Remove(card);
-            NotifyStateChanged();
+            await _httpClient.PutAsJsonAsync($"api/cards", card);
         }
 
-        public void UpdateCard(Card card)
+        public async Task DeleteCard(int cardId)
         {
-            Card oldCard = _setService.CurrentSet!.Cards.FirstOrDefault(c => c.Id == card.Id)!;
-            oldCard = card;
-            NotifyStateChanged();
+            await _httpClient.DeleteAsync($"api/cards/{cardId}");
         }
-
-        public Card? GetCard(int cardId)
-        {
-            return _setService.CurrentSet!.Cards.FirstOrDefault(c => c.Id == cardId);
-        }
-
-        private void NotifyStateChanged() => OnChange.ForEach(a => a.Invoke());
     }
 }

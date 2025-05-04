@@ -1,44 +1,41 @@
 ﻿using BlazorLanguageLearningApp.Shared;
-using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 
 namespace BlazorLanguageLearningApp.Client.Services
 {
     public class SetService
     {
-        private readonly FolderService _folderService;
-        private readonly NavigationManager _navigationManager;
+        private readonly HttpClient _httpClient;
         public Set? CurrentSet { get; private set; }
         public List<Action> OnChange = new List<Action>();
         
-        public SetService(FolderService folderService, NavigationManager navigationManager)
+        public SetService(HttpClient httpClient)
         {
-            _folderService = folderService;
-            _navigationManager = navigationManager;
+            _httpClient = httpClient;
         }
 
-        public void AddSet(Set set)
+        public async Task GetSetById(int setId)
         {
-            _folderService.CurrentFolder!.Sets.Add(set);
+            CurrentSet = await _httpClient.GetFromJsonAsync<Set?>($"api/sets/{setId}");
+        }
+
+        public async Task CreateSet(Set set, int folderId)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/sets/{folderId}", set);
+            CurrentSet = await response.Content.ReadFromJsonAsync<Set>();
+        }
+
+        public async Task UpdateSet(Set set)
+        {
+            await _httpClient.PutAsJsonAsync($"api/sets", set);
+
             NotifyStateChanged();
         }
 
-        public void RemoveSet(Set set)
+        public async Task DeleteSet(int setId)
         {
-            _folderService.CurrentFolder!.Sets.Remove(set);
-            _navigationManager.NavigateTo($"/sets/{_folderService.CurrentFolder.Id}");
-        }
-
-        public void UpdateSet(Set set)
-        {
-            Set oldSet = _folderService.CurrentFolder!.Sets.FirstOrDefault(s => s.Id == set.Id)!;
-            oldSet = set;
-            NotifyStateChanged();
-        }
-
-        public Set? GetSet(int folderId, int setId)
-        {
-            CurrentSet = _folderService.GetFolder(folderId)?.Sets.FirstOrDefault(s => s.Id == setId);
-            return CurrentSet;
+            await _httpClient.DeleteAsync($"api/sets/{setId}");
+            CurrentSet = null;
         }
 
         private void NotifyStateChanged() => OnChange.ForEach(a => a.Invoke());

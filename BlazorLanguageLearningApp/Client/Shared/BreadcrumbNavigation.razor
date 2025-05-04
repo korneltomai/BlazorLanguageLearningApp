@@ -14,15 +14,15 @@
             }
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets(/\d+)?"))
             {
-                <li class="breadcrumb-item"><a href="sets">@Loc["Folders"]</a></li>
+                <li class="breadcrumb-item"><a href="@($"{Username}/sets")">@Loc["Folders"]</a></li>
             }
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+"))
             {
-                <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id">@FolderService.CurrentFolder.Name</a></li>
+                <li class="breadcrumb-item"><a href="@($"{Username}/sets/{FolderService.CurrentFolder!.Id}")">@FolderService.CurrentFolder.Name</a></li>
             }
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+"))
             {
-                <li class="breadcrumb-item"><a href="sets/@FolderService.CurrentFolder!.Id/@SetService.CurrentSet!.Id">@SetService.CurrentSet.Name</a></li>
+                <li class="breadcrumb-item"><a href="@($"{Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}")">@SetService.CurrentSet.Name</a></li>
             }
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/flashcards"))
             {
@@ -42,4 +42,5 @@
 
     [Parameter]
     public string Username { get; set; } = string.Empty;
+
 }

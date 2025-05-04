@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
 @inject FolderService FolderService
+@inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Sets> Loc
 
 <Modal @ref="modal" Title="@Loc["DeleteFolder"]" IsVerticallyCentered="true">
@@ -32,12 +33,18 @@
 </Button>
 
 @code {
+    [Parameter]
+    public required string Username { get; set; }
+
     private Modal modal;
 
     private async void DeleteFolder()
     {
-        FolderService.RemoveFolder(FolderService.CurrentFolder!);
+        await FolderService.DeleteFolder(FolderService.CurrentFolder!.Id);
+
         await modal?.HideAsync();
+
+        Navigation.NavigateTo($"{Username}/sets");
     }
 
     private async Task OnShowModalClick()
