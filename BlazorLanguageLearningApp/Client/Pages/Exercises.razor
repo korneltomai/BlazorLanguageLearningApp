@@ -17,7 +17,7 @@ else
         <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username" />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" />
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder" CurrentSet="@SetService.CurrentSet" />
 
         </div>
     </div>

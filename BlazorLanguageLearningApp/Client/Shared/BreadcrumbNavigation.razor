@@ -1,7 +1,5 @@
 ﻿@using System.Text.RegularExpressions;
 
-@inject FolderService FolderService
-@inject SetService SetService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<BreadcrumbNavigation> Loc
 
@@ -11,36 +9,44 @@
             @if (Username is not null)
             {
                 <li class="breadcrumb-item"><a href="@($"{Username}/profile")">@Username</a></li>
-            }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets(/\d+)?"))
-            {
-                <li class="breadcrumb-item"><a href="@($"{Username}/sets")">@Loc["Folders"]</a></li>
-            }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+"))
-            {
-                <li class="breadcrumb-item"><a href="@($"{Username}/sets/{FolderService.CurrentFolder!.Id}")">@FolderService.CurrentFolder.Name</a></li>
-            }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+"))
-            {
-                <li class="breadcrumb-item"><a href="@($"{Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}")">@SetService.CurrentSet.Name</a></li>
-            }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/flashcards"))
-            {
-                <li class="breadcrumb-item active" aria-current="page">@Loc["Flashcards"]</li>
-            }
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/exercises"))
-            {
-                <li class="breadcrumb-item active" aria-current="page">@Loc["Exercises"]</li>
+
+                @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets(/\d+)?"))
+                {
+                    <li class="breadcrumb-item"><a href="@($"{Username}/sets")">@Loc["Folders"]</a></li>
+                }
+                @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+"))
+                {
+                    <li class="breadcrumb-item"><a href="@($"{Username}/sets/{CurrentFolder!.Id}")">@CurrentFolder.Name</a></li>
+                }
+                @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+"))
+                {
+                    <li class="breadcrumb-item"><a href="@($"{Username}/sets/{CurrentFolder!.Id}/{CurrentSet!.Id}")">@CurrentSet.Name</a></li>
+                }
+                @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/flashcards"))
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@Loc["Flashcards"]</li>
+                }
+                @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/exercises"))
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@Loc["Exercises"]</li>
+                }
             }
         </ol>
     </nav>
 </div>
 
 @code {
+
     [Parameter]
     public required string CurrentPage { get; set; } = string.Empty;
 
     [Parameter]
     public string Username { get; set; } = string.Empty;
+
+    [Parameter]
+    public Folder? CurrentFolder { get; set; } 
+
+    [Parameter]
+    public Set? CurrentSet { get; set; }
 
 }

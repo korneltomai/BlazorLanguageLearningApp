@@ -44,8 +44,8 @@
 
 @media (width>=576px) {
     .term-container {
-        height: 65vw;
-        width: 65vw;
+        height: 60vw;
+        width: 60vw;
     }
 
     .arrow-container {

@@ -195,4 +195,7 @@
   <data name="SelectAFolder" xml:space="preserve">
     <value>Válasszon egy mappát</value>
   </data>
+  <data name="NoFolderOpen" xml:space="preserve">
+    <value>Nincs kiválasztott mappa.</value>
+  </data>
 </root>

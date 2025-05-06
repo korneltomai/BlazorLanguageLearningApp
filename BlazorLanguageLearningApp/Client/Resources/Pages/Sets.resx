@@ -195,4 +195,7 @@
   <data name="SelectAFolder" xml:space="preserve">
     <value>Select a folder</value>
   </data>
+  <data name="NoFolderOpen" xml:space="preserve">
+    <value>No folder open.</value>
+  </data>
 </root>

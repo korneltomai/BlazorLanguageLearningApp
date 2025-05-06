@@ -17,7 +17,7 @@ else
         <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username"/>
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" />
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder" CurrentSet="@SetService.CurrentSet" />
 
             <div class="container-fluid d-flex mt-2">
                 <div class="col-6 col-sm-auto pe-2">
@@ -51,12 +51,12 @@ else
                             <Button Type="ButtonType.Button" Class="w-100 h-100 p-0" @onclick="() => CardIsFlipped = !CardIsFlipped">
                                 <div class="term-container-inner @FlipAnimationClass d-flex align-items-center justify-content-center border border-black rounded-3">
                                     <div class="term-container-front">
-                                        <div class="h4 mb-0">@CardText</div>
-                                        <small class="text-secondary">@CardLanguage</small>
+                                        <div class="fs-2 mb-0">@CardText</div>
+                                        <small class="fs-4 text-secondary">@CardLanguage</small>
                                     </div>
                                     <div class="term-container-back">
-                                        <div class="h4 mb-0">@CardBackText</div>
-                                        <small class="text-secondary">@CardBackLanguage</small>
+                                        <div class="fs-2 mb-0">@CardBackText</div>
+                                        <small class="fs-4 text-secondary">@CardBackLanguage</small>
                                     </div>
                                 </div>
                             </Button>
@@ -111,7 +111,7 @@ else
     private Random random = new Random();
 
     private int CurrentIndex { get; set; }
-    private BlazorLanguageLearningApp.Shared.Card CurrentCard => SetService.CurrentSet!.Cards.First();
+    private BlazorLanguageLearningApp.Shared.Card CurrentCard => SetService.CurrentSet!.Cards.ToList()[CurrentIndex];
 
     private CardSide AskedSide = CardSide.Definition;
     private bool CardIsFlipped;
