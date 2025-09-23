@@ -3,6 +3,8 @@
 
 @using BlazorLanguageLearningApp.Shared
 @using BlazorLanguageLearningApp.Client.Components
+@using BlazorLanguageLearningApp.Client.Helpers
+@using System.Drawing
 
 @inject FolderService FolderService
 @inject SetService SetService
@@ -126,7 +128,7 @@ else
                                         </div>
                                     </div>
                                     <div class="d-flex flex-row-reverse col-2 col-md-1 p-0">
-                                        <div class="learntPercantage d-flex justify-content-center align-items-center bg-primary rounded-circle border border-primary m-2">
+                                        <div class="learntPercantage d-flex justify-content-center align-items-center rounded-circle border m-2" style="@GetColorStyleForPercentage(@set.LearntPercantage)">
                                             @set.LearntPercantage
                                         </div>
                                     </div>
@@ -168,7 +170,7 @@ else
 
             if (FolderService.CurrentFolder is null)
                 Navigation.NavigateTo("page-not-found");
-        }  
+        }
     }
 
     private void OrderSets(SetOrdering selectedOrdering)
@@ -188,5 +190,15 @@ else
     private void ChangeFolder(int folderId)
     {
         Navigation.NavigateTo($"{Username}/sets/{folderId}");
+    }
+
+    private string GetColorStyleForPercentage(int percentage)
+    {
+        Color lightGradient = ColorPicker.GetGradient((double)percentage / 100, Color.FromArgb(100, 255, 0, 0), Color.FromArgb(100, 240, 240, 0), Color.FromArgb(100, 0, 225, 0));
+        Color darkGradient = ColorPicker.GetGradient((double)percentage / 100, Color.FromArgb(100, 128, 0, 0), Color.FromArgb(100, 128, 128, 0), Color.FromArgb(100, 0, 128, 0));
+
+        return $"background-color: rgb({lightGradient.R}, {lightGradient.G}, {lightGradient.B});" +
+        $"border-color: rgb({darkGradient.R}, {darkGradient.G}, {darkGradient.B}) !important;" +
+        $"color: rgb({darkGradient.R}, {darkGradient.G}, {darkGradient.B});";
     }
 }

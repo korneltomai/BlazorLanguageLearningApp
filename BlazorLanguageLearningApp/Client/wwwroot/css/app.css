@@ -118,6 +118,7 @@ a, .btn-link {
     height: 2.5rem;
     width: 2.5rem;
     color: white;
+    font-weight: bold;
 }
 
 @media (width<=420px) {
