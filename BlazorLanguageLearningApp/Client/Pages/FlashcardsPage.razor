@@ -48,8 +48,8 @@ else
                             </div>
                         </div>
                         <div class="term-container mx-4">
-                            <Button Type="ButtonType.Button" Class="w-100 h-100 p-0" @onclick="() => CardIsFlipped = !CardIsFlipped">
-                                <div class="term-container-inner @FlipAnimationClass d-flex align-items-center justify-content-center border border-black rounded-3">
+                            <Button Type="ButtonType.Button" Class="w-100 h-100 p-0" Style="box-shadow: none;" @onclick="HandleCardClicked">
+                                <div class="term-container-inner @FlipAnimationClass d-flex align-items-center justify-content-center border border-black rounded-3" style="@TransitionStyle">
                                     <div class="term-container-front">
                                         <div class="fs-2 mb-0">@CardText</div>
                                         <small class="fs-4 text-secondary">@CardLanguage</small>
@@ -116,6 +116,7 @@ else
     private CardSide AskedSide = CardSide.Definition;
     private bool CardIsFlipped;
     private string FlipAnimationClass => CardIsFlipped ? string.Empty : "flip-term-container";
+    private string TransitionStyle = "transition: transform 0.8s;";
 
     private string CardText => AskedSide == CardSide.Term ? CurrentCard.Term : CurrentCard.Definition;
     private string CardBackText => AskedSide == CardSide.Term ? CurrentCard.Definition : CurrentCard.Term;
@@ -142,19 +143,23 @@ else
         }
     }
 
+    private void HandleCardClicked()
+    {
+        CardIsFlipped = !CardIsFlipped;
+        TransitionStyle = "transition: transform 0.8s;";
+    }
+
     private void IncreaseIndex()
     {
-        CurrentIndex++;
-        if (CurrentIndex >= SetService.CurrentSet!.Cards.Count)
-            CurrentIndex = 0;
+        CurrentIndex = (CurrentIndex + 1) % SetService.CurrentSet!.Cards.Count;
+        TransitionStyle = "transition: transform 0s;";
         CardIsFlipped = false;
     }
 
     private void DecreaseIndex()
     {
-        CurrentIndex--;
-        if (CurrentIndex < 0)
-            CurrentIndex = SetService.CurrentSet!.Cards.Count - 1;
+        CurrentIndex = (CurrentIndex - 1) % SetService.CurrentSet!.Cards.Count;
+        TransitionStyle = "transition: transform 0s;";
         CardIsFlipped = false;
     }
 
