@@ -234,4 +234,7 @@
   <data name="UploadCsvFile" xml:space="preserve">
     <value>CSV fájl feltöltése</value>
   </data>
+  <data name="TopFiveRowsFromFile" xml:space="preserve">
+    <value>Első 5 sor a fájlból</value>
+  </data>
 </root>

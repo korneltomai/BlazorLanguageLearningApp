@@ -234,4 +234,7 @@
   <data name="UploadCsvFile" xml:space="preserve">
     <value>Upload CSV file</value>
   </data>
+  <data name="TopFiveRowsFromFile" xml:space="preserve">
+    <value>Top 5 rows from file</value>
+  </data>
 </root>
