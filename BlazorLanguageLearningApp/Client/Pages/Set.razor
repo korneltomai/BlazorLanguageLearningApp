@@ -57,18 +57,7 @@ else
                         <CardModal SetId="@SetId" UpdateSetList="@(() => StateHasChanged())"/>
                     </div>
                     <div class="me-auto col-12 col-md-auto mb-2 mb-md-0">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle d-block w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5m-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5" />
-                                </svg>
-                                @Loc["ImportCards"]
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">@Loc["FromGoogleSheets"]</a></li>
-                                <li><a class="dropdown-item" href="#">@Loc["FromAnotherSet"]</a></li>
-                            </ul>
-                        </div>
+                        <CardImportDropdown />
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">

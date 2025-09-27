@@ -132,8 +132,8 @@
   <data name="ImportCards" xml:space="preserve">
     <value>Kártyák importálása</value>
   </data>
-  <data name="FromGoogleSheets" xml:space="preserve">
-    <value>Google sheets fájlból</value>
+  <data name="FromCsvFile" xml:space="preserve">
+    <value>CSV fájlból</value>
   </data>
   <data name="FromAnotherSet" xml:space="preserve">
     <value>Másik csomagból</value>
@@ -227,5 +227,11 @@
   </data>
   <data name="EnterDefinition" xml:space="preserve">
     <value>Jelentés</value>
+  </data>
+  <data name="UploadFile" xml:space="preserve">
+    <value>Fájl feltöltése</value>
+  </data>
+  <data name="UploadCsvFile" xml:space="preserve">
+    <value>CSV fájl feltöltése</value>
   </data>
 </root>

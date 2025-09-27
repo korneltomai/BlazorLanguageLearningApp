@@ -44,13 +44,9 @@
 
                     <Button Type="ButtonType.Submit" Color="ButtonColor.Primary" Class="float-end">
                         @if (Editing)
-                        {
                             @Loc["Apply"]
-                        }
                         else
-                        {
                             @Loc["Create"]
-                        }
                     </Button>
                     <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="OnHideModalClick">@Loc["Close"]</Button>
                     @if (Editing)
@@ -99,7 +95,7 @@ else
 
     private string? Title { get; set; }
 
-    private Modal modal;
+    private Modal modal = default!;
 
     private EditContext? editContext;
 
@@ -127,7 +123,7 @@ else
             await SetService.GetSetById(SetId);
             UpdateSetList.Invoke();
 
-            await modal?.HideAsync();
+            await modal.HideAsync();
         }
     }
 
@@ -138,7 +134,7 @@ else
         await SetService.GetSetById(SetId);
         UpdateSetList.Invoke();
 
-        await modal?.HideAsync();
+        await modal.HideAsync();
     }
 
     private void OnModalHidden()
@@ -149,11 +145,11 @@ else
 
     private async Task OnShowModalClick()
     {
-        await modal?.ShowAsync();
+        await modal.ShowAsync();
     }
 
     private async Task OnHideModalClick()
     {
-        await modal?.HideAsync();
+        await modal.HideAsync();
     }
 }

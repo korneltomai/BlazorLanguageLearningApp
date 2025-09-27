@@ -36,24 +36,24 @@
     [Parameter]
     public required string Username { get; set; }
 
-    private Modal modal;
+    private Modal modal = default!;
 
     private async void DeleteFolder()
     {
         await FolderService.DeleteFolder(FolderService.CurrentFolder!.Id);
 
-        await modal?.HideAsync();
+        await modal.HideAsync();
 
         Navigation.NavigateTo($"{Username}/sets");
     }
 
     private async Task OnShowModalClick()
     {
-        await modal?.ShowAsync();
+        await modal.ShowAsync();
     }
 
     private async Task OnHideModalClick()
     {
-        await modal?.HideAsync();
+        await modal.HideAsync();
     }
 }

@@ -1,0 +1,48 @@
+﻿@inject IStringLocalizer<Pages.Set> Loc
+
+<Modal @ref="modal" />
+
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle d-block w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5m-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5" />
+        </svg>
+        @Loc["ImportCards"]
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <Button Type="ButtonType.Button" Class="dropdown-item" @onclick="ShowSelectImportFileModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
+                    <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z" />
+                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                </svg>
+                @Loc["FromCsvFile"]
+            </Button>
+        </li>
+        <li>
+            <Button Type="ButtonType.Button" Class="dropdown-item" @onclick="ShowImportFromSetModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                </svg>
+                @Loc["FromAnotherSet"]
+            </Button>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private Modal modal = default!;
+
+    private async Task ShowSelectImportFileModal()
+    {
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("OnCloseClickedCallback", EventCallback.Factory.Create(this, () => modal.HideAsync()));
+        await modal.ShowAsync<SelectImportFileComponent>(title: @Loc["UploadCsvFile"], parameters: parameters);
+    }
+
+    private async Task ShowImportFromSetModal()
+    {
+
+    }
+
+}
