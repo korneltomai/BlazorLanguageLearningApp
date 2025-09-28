@@ -11,18 +11,67 @@
             <InputFile OnChange="LoadExampleFileContent" accept=".csv" @key=@(inputFileId) />
             <div>
                 <h4 class="mt-3">@Loc["TopFiveRowsFromFile"]:</h4>
-                <p class="border px-2">
-                    @foreach (string line in csvFileContent)
+                <div class="border overflow-auto">
+                    @if (csvFileContent is null)
                     {
-                        @line<br/>
+                        <span class="px-3 py-2">@Loc["NoFileSelected"]</span>
                     }
-                </p>
+                    else if (csvFileContent.Count == 0)
+                    {
+                        <span class="px-3 py-2">@Loc["TheSelectedFileIsEmpty"]</span>
+                    }
+                    else
+                    {
+                        <table class="table table-bordered w-100 mb-0">
+                            <thead>
+                                <tr>
+                                    @for (int i = 1; i <= csvFileContent.First().Length; i++)
+                                    {
+                                        <td>@String.Format($"{@Loc["NumberedColumn"]}", @i)</td>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody class=" table-group-divider">
+                                @foreach (var line in csvFileContent)
+                                {
+                                    <tr>
+                                        @foreach (var col in line)
+                                        {
+                                            <td>@col</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+            <hr />
+            <h4 class="mt-3">@Loc["Columns"]:</h4>
+            <div class="ms-2">
+                @foreach (var columnName in Enum.GetValues<ColumnName>())
+                {
+                    <div class="row mb-2">
+                        <div class="col-7 d-flex align-items-center">
+                            <label for="@String.Format($"columnFor{0}Select", columnName.ToString())">@Loc[columnName.ToString()]</label>
+                        </div>
+                        <div class="col-5">
+                            <InputSelect class="form-select" id="@String.Format($"columnFor{0}Select", columnName)" @bind-Value="importColumns[columnName.ToString()].Column">
+                                <option value="0" selected>None</option>
+                                @foreach (var column in GetAvailableColumns(importColumns[columnName.ToString()].Column))
+                                {
+                                    <option value="@column">@String.Format($"{@Loc["NumberedColumn"]}", column)</option>
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 text-right">
+            <div class="col-md-12 text-end">
                 <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
-                <Button Color="ButtonColor.Primary">@Loc["UploadFile"]</Button>
+                <Button Color="ButtonColor.Primary" @onclick="ImportFile">@Loc["UploadFile"]</Button>
             </div>
         </div>
     </BodyTemplate>
@@ -60,43 +109,57 @@
     private Modal importFromCsvModal = default!;
 
     private Guid inputFileId = Guid.NewGuid();
-    private string[] csvFileContent = new string[5];
+    private List<string[]>? csvFileContent;
 
-    protected override void OnInitialized()
+    private Dictionary<string, SelectColumnResponse> importColumns = new()
     {
-        csvFileContent[0] = "No file is selected.";
-        base.OnInitialized();
-    }
+        {"TermLanguage", new SelectColumnResponse()},
+        {"DefinitionLanguage", new SelectColumnResponse()},
+        {"Term", new SelectColumnResponse()},
+        {"Definition", new SelectColumnResponse()},
+    };
 
     private void OnImportFromCsvModalHidden()
     {
-        csvFileContent = new string[5];
-        csvFileContent[0] = "No file is selected.";
+        csvFileContent?.Clear();
         inputFileId = Guid.NewGuid();
     }
 
     private async void LoadExampleFileContent(InputFileChangeEventArgs e)
     {
+        csvFileContent = new(5);
+
         using (var reader = new StreamReader(e.File.OpenReadStream()))
         {
-            csvFileContent = new string[5];
-
             string? line = await reader.ReadLineAsync();
             if (line is null)
-            {
-                csvFileContent[0] = "The selected file is empty.";
                 return;
-            }
-            csvFileContent[0] = line;
+
+            csvFileContent.Add(line.Split(','));
 
             int linesLeft = 4;
             while ((line = await reader.ReadLineAsync()) != null && linesLeft > 0)
             {
-                csvFileContent[5 - linesLeft] = line;
+                csvFileContent.Add(line.Split(','));
                 linesLeft--;
             }
         }
 
         StateHasChanged();
     }
-}
+
+    private async void ImportFile()
+    {
+        foreach (var key in importColumns.Keys)
+            Console.WriteLine($"{key}: {importColumns[key].Column}");
+    }
+
+    private IEnumerable<int> GetAvailableColumns(int selectedValue)
+    {
+        var taken = importColumns.Values.Select(x => x.Column).Where(c => c != 0);
+        return new[] { 1, 2, 3, 4 }.Where(opt => opt == selectedValue || !taken.Contains(opt));
+    }
+
+    private enum ColumnName { TermLanguage, DefinitionLanguage, Term, Definition }
+    private class SelectColumnResponse { public int Column { get; set; } }
+} 

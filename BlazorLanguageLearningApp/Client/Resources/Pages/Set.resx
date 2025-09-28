@@ -237,4 +237,19 @@
   <data name="TopFiveRowsFromFile" xml:space="preserve">
     <value>Top 5 rows from file</value>
   </data>
+  <data name="NoFileSelected" xml:space="preserve">
+    <value>No file selected</value>
+  </data>
+  <data name="TheSelectedFileIsEmpty" xml:space="preserve">
+    <value>The selected file is empty.</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="Columns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="NumberedColumn" xml:space="preserve">
+    <value>Column {0}</value>
+  </data>
 </root>
