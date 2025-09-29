@@ -237,7 +237,7 @@
   <data name="TopFiveRowsFromFile" xml:space="preserve">
     <value>Első 5 sor a fájlból</value>
   </data>
-  <data name="NoSelectedFile" xml:space="preserve">
+  <data name="NoFileSelected" xml:space="preserve">
     <value>Nincs kiválasztott fájl</value>
   </data>
   <data name="TheSelectedFileIsEmpty" xml:space="preserve">
@@ -251,5 +251,8 @@
   </data>
   <data name="NumberedColumn" xml:space="preserve">
     <value>{0}. Oszlop</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Nincs</value>
   </data>
 </root>

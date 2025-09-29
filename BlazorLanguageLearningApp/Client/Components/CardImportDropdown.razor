@@ -6,7 +6,7 @@
 @inject IStringLocalizer<Pages.Set> Loc
 
 <Modal @ref="importFromCsvModal" Title="@Loc["UploadCsvFile"]" IsVerticallyCentered="true" OnHidden="OnImportFromCsvModalHidden">
-    <BodyTemplate>
+    <BodyTemplate Class="overflow-auto">
         <div class="container mb-3">
             <InputFile OnChange="LoadExampleFileContent" accept=".csv" @key=@(inputFileId) />
             <div>
@@ -27,7 +27,7 @@
                                 <tr>
                                     @for (int i = 1; i <= csvFileContent.First().Length; i++)
                                     {
-                                        <td>@String.Format($"{@Loc["NumberedColumn"]}", @i)</td>
+                                        <td class="text-nowrap">@String.Format($"{@Loc["NumberedColumn"]}", @i)</td>
                                     }
                                 </tr>
                             </thead>
@@ -53,11 +53,11 @@
                 {
                     <div class="row mb-2">
                         <div class="col-7 d-flex align-items-center">
-                            <label for="@String.Format($"columnFor{0}Select", columnName.ToString())">@Loc[columnName.ToString()]</label>
+                            <label for="@String.Format($"columnFor{0}Select", columnName.ToString())">@Loc[columnName.ToString()]:</label>
                         </div>
                         <div class="col-5">
                             <InputSelect class="form-select" id="@String.Format($"columnFor{0}Select", columnName)" @bind-Value="importColumns[columnName.ToString()].Column">
-                                <option value="0" selected>None</option>
+                                <option value="0">@Loc["None"]</option>
                                 @foreach (var column in GetAvailableColumns(importColumns[columnName.ToString()].Column))
                                 {
                                     <option value="@column">@String.Format($"{@Loc["NumberedColumn"]}", column)</option>
@@ -67,14 +67,30 @@
                     </div>
                 }
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-end">
-                <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
-                <Button Color="ButtonColor.Primary" @onclick="ImportFile">@Loc["UploadFile"]</Button>
+            <hr />
+            <h4 class="mt-3">@Loc["Languages"]:</h4>
+            <div class="row mb-2">
+                <div class="col-7 d-flex align-items-center">
+                    <label for="termLanguageInput">@Loc["TermLanguage"]:</label>
+                </div>
+                <div class="col-5">
+                    <TextInput id="termLanguageInput" @bind-Value="@customTermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" Disabled="@(importColumns["TermLanguage"].Column > 0)"/>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7 d-flex align-items-center">
+                    <label for="definitionLanguageInput">@Loc["DefinitionLanguage"]:</label>
+                </div>
+                <div class="col-5">
+                    <TextInput id="definitionLanguageInput" @bind-Value="@customDefinitionLanguage" Placeholder="@Loc["DefinitioLanguage"]" MaxLength="25" Disabled="@(importColumns["DefinitionLanguage"].Column > 0)"/>
+                </div>
             </div>
         </div>
     </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
+        <Button Color="ButtonColor.Primary" @onclick="ImportFile">@Loc["UploadFile"]</Button>
+    </FooterTemplate>
 </Modal>
 
 <div class="dropdown">
@@ -118,6 +134,9 @@
         {"Term", new SelectColumnResponse()},
         {"Definition", new SelectColumnResponse()},
     };
+
+    private string customTermLanguage = "";
+    private string customDefinitionLanguage = "";
 
     private void OnImportFromCsvModalHidden()
     {
