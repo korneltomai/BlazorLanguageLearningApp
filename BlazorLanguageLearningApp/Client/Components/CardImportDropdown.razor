@@ -5,10 +5,11 @@
 
 @inject IStringLocalizer<Pages.Set> Loc
 
+<!-- IMPORT CSV MODAL -->
 <Modal @ref="importFromCsvModal" Title="@Loc["UploadCsvFile"]" IsVerticallyCentered="true" OnHidden="OnImportFromCsvModalHidden">
-    <BodyTemplate Class="overflow-auto">
-        <div class="container mb-3">
-            <InputFile OnChange="LoadExampleFileContent" accept=".csv" @key=@(inputFileId) />
+    <BodyTemplate>
+        <div class="container">
+            <InputFile OnChange="LoadExampleFileContent" accept=".csv" @key=@(fileInputId) />
             <div>
                 <h4 class="mt-3">@Loc["TopFiveRowsFromFile"]:</h4>
                 <div class="border overflow-auto">
@@ -82,14 +83,30 @@
                     <label for="definitionLanguageInput">@Loc["DefinitionLanguage"]:</label>
                 </div>
                 <div class="col-5">
-                    <TextInput id="definitionLanguageInput" @bind-Value="@customDefinitionLanguage" Placeholder="@Loc["DefinitioLanguage"]" MaxLength="25" Disabled="@(importColumns["DefinitionLanguage"].Column > 0)"/>
+                    <TextInput id="definitionLanguageInput" @bind-Value="@customDefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" Disabled="@(importColumns["DefinitionLanguage"].Column > 0)"/>
                 </div>
             </div>
         </div>
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
-        <Button Color="ButtonColor.Primary" @onclick="ImportFile">@Loc["UploadFile"]</Button>
+        <Button Color="ButtonColor.Primary" @onclick="ImportFile" Disabled="@CannotImport">@Loc["UploadFile"]</Button>
+    </FooterTemplate>
+</Modal>
+
+<!-- SELECTION MODAL -->
+<Modal @ref="importSelectionModal" Title="@Loc["SelectCardsToImport"]" IsVerticallyCentered="true" OnHidden="OnImportSelectionModalHidden">
+    <BodyTemplate>
+        <div class="container">
+            @foreach (var card in cards)
+            {
+                <p>@card.TermLanguage - @card.DefinitionLanguage - @card.Term - @card.Definition</p>
+            }
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
+        <Button Color="ButtonColor.Primary" @onclick="ImportFile">@Loc["Import"]</Button>
     </FooterTemplate>
 </Modal>
 
@@ -123,9 +140,13 @@
 
 @code {
     private Modal importFromCsvModal = default!;
+    private Modal importSelectionModal = default!;
 
-    private Guid inputFileId = Guid.NewGuid();
+    private Guid fileInputId = Guid.NewGuid();
+    private IBrowserFile? selectedFile;
     private List<string[]>? csvFileContent;
+    private IEnumerable<BlazorLanguageLearningApp.Shared.Card> cards = default!;
+    private List<BlazorLanguageLearningApp.Shared.Card> selectedCards = new();
 
     private Dictionary<string, SelectColumnResponse> importColumns = new()
     {
@@ -138,17 +159,32 @@
     private string customTermLanguage = "";
     private string customDefinitionLanguage = "";
 
+    private bool CannotImport => 
+        (csvFileContent is null || csvFileContent.Count == 0) 
+        || importColumns["Term"].Column == 0 
+        || importColumns["Definition"].Column == 0;
+
     private void OnImportFromCsvModalHidden()
     {
         csvFileContent?.Clear();
-        inputFileId = Guid.NewGuid();
+        fileInputId = Guid.NewGuid();
+    }
+
+    private void OnImportSelectionModalHidden()
+    {
+        csvFileContent?.Clear();
+        cards = default!;
+        selectedCards = new();
+        fileInputId = Guid.NewGuid();
     }
 
     private async void LoadExampleFileContent(InputFileChangeEventArgs e)
     {
+        selectedFile = e.File;
+
         csvFileContent = new(5);
 
-        using (var reader = new StreamReader(e.File.OpenReadStream()))
+        using (var reader = new StreamReader(selectedFile.OpenReadStream()))
         {
             string? line = await reader.ReadLineAsync();
             if (line is null)
@@ -169,8 +205,30 @@
 
     private async void ImportFile()
     {
-        foreach (var key in importColumns.Keys)
-            Console.WriteLine($"{key}: {importColumns[key].Column}");
+        if (selectedFile is null)
+            return;
+
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            HasHeaderRecord = false,
+        };
+
+        using (var reader = new StreamReader(selectedFile.OpenReadStream()))
+        using (var csv = new CsvReader(reader, config))
+        {
+            var cardMap = new CardMap(
+                importColumns["TermLanguage"].Column - 1,
+                importColumns["DefinitionLanguage"].Column - 1,
+                importColumns["Term"].Column - 1,
+                importColumns["Definition"].Column - 1
+            );
+            csv.Context.RegisterClassMap(cardMap);
+            cards = (await csv.GetRecordsAsync<BlazorLanguageLearningApp.Shared.Card>().ToListAsync())
+                .Where(c => c.TermLanguage.Length <= 25 && c.DefinitionLanguage.Length <= 25 && c.Term.Length <= 50 && c.Definition.Length <= 50);
+        }
+
+        await importFromCsvModal.HideAsync();
+        await importSelectionModal.ShowAsync();
     }
 
     private IEnumerable<int> GetAvailableColumns(int selectedValue)

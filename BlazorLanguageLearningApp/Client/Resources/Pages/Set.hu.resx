@@ -255,4 +255,10 @@
   <data name="None" xml:space="preserve">
     <value>Nincs</value>
   </data>
+  <data name="SelectCardsToImport" xml:space="preserve">
+    <value>Importálni kivánt kártyák kiválasztása</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importálás</value>
+  </data>
 </root>
