@@ -61,7 +61,7 @@
                                 <option value="0">@Loc["None"]</option>
                                 @foreach (var column in GetAvailableColumns(importColumns[columnName.ToString()].Column))
                                 {
-                                    <option value="@column">@String.Format($"{@Loc["NumberedColumn"]}", column)</option>
+                                    <option value="@column" @key="column">@String.Format($"{@Loc["NumberedColumn"]}", column)</option>
                                 }
                             </InputSelect>
                         </div>
