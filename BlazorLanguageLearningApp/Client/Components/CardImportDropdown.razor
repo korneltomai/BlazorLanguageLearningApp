@@ -57,7 +57,7 @@
                             <label for="@String.Format($"columnFor{0}Select", columnName.ToString())">@Loc[columnName.ToString()]:</label>
                         </div>
                         <div class="col-5">
-                            <InputSelect class="form-select" id="@String.Format($"columnFor{0}Select", columnName)" @bind-Value="importColumns[columnName.ToString()].Column">
+                            <InputSelect class="form-select" id="@String.Format($"columnFor{0}Select", columnName)" @bind-Value="importColumns[columnName.ToString()].Column" Disabled="@NoFileSelected">
                                 <option value="0">@Loc["None"]</option>
                                 @foreach (var column in GetAvailableColumns(importColumns[columnName.ToString()].Column))
                                 {
@@ -75,7 +75,7 @@
                     <label for="termLanguageInput">@Loc["TermLanguage"]:</label>
                 </div>
                 <div class="col-5">
-                    <TextInput id="termLanguageInput" @bind-Value="customTermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" Disabled="@(!UseCustomTermLanguage)" />
+                    <TextInput id="termLanguageInput" @bind-Value="customTermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" Disabled="@(!UseCustomTermLanguage || NoFileSelected)" />
                 </div>
             </div>
             <div class="row mb-2">
@@ -83,7 +83,7 @@
                     <label for="definitionLanguageInput">@Loc["DefinitionLanguage"]:</label>
                 </div>
                 <div class="col-5">
-                    <TextInput id="definitionLanguageInput" @bind-Value="customDefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" Disabled="@(!UseCustomDefinitionLanguage)" />
+                    <TextInput id="definitionLanguageInput" @bind-Value="customDefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" Disabled="@(!UseCustomDefinitionLanguage || NoFileSelected)" />
                 </div>
             </div>
         </div>
@@ -181,6 +181,7 @@
     private string customTermLanguage = "";
     private string customDefinitionLanguage = "";
 
+    private bool NoFileSelected => selectedFile is null;
     private bool CannotImport => 
         (csvFileContent is null || csvFileContent.Count == 0) 
         || importColumns["Term"].Column == 0 
@@ -188,6 +189,8 @@
 
     private void OnImportFromCsvModalHidden()
     {
+        csvFileContent?.Clear();
+        fileInputId = Guid.NewGuid();
         importColumns = new()
         {
             {"TermLanguage", new SelectColumnResponse()},
@@ -195,8 +198,8 @@
             {"Term", new SelectColumnResponse()},
             {"Definition", new SelectColumnResponse()},
         };
-        csvFileContent?.Clear();
-        fileInputId = Guid.NewGuid();
+        customTermLanguage = "";
+        customDefinitionLanguage = "";
     }
 
     private void OnImportSelectionModalHidden()
