@@ -75,7 +75,7 @@
                     <label for="termLanguageInput">@Loc["TermLanguage"]:</label>
                 </div>
                 <div class="col-5">
-                    <TextInput id="termLanguageInput" @bind-Value="@customTermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" Disabled="@(importColumns["TermLanguage"].Column > 0)"/>
+                    <TextInput id="termLanguageInput" @bind-Value="customTermLanguage" Placeholder="@Loc["TermLanguage"]" MaxLength="25" Disabled="@(!UseCustomTermLanguage)" />
                 </div>
             </div>
             <div class="row mb-2">
@@ -83,7 +83,7 @@
                     <label for="definitionLanguageInput">@Loc["DefinitionLanguage"]:</label>
                 </div>
                 <div class="col-5">
-                    <TextInput id="definitionLanguageInput" @bind-Value="@customDefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" Disabled="@(importColumns["DefinitionLanguage"].Column > 0)"/>
+                    <TextInput id="definitionLanguageInput" @bind-Value="customDefinitionLanguage" Placeholder="@Loc["DefinitionLanguage"]" MaxLength="25" Disabled="@(!UseCustomDefinitionLanguage)" />
                 </div>
             </div>
         </div>
@@ -94,15 +94,35 @@
     </FooterTemplate>
 </Modal>
 
-<!-- SELECTION MODAL -->
-<Modal @ref="importSelectionModal" Title="@Loc["SelectCardsToImport"]" IsVerticallyCentered="true" OnHidden="OnImportSelectionModalHidden">
+
+
+<Modal @ref="importSelectionModal" Title="@Loc["SelectCardsToImport"]" IsVerticallyCentered="true" IsScrollable="true" Size="ModalSize.Large"  OnHidden="OnImportSelectionModalHidden">
     <BodyTemplate>
-        <div class="container">
-            @foreach (var card in cards)
-            {
-                <p>@card.TermLanguage - @card.DefinitionLanguage - @card.Term - @card.Definition</p>
-            }
-        </div>
+        <Grid TItem="BlazorLanguageLearningApp.Shared.Card"
+              Class="table table-hover table-bordered"
+              Data="cards"
+              AllowFiltering="true"
+              AllowSelection="true"
+              SelectionMode="GridSelectionMode.Multiple"
+              @bind-SelectedItems="@selectedCards"
+              Responsive="true">
+
+            <GridColumns>
+                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term" PropertyName="Term">
+                    @context.Term
+                </GridColumn>
+                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition" PropertyName="Definition">
+                    @context.Definition
+                </GridColumn>
+                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term Language" PropertyName="TermLanguage">
+                    @context.TermLanguage
+                </GridColumn>
+                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition Language" PropertyName="DefinitionLanguage">
+                    @context.DefinitionLanguage
+                </GridColumn>
+            </GridColumns>
+
+        </Grid>
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
@@ -145,8 +165,8 @@
     private Guid fileInputId = Guid.NewGuid();
     private IBrowserFile? selectedFile;
     private List<string[]>? csvFileContent;
-    private IEnumerable<BlazorLanguageLearningApp.Shared.Card> cards = default!;
-    private List<BlazorLanguageLearningApp.Shared.Card> selectedCards = new();
+    private List<BlazorLanguageLearningApp.Shared.Card> cards = default!;
+    private HashSet<BlazorLanguageLearningApp.Shared.Card> selectedCards = new();
 
     private Dictionary<string, SelectColumnResponse> importColumns = new()
     {
@@ -156,6 +176,8 @@
         {"Definition", new SelectColumnResponse()},
     };
 
+    private bool UseCustomTermLanguage => importColumns["TermLanguage"].Column == 0;
+    private bool UseCustomDefinitionLanguage => importColumns["DefinitionLanguage"].Column == 0;
     private string customTermLanguage = "";
     private string customDefinitionLanguage = "";
 
@@ -166,6 +188,13 @@
 
     private void OnImportFromCsvModalHidden()
     {
+        importColumns = new()
+        {
+            {"TermLanguage", new SelectColumnResponse()},
+            {"DefinitionLanguage", new SelectColumnResponse()},
+            {"Term", new SelectColumnResponse()},
+            {"Definition", new SelectColumnResponse()},
+        };
         csvFileContent?.Clear();
         fileInputId = Guid.NewGuid();
     }
@@ -211,20 +240,34 @@
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = false,
+            MissingFieldFound = null,
         };
 
         using (var reader = new StreamReader(selectedFile.OpenReadStream()))
         using (var csv = new CsvReader(reader, config))
         {
-            var cardMap = new CardMap(
-                importColumns["TermLanguage"].Column - 1,
-                importColumns["DefinitionLanguage"].Column - 1,
-                importColumns["Term"].Column - 1,
-                importColumns["Definition"].Column - 1
-            );
+            CardMap cardMap; 
+
+            if (!UseCustomTermLanguage && !UseCustomDefinitionLanguage)
+                cardMap = new CardMap(importColumns["Term"].Column - 1, importColumns["Definition"].Column - 1);
+            else if (UseCustomTermLanguage && !UseCustomDefinitionLanguage)
+                cardMap = new CardMap(importColumns["Term"].Column - 1, importColumns["Definition"].Column - 1, definitionLanguageIndex: importColumns["DefinitionLanguage"].Column - 1);
+            else if (UseCustomDefinitionLanguage && !UseCustomTermLanguage)
+                cardMap = new CardMap(importColumns["Term"].Column - 1, importColumns["Definition"].Column - 1, termLanguageIndex: importColumns["TermLanguage"].Column - 1);
+            else
+                cardMap = new CardMap(importColumns["Term"].Column - 1, importColumns["Definition"].Column - 1, importColumns["TermLanguage"].Column - 1, importColumns["DefinitionLanguage"].Column - 1);
+
+
             csv.Context.RegisterClassMap(cardMap);
+
             cards = (await csv.GetRecordsAsync<BlazorLanguageLearningApp.Shared.Card>().ToListAsync())
-                .Where(c => c.TermLanguage.Length <= 25 && c.DefinitionLanguage.Length <= 25 && c.Term.Length <= 50 && c.Definition.Length <= 50);
+                .Where(c => c.TermLanguage.Length <= 25 && c.DefinitionLanguage.Length <= 25 && c.Term.Length <= 50 && c.Definition.Length <= 50).ToList();
+
+            if (UseCustomTermLanguage)
+                cards.ForEach((c) => c.TermLanguage = customTermLanguage);
+            
+            if (UseCustomDefinitionLanguage)
+                cards.ForEach((c) => c.DefinitionLanguage = customDefinitionLanguage);
         }
 
         await importFromCsvModal.HideAsync();

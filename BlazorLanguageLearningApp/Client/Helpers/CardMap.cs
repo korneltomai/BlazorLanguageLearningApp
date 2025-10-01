@@ -1,15 +1,19 @@
 ﻿using CsvHelper.Configuration;
 using BlazorLanguageLearningApp.Shared;
+using System.Runtime.CompilerServices;
 
 namespace BlazorLanguageLearningApp.Client.Helpers;
 
 public class CardMap : ClassMap<Card>
 {
-    public CardMap(int termLanguageIndex = 0, int definitionLanguageIndex = 1, int termIndex = 2, int definitionIndex = 3)
+    public CardMap(int termIndex, int definitionIndex, int termLanguageIndex = -1, int definitionLanguageIndex = -1)
     {
-        Map(m => m.TermLanguage).Index(termLanguageIndex);
-        Map(m => m.DefinitionLanguage).Index(definitionLanguageIndex);
         Map(m => m.Term).Index(termIndex);
         Map(m => m.Definition).Index(definitionIndex);
+
+        if (termLanguageIndex != -1)
+            Map(m => m.TermLanguage).Index(termLanguageIndex);
+        if (definitionLanguageIndex != -1)
+            Map(m => m.DefinitionLanguage).Index(definitionLanguageIndex);
     }
 }
