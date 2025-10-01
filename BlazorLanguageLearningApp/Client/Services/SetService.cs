@@ -38,6 +38,30 @@ namespace BlazorLanguageLearningApp.Client.Services
             CurrentSet = null;
         }
 
+        public void AddCard(Card card)
+        {
+            if (CurrentSet is null)
+                return;
+
+            CurrentSet.Cards.Add(card);
+
+            NotifyStateChanged();
+        }
+
+        public void RemoveCard(int cardId)
+        {
+            if (CurrentSet is null)
+                return;
+
+            var cardToDelete = CurrentSet.Cards.Where(c => c.Id == cardId).FirstOrDefault();
+            if (cardToDelete is null)
+                return;
+
+            CurrentSet.Cards.Remove(cardToDelete);
+
+            NotifyStateChanged();
+        }
+
         private void NotifyStateChanged() => OnChange.ForEach(a => a.Invoke());
     }
 }

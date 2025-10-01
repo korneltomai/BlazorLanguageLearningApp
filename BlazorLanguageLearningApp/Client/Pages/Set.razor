@@ -54,10 +54,10 @@ else
             <div class="container-fluid mb-3">
                 <div class="d-flex align-items-center flex-wrap">
                     <div class="col-12 col-md-auto mb-2 mb-md-0 me-0 me-md-2">
-                        <CardModal SetId="@SetId" UpdateSetList="@(() => StateHasChanged())"/>
+                        <CardModal UpdateSetList="@(() => StateHasChanged())"/>
                     </div>
                     <div class="me-auto col-12 col-md-auto mb-2 mb-md-0">
-                        <CardImportDropdown />
+                        <CardImportDropdown UpdateSetList="@(() => StateHasChanged())" />
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">
@@ -81,7 +81,7 @@ else
                 <div class="d-flex flex-column pt-3">
                     @foreach (BlazorLanguageLearningApp.Shared.Card card in SetService.CurrentSet.Cards)
                     {
-                        <CardModal Editing="true" Card="@card" SetId="@SetId" UpdateSetList="@(() => StateHasChanged())">
+                        <CardModal Editing="true" Card="@card" UpdateSetList="@(() => StateHasChanged())">
                             <div class="d-flex row border border-black rounded-3 mx-0">
                                 <div class="row g-0 col-10 col-md-11 me-auto">
                                     <div class="col-12 col-md-6 p-3 pe-0 pe-md-3 pb-0 pb-md-3">

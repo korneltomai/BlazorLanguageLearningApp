@@ -88,9 +88,6 @@ else
     public BlazorLanguageLearningApp.Shared.Card Card { get; set; } = new();
 
     [Parameter]
-    public required int SetId { get; set; }
-
-    [Parameter]
     public required Action UpdateSetList { get; set; }
 
     private string? Title { get; set; }
@@ -118,10 +115,7 @@ else
             if (Editing)
                 await CardService.UpdateCard(Card);
             else
-                await CardService.CreateCard(Card, SetService.CurrentSet!.Id);
-
-            await SetService.GetSetById(SetId);
-            UpdateSetList.Invoke();
+                await CardService.CreateCard(Card);
 
             await modal.HideAsync();
         }
@@ -130,9 +124,6 @@ else
     public async void DeleteCard()
     {
         await CardService.DeleteCard(Card.Id);
-
-        await SetService.GetSetById(SetId);
-        UpdateSetList.Invoke();
 
         await modal.HideAsync();
     }

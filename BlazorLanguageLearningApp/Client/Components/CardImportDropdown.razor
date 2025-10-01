@@ -3,6 +3,8 @@
 @using BlazorLanguageLearningApp.Client.Helpers;
 @using CsvHelper.Configuration
 
+@inject CardService CardService
+@inject SetService SetService
 @inject IStringLocalizer<Pages.Set> Loc
 
 <!-- IMPORT CSV MODAL -->
@@ -125,8 +127,8 @@
         </Grid>
     </BodyTemplate>
     <FooterTemplate>
-        <Button Color="ButtonColor.Secondary" @onclick="() => importFromCsvModal.HideAsync()">@Loc["Close"]</Button>
-        <Button Color="ButtonColor.Primary" @onclick="ImportFile">@Loc["Import"]</Button>
+        <Button Color="ButtonColor.Secondary" @onclick="() => importSelectionModal.HideAsync()">@Loc["Close"]</Button>
+        <Button Color="ButtonColor.Primary" @onclick="ImportCards">@Loc["Import"]</Button>
     </FooterTemplate>
 </Modal>
 
@@ -159,6 +161,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public required Action UpdateSetList { get; set; }
+
     private Modal importFromCsvModal = default!;
     private Modal importSelectionModal = default!;
 
@@ -268,13 +273,21 @@
 
             if (UseCustomTermLanguage)
                 cards.ForEach((c) => c.TermLanguage = customTermLanguage);
-            
+
             if (UseCustomDefinitionLanguage)
                 cards.ForEach((c) => c.DefinitionLanguage = customDefinitionLanguage);
         }
 
         await importFromCsvModal.HideAsync();
         await importSelectionModal.ShowAsync();
+    }
+
+    private async void ImportCards()
+    {
+        foreach (var card in selectedCards)
+            await CardService.CreateCard(card);
+
+        await importSelectionModal.HideAsync();
     }
 
     private IEnumerable<int> GetAvailableColumns(int selectedValue)
