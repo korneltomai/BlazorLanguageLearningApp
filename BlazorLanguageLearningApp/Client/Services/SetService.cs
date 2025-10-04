@@ -62,6 +62,19 @@ namespace BlazorLanguageLearningApp.Client.Services
             NotifyStateChanged();
         }
 
+        public bool CurrentContainsCard(Card card)
+        {
+            if (CurrentSet is null)
+                return false;
+
+            return CurrentSet.Cards.Where(c =>
+                    card.Term == c.Term 
+                    && card.Definition == c.Definition
+                    && card.TermLanguage == c.TermLanguage
+                    && card.DefinitionLanguage == c.DefinitionLanguage)
+                .Any();
+        }
+
         private void NotifyStateChanged() => OnChange.ForEach(a => a.Invoke());
     }
 }

@@ -268,7 +268,9 @@
             csv.Context.RegisterClassMap(cardMap);
 
             cards = (await csv.GetRecordsAsync<BlazorLanguageLearningApp.Shared.Card>().ToListAsync())
-                .Where(c => c.TermLanguage.Length <= 25 && c.DefinitionLanguage.Length <= 25 && c.Term.Length <= 50 && c.Definition.Length <= 50).ToList();
+                .Where(c => c.TermLanguage.Length <= 25 && c.DefinitionLanguage.Length <= 25 && c.Term.Length <= 50 && c.Definition.Length <= 50)
+                .Where(c => !SetService.CurrentContainsCard(c))
+                .ToList();
 
             if (UseCustomTermLanguage)
                 cards.ForEach((c) => c.TermLanguage = customTermLanguage);
