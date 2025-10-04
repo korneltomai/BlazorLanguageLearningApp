@@ -25,8 +25,12 @@
 .term-container-front,
 .term-container-back {
     position: absolute;
-    -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden; /* Safari */
+}
+
+.term-container-front {
+    transform: rotateY(0deg);
 }
 
 .term-container-back {

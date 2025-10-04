@@ -129,11 +129,12 @@ else
     [Parameter]
     public int SetId { get; set; }
 
-    private CardOrdering Ordering { get; set; }
+    private CardOrdering Ordering { get; set; } = CardOrdering.TermIncreasing;
 
     protected override void OnInitialized()
     {
         SetService.OnChange.Add(StateHasChanged);
+        SetService.OnChange.Add(OrderCardsHandler);
     }
 
     protected async override Task OnParametersSetAsync()
@@ -148,7 +149,7 @@ else
             Navigation.NavigateTo("page-not-found");
         }
 
-        OrderCards(CardOrdering.TermIncreasing);
+        OrderCards(Ordering);
     }
 
     private void OrderCards(CardOrdering selectedOrdering)
@@ -168,6 +169,9 @@ else
         else if (selectedOrdering == CardOrdering.ScoreDecreasing)
             SetService.CurrentSet!.Cards = SetService.CurrentSet.Cards.OrderByDescending(s => s.LearntPercantage).ToList();
     }
+
+    private void OrderCardsHandler() => OrderCards(Ordering);
+
 
     private string GetColorStyleForPercentage(int percentage)
     {

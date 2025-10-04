@@ -7,7 +7,6 @@
 @inject SetService SetService
 @inject IStringLocalizer<Pages.Set> Loc
 
-<!-- IMPORT CSV MODAL -->
 <Modal @ref="importFromCsvModal" Title="@Loc["UploadCsvFile"]" IsVerticallyCentered="true" OnHidden="OnImportFromCsvModalHidden">
     <BodyTemplate>
         <div class="container">
@@ -101,7 +100,7 @@
 <Modal @ref="importSelectionModal" Title="@Loc["SelectCardsToImport"]" IsVerticallyCentered="true" IsScrollable="true" Size="ModalSize.Large"  OnHidden="OnImportSelectionModalHidden">
     <BodyTemplate>
         <Grid TItem="BlazorLanguageLearningApp.Shared.Card"
-              Class="table table-hover table-bordered"
+              Class="table table-hover table-bordered mb-0"
               Data="cards"
               AllowFiltering="true"
               AllowSelection="true"
@@ -128,7 +127,7 @@
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="() => importSelectionModal.HideAsync()">@Loc["Close"]</Button>
-        <Button Color="ButtonColor.Primary" @onclick="ImportCards">@Loc["Import"]</Button>
+        <Button Color="ButtonColor.Primary" @onclick="ImportCards" Disabled="@(selectedCards.Count == 0)">@Loc["Import"]</Button>
     </FooterTemplate>
 </Modal>
 
@@ -186,7 +185,7 @@
     private string customTermLanguage = "";
     private string customDefinitionLanguage = "";
 
-    private bool NoFileSelected => selectedFile is null;
+    private bool NoFileSelected => csvFileContent is null || csvFileContent.Count == 0;
     private bool CannotImport => 
         (csvFileContent is null || csvFileContent.Count == 0) 
         || importColumns["Term"].Column == 0 
@@ -256,7 +255,7 @@
         {
             CardMap cardMap; 
 
-            if (!UseCustomTermLanguage && !UseCustomDefinitionLanguage)
+            if (UseCustomTermLanguage && UseCustomDefinitionLanguage)
                 cardMap = new CardMap(importColumns["Term"].Column - 1, importColumns["Definition"].Column - 1);
             else if (UseCustomTermLanguage && !UseCustomDefinitionLanguage)
                 cardMap = new CardMap(importColumns["Term"].Column - 1, importColumns["Definition"].Column - 1, definitionLanguageIndex: importColumns["DefinitionLanguage"].Column - 1);
