@@ -57,7 +57,7 @@ else
                         <CardModal UpdateSetList="@(() => StateHasChanged())"/>
                     </div>
                     <div class="me-auto col-12 col-md-auto mb-2 mb-md-0">
-                        <CardImportDropdown UpdateSetList="@(() => StateHasChanged())" />
+                        <CardImportDropdown UpdateSetList="@(() => StateHasChanged())" Username="@Username" />
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">
@@ -142,7 +142,7 @@ else
         try
         {
             await FolderService.GetFolderById(FolderId);
-            await SetService.GetSetById(SetId);
+            await SetService.SetCurrentSetById(SetId);
         }
         catch (HttpRequestException)
         {

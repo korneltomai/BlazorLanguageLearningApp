@@ -14,7 +14,12 @@ namespace BlazorLanguageLearningApp.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task GetSetById(int setId)
+        public async Task<Set?> GetSetById(int setId)
+        {
+            return await _httpClient.GetFromJsonAsync<Set?>($"api/sets/{setId}");
+        }
+
+        public async Task SetCurrentSetById(int setId)
         {
             CurrentSet = await _httpClient.GetFromJsonAsync<Set?>($"api/sets/{setId}");
         }

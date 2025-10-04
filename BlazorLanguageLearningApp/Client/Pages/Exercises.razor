@@ -45,7 +45,7 @@ else
             await FolderService.GetFolderById(FolderId);
             if (FolderService.CurrentFolder!.Owner != Username)
                 throw new HttpRequestException();
-            await SetService.GetSetById(SetId);
+            await SetService.SetCurrentSetById(SetId);
         }
         catch (HttpRequestException)
         {

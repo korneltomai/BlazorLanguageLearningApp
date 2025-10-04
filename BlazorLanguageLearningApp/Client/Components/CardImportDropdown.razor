@@ -5,6 +5,7 @@
 
 @inject CardService CardService
 @inject SetService SetService
+@inject FolderService FolderService
 @inject IStringLocalizer<Pages.Set> Loc
 
 <Modal @ref="importFromCsvModal" Title="@Loc["UploadCsvFile"]" IsVerticallyCentered="true" OnHidden="OnImportFromCsvModalHidden">
@@ -99,6 +100,23 @@
 
 <Modal @ref="importSelectionModal" Title="@Loc["SelectCardsToImport"]" IsVerticallyCentered="true" IsScrollable="true" Size="ModalSize.Large"  OnHidden="OnImportSelectionModalHidden">
     <BodyTemplate>
+        @if (importingFromSet)
+        {
+            <div class="row w-100">
+                <div class="col-9">
+                    <BootstrapSelect TItem="SelectSetEntry"
+                                     Data="@allSetsForUser.OrderBy(e => e.FolderName)"
+                                     TextField="@((entry) => entry.SetName)"
+                                     ValueField="@((entry) => entry.SetId.ToString())"
+                                     OptGroupField="@((set) => set.FolderName)"
+                                     TType="string" />
+                </div>
+                <div class="col-3">
+                    <Switch @bind-Value="moveSets" Label="Move sets" />
+                </div>
+            </div>
+            <hr />
+        }
         <Grid TItem="BlazorLanguageLearningApp.Shared.Card"
               Class="table table-hover table-bordered mb-0"
               Data="cards"
@@ -149,7 +167,7 @@
             </Button>
         </li>
         <li>
-            <Button Type="ButtonType.Button" Class="dropdown-item" @onclick="() => importFromCsvModal.ShowAsync()">
+            <Button Type="ButtonType.Button" Class="dropdown-item" @onclick="() => ShowImportSelectionModal(true)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
                 </svg>
@@ -163,14 +181,21 @@
     [Parameter]
     public required Action UpdateSetList { get; set; }
 
+    [Parameter]
+    public required string Username { get; set; }
+
     private Modal importFromCsvModal = default!;
     private Modal importSelectionModal = default!;
 
     private Guid fileInputId = Guid.NewGuid();
     private IBrowserFile? selectedFile;
     private List<string[]>? csvFileContent;
-    private List<BlazorLanguageLearningApp.Shared.Card> cards = default!;
+    private List<BlazorLanguageLearningApp.Shared.Card> cards = new();
     private HashSet<BlazorLanguageLearningApp.Shared.Card> selectedCards = new();
+
+    private bool importingFromSet = false;
+    private IEnumerable<SelectSetEntry> allSetsForUser = new List<SelectSetEntry>();
+    private bool moveSets = false;
 
     private Dictionary<string, SelectColumnResponse> importColumns = new()
     {
@@ -209,9 +234,36 @@
     private void OnImportSelectionModalHidden()
     {
         csvFileContent?.Clear();
-        cards = default!;
+        cards = new();
         selectedCards = new();
         fileInputId = Guid.NewGuid();
+    }
+
+    private async void ShowImportSelectionModal(bool fromSet)
+    {
+        importingFromSet = fromSet;
+        if (importingFromSet)
+            allSetsForUser = await GetAllSetsForUser();
+        await importSelectionModal.ShowAsync();
+    }
+
+    private async Task<IEnumerable<SelectSetEntry>> GetAllSetsForUser()
+    {
+        var folders = (await FolderService.GetAllFoldersForUser(Username));
+        if (folders is null)
+            return new List<SelectSetEntry>();
+
+        List<SelectSetEntry> entryList = new();
+        foreach (var folder in folders)
+        {
+            Console.WriteLine(folder.Name);
+            foreach (var set in folder.Sets)
+            {
+                entryList.Add(new SelectSetEntry(folder.Name, set.Name, set.Id));
+            }
+        }
+
+        return entryList;
     }
 
     private async void LoadExampleFileContent(InputFileChangeEventArgs e)
@@ -280,7 +332,7 @@
         }
 
         await importFromCsvModal.HideAsync();
-        await importSelectionModal.ShowAsync();
+        ShowImportSelectionModal(false);
     }
 
     private async void ImportCards()
@@ -299,4 +351,5 @@
 
     private enum ColumnName { TermLanguage, DefinitionLanguage, Term, Definition }
     private class SelectColumnResponse { public int Column { get; set; } }
+    private record SelectSetEntry(string FolderName, string SetName, int SetId);
 } 
