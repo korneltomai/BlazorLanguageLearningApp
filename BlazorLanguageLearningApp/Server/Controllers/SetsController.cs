@@ -29,12 +29,12 @@ namespace BlazorLanguageLearningApp.Server.Controllers
         [HttpPost("{folderId}")]
         public async Task<ActionResult<Set>> CreateSet(int folderId, Set set)
         {
-            _context.Sets.Add(set);
-
             var folder = await _context.Folders.FindAsync(folderId);
             if (folder is null)
                 return NotFound("This folder does not exist!");
             folder.Sets.Add(set);
+
+            _context.Sets.Add(set);
 
             await _context.SaveChangesAsync();
 

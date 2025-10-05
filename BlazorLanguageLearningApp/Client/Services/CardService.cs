@@ -19,8 +19,24 @@ namespace BlazorLanguageLearningApp.Client.Services
             if (_setService.CurrentSet is null)
                 return;
 
-            _setService.AddCard(card);
-            await _httpClient.PostAsJsonAsync($"api/cards/{_setService.CurrentSet.Id}", card);
+            var response = await _httpClient.PostAsJsonAsync($"api/cards/{_setService.CurrentSet.Id}", card);
+            var newCard = await response.Content.ReadFromJsonAsync<Card>();
+            if (newCard is not null)
+                _setService.AddCard(newCard); 
+        }
+
+        public async Task CopyCard(Card card)
+        {
+            var copyCard = new Card() 
+            { 
+                Term = card.Term, 
+                Definition = card.Definition, 
+                TermLanguage = card.TermLanguage, 
+                DefinitionLanguage = card.DefinitionLanguage,
+                LearntPercantage = card.LearntPercantage
+            };
+
+            await CreateCard(copyCard);
         }
 
         public async Task UpdateCard(Card card)

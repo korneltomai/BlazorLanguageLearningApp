@@ -29,16 +29,16 @@ namespace BlazorLanguageLearningApp.Server.Controllers
         [HttpPost("{setId}")]
         public async Task<ActionResult> CreateCard(int setId, Card card)
         {
-            _context.Cards.Add(card);
-
             var set = await _context.Sets.FindAsync(setId);
             if (set is null)
-                return NotFound("This folder does not exist!");
+                return NotFound("This set does not exist!");
             set.Cards.Add(card);
+
+            _context.Cards.Add(card);
 
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(card);
         }
 
         [HttpPut]

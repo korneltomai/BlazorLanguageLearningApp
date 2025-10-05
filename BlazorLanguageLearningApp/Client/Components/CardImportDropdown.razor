@@ -103,49 +103,61 @@
         @if (importingFromSet)
         {
             <div class="row w-100">
-                <div class="col-9">
+                <div class="col-12 col-lg-7">
                     <BootstrapSelect TItem="SelectSetEntry"
-                                     Data="@allSetsForUser.OrderBy(e => e.FolderName)"
+                                     Data="@allSetsForUser.Where(s => SetService.CurrentSet!.Id != s.SetId)"
                                      TextField="@((entry) => entry.SetName)"
                                      ValueField="@((entry) => entry.SetId.ToString())"
                                      OptGroupField="@((set) => set.FolderName)"
-                                     TType="string" />
+                                     TType="int"
+                                     Value="@selectedSetId"
+                                     ValueChanged="@OnSetSelectValueChanged"
+                                     ButtonStyle="ButtonStyles.Primary" 
+                                     Width="100%"/>
                 </div>
-                <div class="col-3">
-                    <Switch @bind-Value="moveSets" Label="Move sets" />
+                <div class="col-12 col-lg-5 mt-3 mt-lg-0 d-flex align-items-center">
+                    <Switch @bind-Value="moveCards" Label="Delete original cards"/>
                 </div>
             </div>
             <hr />
         }
-        <Grid TItem="BlazorLanguageLearningApp.Shared.Card"
-              Class="table table-hover table-bordered mb-0"
-              Data="cards"
-              AllowFiltering="true"
-              AllowSelection="true"
-              SelectionMode="GridSelectionMode.Multiple"
-              @bind-SelectedItems="@selectedCards"
-              Responsive="true">
+        <div class="border">
+            <Grid TItem="BlazorLanguageLearningApp.Shared.Card"
+                  Class="table table-hover table-bordered mb-0"
+                  Data="cards"
+                  AllowFiltering="true"
+                  AllowSelection="true"
+                  SelectionMode="GridSelectionMode.Multiple"
+                  @bind-SelectedItems="@selectedCards"
+                  Responsive="true">
 
-            <GridColumns>
-                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term" PropertyName="Term">
-                    @context.Term
-                </GridColumn>
-                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition" PropertyName="Definition">
-                    @context.Definition
-                </GridColumn>
-                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term Language" PropertyName="TermLanguage">
-                    @context.TermLanguage
-                </GridColumn>
-                <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition Language" PropertyName="DefinitionLanguage">
-                    @context.DefinitionLanguage
-                </GridColumn>
-            </GridColumns>
-
-        </Grid>
+                <GridColumns>
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term" PropertyName="Term">
+                        @context.Term
+                    </GridColumn>
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition" PropertyName="Definition">
+                        @context.Definition
+                    </GridColumn>
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term Language" PropertyName="TermLanguage">
+                        @context.TermLanguage
+                    </GridColumn>
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition Language" PropertyName="DefinitionLanguage">
+                        @context.DefinitionLanguage
+                    </GridColumn>
+                </GridColumns>
+            </Grid>
+        </div>
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="() => importSelectionModal.HideAsync()">@Loc["Close"]</Button>
-        <Button Color="ButtonColor.Primary" @onclick="ImportCards" Disabled="@(selectedCards.Count == 0)">@Loc["Import"]</Button>
+        @if (importingFromSet)
+        {
+            <Button Color="ButtonColor.Primary" @onclick="ImportCardsFromSet" Disabled="@(selectedCards.Count == 0)">@Loc["Import"]</Button>
+        }
+        else 
+        {
+            <Button Color="ButtonColor.Primary" @onclick="ImportCardsFromCsv" Disabled="@(selectedCards.Count == 0)">@Loc["Import"]</Button>
+        }
     </FooterTemplate>
 </Modal>
 
@@ -195,7 +207,8 @@
 
     private bool importingFromSet = false;
     private IEnumerable<SelectSetEntry> allSetsForUser = new List<SelectSetEntry>();
-    private bool moveSets = false;
+    private int selectedSetId;
+    private bool moveCards = false;
 
     private Dictionary<string, SelectColumnResponse> importColumns = new()
     {
@@ -243,7 +256,11 @@
     {
         importingFromSet = fromSet;
         if (importingFromSet)
+        {
             allSetsForUser = await GetAllSetsForUser();
+            if (allSetsForUser.Any())
+                await OnSetSelectValueChanged(allSetsForUser.First().SetId);
+        }
         await importSelectionModal.ShowAsync();
     }
 
@@ -256,14 +273,22 @@
         List<SelectSetEntry> entryList = new();
         foreach (var folder in folders)
         {
-            Console.WriteLine(folder.Name);
             foreach (var set in folder.Sets)
-            {
                 entryList.Add(new SelectSetEntry(folder.Name, set.Name, set.Id));
-            }
         }
 
-        return entryList;
+        return entryList.OrderBy(e => e.FolderName);
+    }
+
+    private async Task OnSetSelectValueChanged(int newSelectedSetId)
+    {
+        selectedSetId = newSelectedSetId;
+        Set? selectedSet = await SetService.GetSetById(selectedSetId);
+        if (selectedSet is not null)
+        {
+            cards = selectedSet.Cards.Where(c => !SetService.CurrentContainsCard(c)).ToList();
+            StateHasChanged();
+        }
     }
 
     private async void LoadExampleFileContent(InputFileChangeEventArgs e)
@@ -335,10 +360,22 @@
         ShowImportSelectionModal(false);
     }
 
-    private async void ImportCards()
+    private async void ImportCardsFromCsv()
     {
         foreach (var card in selectedCards)
             await CardService.CreateCard(card);
+
+        await importSelectionModal.HideAsync();
+    }
+
+    private async void ImportCardsFromSet()
+    {
+        foreach (var card in selectedCards)
+        {
+            await CardService.CopyCard(card);
+            if (moveCards)
+                await CardService.DeleteCard(card.Id);
+        }
 
         await importSelectionModal.HideAsync();
     }

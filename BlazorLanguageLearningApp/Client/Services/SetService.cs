@@ -7,7 +7,7 @@ namespace BlazorLanguageLearningApp.Client.Services
     {
         private readonly HttpClient _httpClient;
         public Set? CurrentSet { get; private set; }
-        public List<Action> OnChange = new List<Action>();
+        public List<Action> OnChange = new();
         
         public SetService(HttpClient httpClient)
         {
