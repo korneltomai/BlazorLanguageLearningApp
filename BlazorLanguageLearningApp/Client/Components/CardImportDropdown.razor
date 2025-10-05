@@ -11,7 +11,7 @@
 <Modal @ref="importFromCsvModal" Title="@Loc["UploadCsvFile"]" IsVerticallyCentered="true" OnHidden="OnImportFromCsvModalHidden">
     <BodyTemplate>
         <div class="container">
-            <InputFile OnChange="LoadExampleFileContent" accept=".csv" @key=@(fileInputId) />
+            <InputFile OnChange="LoadExampleFileContent" accept=".csv" @key=@(fileInputId)/>
             <div>
                 <h4 class="mt-3">@Loc["TopFiveRowsFromFile"]:</h4>
                 <div class="border overflow-auto">
@@ -56,10 +56,10 @@
                 {
                     <div class="row mb-2">
                         <div class="col-7 d-flex align-items-center">
-                            <label for="@String.Format($"columnFor{0}Select", columnName.ToString())">@Loc[columnName.ToString()]:</label>
+                            <label for="@String.Format("columnFor{0}Select", columnName.ToString())">@Loc[columnName.ToString()]:</label>
                         </div>
                         <div class="col-5">
-                            <InputSelect class="form-select" id="@String.Format($"columnFor{0}Select", columnName)" @bind-Value="importColumns[columnName.ToString()].Column" Disabled="@NoFileSelected">
+                            <InputSelect class="form-select" id="@String.Format("columnFor{0}Select", columnName)" @bind-Value="importColumns[columnName.ToString()].Column" Disabled="@NoFileSelected">
                                 <option value="0">@Loc["None"]</option>
                                 @foreach (var column in GetAvailableColumns(importColumns[columnName.ToString()].Column))
                                 {
@@ -116,7 +116,7 @@
                                      Width="100%"/>
                 </div>
                 <div class="col-12 col-lg-5 mt-3 mt-lg-0 d-flex align-items-center">
-                    <Switch @bind-Value="moveCards" Label="Delete original cards"/>
+                    <Switch @bind-Value="moveCards" Label="@Loc["DeleteOriginalCards"]"/>
                 </div>
             </div>
             <hr />
@@ -125,23 +125,22 @@
             <Grid TItem="BlazorLanguageLearningApp.Shared.Card"
                   Class="table table-hover table-bordered mb-0"
                   Data="cards"
-                  AllowFiltering="true"
                   AllowSelection="true"
                   SelectionMode="GridSelectionMode.Multiple"
                   @bind-SelectedItems="@selectedCards"
                   Responsive="true">
 
                 <GridColumns>
-                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term" PropertyName="Term">
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="@Loc["Term"]" PropertyName="Term">
                         @context.Term
                     </GridColumn>
-                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition" PropertyName="Definition">
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="@Loc["Definition"]" PropertyName="Definition">
                         @context.Definition
                     </GridColumn>
-                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Term Language" PropertyName="TermLanguage">
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="@Loc["TermLanguage"]" PropertyName="TermLanguage">
                         @context.TermLanguage
                     </GridColumn>
-                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="Definition Language" PropertyName="DefinitionLanguage">
+                    <GridColumn TItem="BlazorLanguageLearningApp.Shared.Card" HeaderText="@Loc["DefinitionLanguage"]" PropertyName="DefinitionLanguage">
                         @context.DefinitionLanguage
                     </GridColumn>
                 </GridColumns>

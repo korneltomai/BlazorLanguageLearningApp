@@ -138,4 +138,7 @@
   <data name="ShuffleCards" xml:space="preserve">
     <value>Shuffle cards</value>
   </data>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Flashcards</value>
+  </data>
 </root>

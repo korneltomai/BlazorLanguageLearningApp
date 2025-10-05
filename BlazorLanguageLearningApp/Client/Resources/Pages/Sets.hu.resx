@@ -198,4 +198,7 @@
   <data name="NoFolderOpen" xml:space="preserve">
     <value>Nincs kiválasztott mappa.</value>
   </data>
+  <data name="Sets" xml:space="preserve">
+    <value>Csomagok</value>
+  </data>
 </root>

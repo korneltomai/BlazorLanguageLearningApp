@@ -138,4 +138,7 @@
   <data name="ShuffleCards" xml:space="preserve">
     <value>Kártyák keverése</value>
   </data>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Tanulókártyák</value>
+  </data>
 </root>

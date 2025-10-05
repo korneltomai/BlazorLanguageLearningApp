@@ -198,4 +198,7 @@
   <data name="NoFolderOpen" xml:space="preserve">
     <value>No folder open.</value>
   </data>
+  <data name="Sets" xml:space="preserve">
+    <value>Sets</value>
+  </data>
 </root>

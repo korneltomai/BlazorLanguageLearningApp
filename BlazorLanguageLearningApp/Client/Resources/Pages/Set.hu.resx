@@ -261,4 +261,7 @@
   <data name="Import" xml:space="preserve">
     <value>Importálás</value>
   </data>
+  <data name="DeleteOriginalCards" xml:space="preserve">
+    <value>Eredeti kártyák törlése</value>
+  </data>
 </root>

@@ -16,7 +16,7 @@
 }
 else
 {
-    <PageTitle>CurrentSet.Name</PageTitle>
+    <PageTitle>@SetService.CurrentSet.Name</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
         <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username" />
@@ -29,7 +29,7 @@ else
                     <div class="col-12 col-sm-9 col-xxl-10">
                         <div class="d-flex align-items-center">
                             <h1 class="fs-3 mb-0">@SetService.CurrentSet.Name</h1>
-                            <span class="text-secondary ms-3 me-auto"><small>@SetService.CurrentSet.Visibility</small></span>
+                            <span class="text-secondary ms-3 me-auto small">@Loc[$"{SetService.CurrentSet.Visibility}"]</span>
                         </div>
                         <div class="mb-2">
                             <small class="text-secondary">@SetService.CurrentSet.TermsLanguage - @SetService.CurrentSet.DefinitionsLanguage</small>
@@ -154,8 +154,6 @@ else
 
     private void OrderCards(CardOrdering selectedOrdering)
     {
-        Console.WriteLine("ORDERING");
-
         Ordering = selectedOrdering;
 
         if (selectedOrdering == CardOrdering.TermIncreasing)

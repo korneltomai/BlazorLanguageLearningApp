@@ -17,7 +17,7 @@
 }
 else
 {
-    <PageTitle>Sets</PageTitle>
+    <PageTitle>@Loc["Sets"]</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
         <div class="bg-light d-none d-lg-block col-lg-3 col-xxl-2">
@@ -54,7 +54,7 @@ else
                             <option value="@folder.Id">@folder.Name</option>
                         }
                     </InputSelect>
-                    <label class="text-white" for="folderSelect"><small>@Loc["Folders"]</small></label>
+                    <label class="text-white small" for="folderSelect">@Loc["Folders"]</label>
                 </div>
                 <div class="col-3">
                     <FolderModal Username="@Username"/>
@@ -75,7 +75,7 @@ else
                         <div class="col-12 col-sm-9 col-xxl-10">
                             <div class="d-flex align-items-center">
                                 <h1 class="fs-3 mb-0">@FolderService.CurrentFolder!.Name</h1>
-                                <span class="text-secondary ms-2 me-auto"><small>@FolderService.CurrentFolder.Visibility</small></span>
+                                <span class="text-secondary ms-2 me-auto small">@Loc[$"{FolderService.CurrentFolder.Visibility}"]</span>
                             </div>
                             <div class="mb-3 mb-sm-0 me-sm-4 pe-2">
                                 @FolderService.CurrentFolder.Description
