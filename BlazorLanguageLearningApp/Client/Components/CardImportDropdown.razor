@@ -105,7 +105,7 @@
             <div class="row w-100">
                 <div class="col-12 col-lg-7">
                     <BootstrapSelect TItem="SelectSetEntry"
-                                     Data="@allSetsForUser.Where(s => SetService.CurrentSet!.Id != s.SetId)"
+                                     Data="@allSetsForUser"
                                      TextField="@((entry) => entry.SetName)"
                                      ValueField="@((entry) => entry.SetId.ToString())"
                                      OptGroupField="@((set) => set.FolderName)"
@@ -256,7 +256,7 @@
         importingFromSet = fromSet;
         if (importingFromSet)
         {
-            allSetsForUser = await GetAllSetsForUser();
+            allSetsForUser = (await GetAllSetsForUser()).Where(s => SetService.CurrentSet!.Id != s.SetId);
             if (allSetsForUser.Any())
                 await OnSetSelectValueChanged(allSetsForUser.First().SetId);
         }
