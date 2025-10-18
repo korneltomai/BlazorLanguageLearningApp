@@ -7,15 +7,18 @@
     <div class="container justify-content-center">
         <a class="btn btn-primary w-100 mb-1" href="@($"{Username}/sets/{FolderId}/{SetId}/flashcards")">@Loc["Flashcards"]</a>
     </div>
+    <div class="container justify-content-center">
+        <a class="btn btn-primary w-100 mb-1" href="@($"{Username}/sets/{FolderId}/{SetId}/exercises")">@Loc["Exercises"]</a>
+    </div>
 </div>
 
 @code {
     [Parameter]
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     [Parameter]
-    public int FolderId { get; set; }
+    public required int FolderId { get; set; }
 
     [Parameter]
-    public int SetId { get; set; }
+    public required int SetId { get; set; }
 }

@@ -1,0 +1,48 @@
+﻿@inject IStringLocalizer<Pages.Exercises> Loc
+
+<div class="border border-2 rounded-3 my-5">
+    <div class="pt-3 px-3">
+        <span class="h5">@Loc["TrueOrFalseExerciseHeader"]</span>
+    </div>
+    <hr />
+    <div class="row align-items-center justify-content-center">
+        <div class="text-center col-12 col-md-5">
+            <div class="fs-3">@Exercise.Question.Expression</div>
+            <div class="small">@Exercise.Question.Language</div>
+        </div>
+        <div class="text-center col-12 col-md-1 m-2 m-md-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right d-none d-md-inline" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up d-inline d-md-none" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+            </svg>
+        </div>
+        <div class="text-center col-12 col-md-5">
+            <div class="fs-3">@Exercise.PossibleAnswers.First().Expression</div>
+            <div class="small">@Exercise.PossibleAnswers.First().Language</div>
+        </div>
+    </div>
+    <div class="row p-3">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+            <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}Correct", ExerciseNumber)" @onchange="@(() => Exercise.UserAnswer = new("TRUE", "TRUE"))" autocomplete="off">
+            <label class="btn btn-outline-success w-100" for="@String.Format("answer{0}Correct", ExerciseNumber)">
+                <span class="d-block"><strong>@Loc["Correct"]</strong></span>
+            </label>
+        </div>
+        <div class="col-12 col-md-6">
+            <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}Incorrect", ExerciseNumber)" @onchange="@(() => Exercise.UserAnswer = new("FALSE", "FALSE"))" autocomplete="off">
+            <label class="btn btn-outline-danger w-100" for="@String.Format("answer{0}Incorrect", ExerciseNumber)">
+                <span class="d-block"><strong>@Loc["Incorrect"]</strong></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public required int ExerciseNumber { get; set; }
+
+    [Parameter]
+    public required Exercise Exercise { get; set; }
+}

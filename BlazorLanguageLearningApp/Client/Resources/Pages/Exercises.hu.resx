@@ -120,4 +120,22 @@
   <data name="Exercises" xml:space="preserve">
     <value>Gyakorlás</value>
   </data>
+  <data name="SelectionExerciseHeader" xml:space="preserve">
+    <value>Melyik a helyes fordítása a kifejezésnek?</value>
+  </data>
+  <data name="TypeInExerciseHeader" xml:space="preserve">
+    <value>Írja be a helyes fordítását a kifejezésnek.</value>
+  </data>
+  <data name="TrueOrFalseExerciseHeader" xml:space="preserve">
+    <value>Helyes a megadott fordítása a kifejezésnek?</value>
+  </data>
+  <data name="Correct" xml:space="preserve">
+    <value>Helyes</value>
+  </data>
+  <data name="Incorrect" xml:space="preserve">
+    <value>Helytelen</value>
+  </data>
+  <data name="TypeInYourAnswer" xml:space="preserve">
+    <value>Írja be a válaszát.</value>
+  </data>
 </root>

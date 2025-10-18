@@ -1,5 +1,7 @@
 ﻿@page "/{username}/sets/{folderId:int}/{setId:int}/exercises"
 
+@using BlazorLanguageLearningApp.Client.Components.Exercises;
+
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
@@ -19,6 +21,26 @@ else
         <div class="content d-flex flex-column col-lg-9 col-xxl-10">
             <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder" CurrentSet="@SetService.CurrentSet" />
 
+            <div class="container" style="max-width: 900px;">
+                @for(int i = 0; i < _exercises.Count(); i++)
+                {
+                    @if (_exercises[i].Type == ExerciseType.Selection)
+                    {
+                        <SelectionExerciseComponent Exercise="_exercises[i]" ExerciseNumber="@i"/>
+                    }
+                    @if (_exercises[i].Type == ExerciseType.TrueOrFalse)
+                    {
+                        <TrueOrFalseExerciseComponent Exercise="_exercises[i]" ExerciseNumber="@i" />
+                    }
+                    @if (_exercises[i].Type == ExerciseType.TypeIn)
+                    {
+                        <TypeInExerciseComponent Exercise="_exercises[i]" ExerciseNumber="@i" />
+                    }
+                }
+            </div>
+            <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-25 m-5" @onclick="PrintUserAnswers">
+                TEST
+            </Button>
         </div>
     </div>
 }
@@ -33,9 +55,12 @@ else
     [Parameter]
     public int SetId { get; set; }
 
+    private List<Exercise> _exercises = new();
+
     protected override void OnInitialized()
     {
         SetService.OnChange.Add(StateHasChanged);
+        loadTestExercises();
     }
 
     protected async override Task OnParametersSetAsync()
@@ -51,5 +76,44 @@ else
         {
             Navigation.NavigateTo("page-not-found");
         }
+    }
+
+    private void loadTestExercises()
+    {
+        _exercises.Add(new Exercise(
+            ExerciseType.Selection, 
+            new ExerciseEntry("Capybara", "english"), 
+            new() 
+            { 
+                new ExerciseEntry("Vizidisznó", "magyar"), 
+                new ExerciseEntry("Egér", "magyar"),
+                new ExerciseEntry("Tehén", "magyar"),
+                new ExerciseEntry("Ló", "magyar")
+            })
+        );
+
+        _exercises.Add(new Exercise(
+            ExerciseType.TrueOrFalse,
+            new ExerciseEntry("Capybara", "english"),
+            new()
+                {
+                    new ExerciseEntry("Vizidisznó", "magyar"),
+                })
+        );
+
+        _exercises.Add(new Exercise(
+            ExerciseType.TypeIn,
+            new ExerciseEntry("Capybara", "english"),
+            new()
+                {
+                    new ExerciseEntry("", "magyar"),
+                })
+        );
+    }
+
+    private void PrintUserAnswers()
+    {
+        foreach (var exercise in _exercises)
+            Console.WriteLine($"ANSWER: {exercise.UserAnswer.Expression} - {exercise.UserAnswer.Language}");
     }
 }

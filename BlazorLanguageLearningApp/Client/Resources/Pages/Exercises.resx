@@ -120,4 +120,22 @@
   <data name="Exercises" xml:space="preserve">
     <value>Exercises</value>
   </data>
+  <data name="SelectionExerciseHeader" xml:space="preserve">
+    <value>Which one is the correct translation for this expression?</value>
+  </data>
+  <data name="TypeInExerciseHeader" xml:space="preserve">
+    <value>Type in the correct translation for this expression.</value>
+  </data>
+  <data name="TrueOrFalseExerciseHeader" xml:space="preserve">
+    <value>Is the given translation correct for this expression?</value>
+  </data>
+  <data name="Correct" xml:space="preserve">
+    <value>Correct</value>
+  </data>
+  <data name="Incorrect" xml:space="preserve">
+    <value>Incorrect</value>
+  </data>
+  <data name="TypeInYourAnswer" xml:space="preserve">
+    <value>Type in your answer.</value>
+  </data>
 </root>
