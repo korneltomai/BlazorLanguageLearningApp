@@ -16,13 +16,11 @@
                 @String.Format($"{Loc["DeleteEmptyFolderText"]}", @FolderService.CurrentFolder!.Name)
             }
         </div>
-        <div class="row">
-            <div class="col-md-12 text-end">
-                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Class="float-end me-2" @onclick="DeleteFolder">@Loc["Delete"]</Button>
-                <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="OnHideModalClick">@Loc["Close"]</Button>
-            </div>
-        </div>
     </BodyTemplate>
+    <FooterTemplate>
+        <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="OnHideModalClick">@Loc["Close"]</Button>
+        <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Class="float-end me-2" @onclick="DeleteFolder">@Loc["Delete"]</Button>
+    </FooterTemplate>
 </Modal>
 
 <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Class="w-100" @onclick="OnShowModalClick">
