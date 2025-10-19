@@ -18,29 +18,47 @@ else
     <div class="row d-lg-flex m-0 p-0">
         <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username" />
 
-        <div class="content d-flex flex-column col-lg-9 col-xxl-10">
+        <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
             <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder" CurrentSet="@SetService.CurrentSet" />
 
-            <div class="container" style="max-width: 900px;">
-                @for(int i = 0; i < _exercises.Count(); i++)
-                {
-                    @if (_exercises[i].Type == ExerciseType.Selection)
-                    {
-                        <SelectionExerciseComponent Exercise="_exercises[i]" ExerciseNumber="@i"/>
-                    }
-                    @if (_exercises[i].Type == ExerciseType.TrueOrFalse)
-                    {
-                        <TrueOrFalseExerciseComponent Exercise="_exercises[i]" ExerciseNumber="@i" />
-                    }
-                    @if (_exercises[i].Type == ExerciseType.TypeIn)
-                    {
-                        <TypeInExerciseComponent Exercise="_exercises[i]" ExerciseNumber="@i" />
-                    }
-                }
+            <div class="container-fluid row border-bottom py-3 pe-0">
+                <div class="col-6 col-sm-auto pe-1">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Success" Class="w-100 h-100" @onclick="OpenExerciseSheetModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square me-1" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                        </svg>
+                        @Loc["NewExerciseSheet"]
+                    </Button>
+                </div>
+                <div class="col-6 col-sm-auto">
+                    <BlazorLanguageLearningApp.Client.Components.DeleteExerciseSheetModal Username="@Username" ExerciseSheet="@_exerciseSheet" RefreshExercisePage="StateHasChanged"/>
+                </div>
+                <div class="col-12 col-sm-auto pt-2 pt-sm-0 ps-sm-1">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="GetQuickQuestion">
+                        @Loc["QuickQuestion"]
+                    </Button>
+                </div>
             </div>
-            <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-25 m-5" @onclick="PrintUserAnswers">
-                TEST
-            </Button>
+            <div class="container-fluid exercise-sheet-container">
+                <div class="container-fluid" style="max-width: 900px;">
+                    @for (int i = 0; i < _exerciseSheet.Exercises.Count(); i++)
+                    {
+                        @if (_exerciseSheet.Exercises[i].Type == ExerciseType.Selection)
+                        {
+                            <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" />
+                        }
+                        @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TrueOrFalse)
+                        {
+                            <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" />
+                        }
+                        @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TypeIn)
+                        {
+                            <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" />
+                        }
+                    }
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -55,7 +73,7 @@ else
     [Parameter]
     public int SetId { get; set; }
 
-    private List<Exercise> _exercises = new();
+    private ExerciseSheet _exerciseSheet = new();
 
     protected override void OnInitialized()
     {
@@ -78,9 +96,19 @@ else
         }
     }
 
+    private void OpenExerciseSheetModal()
+    {
+        
+    }
+
+    private void GetQuickQuestion()
+    {
+
+    }
+
     private void loadTestExercises()
     {
-        _exercises.Add(new Exercise(
+        _exerciseSheet.Exercises.Add(new Exercise(
             ExerciseType.Selection, 
             new ExerciseEntry("Capybara", "english"), 
             new() 
@@ -92,7 +120,7 @@ else
             })
         );
 
-        _exercises.Add(new Exercise(
+        _exerciseSheet.Exercises.Add(new Exercise(
             ExerciseType.TrueOrFalse,
             new ExerciseEntry("Capybara", "english"),
             new()
@@ -101,7 +129,7 @@ else
                 })
         );
 
-        _exercises.Add(new Exercise(
+        _exerciseSheet.Exercises.Add(new Exercise(
             ExerciseType.TypeIn,
             new ExerciseEntry("Capybara", "english"),
             new()
@@ -109,11 +137,5 @@ else
                     new ExerciseEntry("", "magyar"),
                 })
         );
-    }
-
-    private void PrintUserAnswers()
-    {
-        foreach (var exercise in _exercises)
-            Console.WriteLine($"ANSWER: {exercise.UserAnswer.Expression} - {exercise.UserAnswer.Language}");
     }
 }

@@ -77,7 +77,7 @@ else
                     <span class="fs-5 mt-2 mb-0">@String.Format($"{Loc["CardsInSet"]}", @SetService.CurrentSet.Cards.Count())</span>
                 </div>
             </div>
-            <div class="cardContainer container-fluid">
+            <div class="card-container container-fluid">
                 <div class="d-flex flex-column pt-3">
                     @foreach (BlazorLanguageLearningApp.Shared.Card card in SetService.CurrentSet.Cards)
                     {

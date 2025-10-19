@@ -138,4 +138,22 @@
   <data name="TypeInYourAnswer" xml:space="preserve">
     <value>Írja be a válaszát.</value>
   </data>
+  <data name="NewExerciseSheet" xml:space="preserve">
+    <value>Új feladatsor</value>
+  </data>
+  <data name="QuickQuestion" xml:space="preserve">
+    <value>Gyors kérdés</value>
+  </data>
+  <data name="DeleteExerciseSheet" xml:space="preserve">
+    <value>Feladatsor törlése</value>
+  </data>
+  <data name="DeleteExerciseSheetModalText" xml:space="preserve">
+    <value>Biztosan törölni szeretné a feladatsort?</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
 </root>

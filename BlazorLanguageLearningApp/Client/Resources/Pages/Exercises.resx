@@ -138,4 +138,22 @@
   <data name="TypeInYourAnswer" xml:space="preserve">
     <value>Type in your answer.</value>
   </data>
+  <data name="NewExerciseSheet" xml:space="preserve">
+    <value>New exercise sheet</value>
+  </data>
+  <data name="QuickQuestion" xml:space="preserve">
+    <value>Quick question</value>
+  </data>
+  <data name="DeleteExerciseSheet" xml:space="preserve">
+    <value>Delete exercise sheet</value>
+  </data>
+  <data name="DeleteExerciseSheetModalText" xml:space="preserve">
+    <value>Are you sure you want to delete your current exercise sheet?</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
 </root>

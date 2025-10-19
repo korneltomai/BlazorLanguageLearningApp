@@ -17,3 +17,10 @@
         height: calc(100vh - 166px);
     }
 }
+
+@media (width>=576px) {
+    .exercise-sheet-container {
+        overflow: auto;
+    }
+}
+

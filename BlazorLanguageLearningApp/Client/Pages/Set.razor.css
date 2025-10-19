@@ -11,7 +11,7 @@ a[class*="cardLink"]:visited {
 }
 
 @media (width>=576px) {
-    .cardContainer {
+    .card-container {
         overflow: auto;
     }
 }
