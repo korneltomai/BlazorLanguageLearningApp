@@ -1,5 +1,4 @@
-﻿
-namespace BlazorLanguageLearningApp.Shared;
+﻿namespace BlazorLanguageLearningApp.Shared;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -21,6 +20,6 @@ public class Card
 
     [StringLength(25, MinimumLength = 3)]
     public string DefinitionLanguage { get; set; } = "unknown";
-
     public int LearntPercantage { get; set; }
+    public ICollection<AnswerRecord> PastAnswers { get; set; } = new List<AnswerRecord>();
 }

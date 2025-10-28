@@ -20,7 +20,7 @@ namespace BlazorLanguageLearningApp.Server.Controllers
         [HttpGet("{username}/{folderId}/{setId}")]
         public async Task<ActionResult<Set>> GetSetById(string username, int folderId, int setId)
         {
-            var user = await _context.Users.Include("Folders.Sets.Cards").FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users.Include("Folders.Sets.Cards.PastAnswers").FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
                 return NotFound($"User {username} does not exist!");
 
@@ -31,6 +31,9 @@ namespace BlazorLanguageLearningApp.Server.Controllers
             var set = folder.Sets.FirstOrDefault(s => s.Id == setId);
             if (set is null)
                 return NotFound("This set does not exist!");
+
+            CalculateCardScores(set);
+            await _context.SaveChangesAsync();
 
             return Ok(set);
         }
@@ -76,6 +79,17 @@ namespace BlazorLanguageLearningApp.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        private static void CalculateCardScores(Set set)
+        {
+            foreach (var card in set.Cards)
+            {
+                if (card.PastAnswers.Count == 0)
+                    card.LearntPercantage = 0;
+                else
+                    card.LearntPercantage = (int)((double)card.PastAnswers.Count(a => a.Correct) / card.PastAnswers.Count * 100);
+            }
         }
     }
 }

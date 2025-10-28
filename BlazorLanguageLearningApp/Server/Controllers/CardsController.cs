@@ -35,6 +35,7 @@ namespace BlazorLanguageLearningApp.Server.Controllers
             set.Cards.Add(card);
 
             _context.Cards.Add(card);
+            set.LearntPercantage = (int)set.Cards.Average(c => c.LearntPercantage);
 
             await _context.SaveChangesAsync();
 
@@ -55,14 +56,19 @@ namespace BlazorLanguageLearningApp.Server.Controllers
             return Ok();
         }
 
-        [HttpDelete("{cardId}")]
-        public async Task<ActionResult> DeleteCard(int cardId)
+        [HttpDelete("{setId}/{cardId}")]
+        public async Task<ActionResult> DeleteCard(int setId, int cardId)
         {
-            var dbCard = await _context.Cards.FindAsync(cardId);
-            if (dbCard is null)
+            var set = await _context.Sets.Include("Cards").FirstOrDefaultAsync(s => s.Id == setId);
+            if (set is null)
+                return NotFound("This set does not exist!");
+
+            var card = set.Cards.FirstOrDefault(c => c.Id == cardId);
+            if (card is null)
                 return NotFound("This card does not exist!");
 
-            _context.Cards.Remove(dbCard);
+            set.Cards.Remove(card);
+            set.LearntPercantage = (int)set.Cards.Average(c => c.LearntPercantage);
 
             await _context.SaveChangesAsync();
 

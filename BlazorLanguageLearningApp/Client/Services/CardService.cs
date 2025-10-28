@@ -46,7 +46,10 @@ public class CardService
 
     public async Task DeleteCard(int cardId)
     {
+        if (_setService.CurrentSet is null)
+            return;
+
         _setService.RemoveCard(cardId);
-        await _httpClient.DeleteAsync($"api/cards/{cardId}");
+        await _httpClient.DeleteAsync($"api/cards/{_setService.CurrentSet.Id}/{cardId}");
     }
 }

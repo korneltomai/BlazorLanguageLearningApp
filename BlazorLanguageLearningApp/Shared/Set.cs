@@ -1,6 +1,7 @@
 ﻿namespace BlazorLanguageLearningApp.Shared;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Set
 {
@@ -16,7 +17,7 @@ public class Set
     [StringLength(500)]
     public string Description { get; set; } = string.Empty;
     public string TermsLanguage { get; set; } = string.Empty;
-    public string DefinitionsLanguage { get; set; } = string.Empty; 
-    public int LearntPercantage { get; set; }
+    public string DefinitionsLanguage { get; set; } = string.Empty;
     public ICollection<Card> Cards { get; set; } = new List<Card>();
+    public int LearntPercantage { get; set; }
 }
