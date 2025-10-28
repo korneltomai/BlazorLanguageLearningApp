@@ -1,11 +1,13 @@
 ﻿@using CsvHelper
 @using System.Globalization
-@using BlazorLanguageLearningApp.Client.Helpers;
+@using BlazorLanguageLearningApp.Client.Helpers
 @using CsvHelper.Configuration
 
-@inject CardService CardService
-@inject SetService SetService
+@inject UserService UserService
 @inject FolderService FolderService
+@inject SetService SetService
+@inject CardService CardService
+
 @inject IStringLocalizer<Pages.Set> Loc
 
 <Modal @ref="importFromCsvModal" Title="@Loc["UploadCsvFile"]" IsVerticallyCentered="true" OnHidden="OnImportFromCsvModalHidden">
@@ -192,9 +194,6 @@
     [Parameter]
     public required Action UpdateSetList { get; set; }
 
-    [Parameter]
-    public required string Username { get; set; }
-
     private Modal importFromCsvModal = default!;
     private Modal importSelectionModal = default!;
 
@@ -265,7 +264,7 @@
 
     private async Task<IEnumerable<SelectSetEntry>> GetAllSetsForUser()
     {
-        var folders = (await FolderService.GetAllFoldersForUser(Username));
+        var folders = (await FolderService.GetAllFoldersForUser(UserService.CurrentUser.Username));
         if (folders is null)
             return new List<SelectSetEntry>();
 
@@ -282,7 +281,7 @@
     private async Task OnSetSelectValueChanged(int newSelectedSetId)
     {
         selectedSetId = newSelectedSetId;
-        Set? selectedSet = await SetService.GetSetById(selectedSetId);
+        Set? selectedSet = await SetService.GetSetById(UserService.CurrentUser!.Username, FolderService.CurrentFolder.Id, selectedSetId);
         if (selectedSet is not null)
         {
             cards = selectedSet.Cards.Where(c => !SetService.CurrentContainsCard(c)).ToList();

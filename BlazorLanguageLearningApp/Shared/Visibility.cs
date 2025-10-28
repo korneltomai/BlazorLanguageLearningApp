@@ -1,9 +1,8 @@
-﻿namespace BlazorLanguageLearningApp.Shared
+﻿namespace BlazorLanguageLearningApp.Shared;
+
+public enum Visibility
 {
-    public enum Visibility
-    {
-        Private,
-        FriendsOnly,
-        Public
-    }
+    Private,
+    FriendsOnly,
+    Public
 }

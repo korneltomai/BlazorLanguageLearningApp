@@ -2,6 +2,7 @@
 using BlazorLanguageLearningApp.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace BlazorLanguageLearningApp.Server.Controllers
 {
@@ -19,24 +20,34 @@ namespace BlazorLanguageLearningApp.Server.Controllers
         [HttpGet("{username}/all")]
         public async Task<ActionResult<List<Folder>>> GetAllFoldersForUser(string username)
         {
-            var folders = await _context.Folders.Include("Sets").Where(f => f.Owner.Equals(username)).ToListAsync();
-            if (folders is null)
-                return Ok(new List<Folder>());
-            return Ok(folders);
+            var user = await _context.Users.Include("Folders.Sets").FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return NotFound($"User {username} does not exist!");
+            return Ok(user.Folders);
         }
 
-        [HttpGet("{folderId}")]
-        public async Task<ActionResult<Folder>> GetFolderById(int folderId)
+        [HttpGet("{username}/{folderId}")]
+        public async Task<ActionResult<Folder>> GetFolderById(string username, int folderId)
         {
-            var folder = await _context.Folders.FirstOrDefaultAsync(f => f.Id == folderId);
+            var user = await _context.Users.Include("Folders.Sets").FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return NotFound($"User {username} does not exist!");
+
+            var folder = user.Folders.FirstOrDefault(f => f.Id == folderId);
             if (folder is null)
                 return NotFound("This folder does not exist!");
+
             return Ok(folder);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Folder>> CreateFolder(Folder folder)
+        [HttpPost("{username}")]
+        public async Task<ActionResult<Set>> CreateFolder(string username, Folder folder)
         {
+            var user = await _context.Users.FindAsync(username);
+            if (user == null)
+                return NotFound($"User {username} does not exist!");
+
+            user.Folders.Add(folder);
             _context.Folders.Add(folder);
 
             await _context.SaveChangesAsync();

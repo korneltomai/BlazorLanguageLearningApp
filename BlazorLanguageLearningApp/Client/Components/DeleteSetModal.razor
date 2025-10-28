@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
@@ -32,8 +33,6 @@
 </Button>
 
 @code {
-    [Parameter]
-    public required string Username { get; set; }
 
     private Modal modal = default!;
 
@@ -43,7 +42,7 @@
 
         await modal.HideAsync();
 
-        Navigation.NavigateTo($"{Username}/sets/{FolderService.CurrentFolder!.Id}");
+        Navigation.NavigateTo($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}");
     }
 
     private async Task OnShowModalClick()

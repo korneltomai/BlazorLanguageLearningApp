@@ -1,11 +1,12 @@
 ﻿@page "/{username}/sets/{folderId:int}/{setId:int}/exercises"
 
+@using BlazorLanguageLearningApp.Client.Components;
 @using BlazorLanguageLearningApp.Client.Components.Exercises;
 
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
-@inject IStringLocalizer<Exercises> Loc
+@inject IStringLocalizer<Pages.Exercises> Loc
 
 @if (SetService.CurrentSet == null)
 {
@@ -16,23 +17,17 @@ else
     <PageTitle>@Loc["Exercises"] - @SetService.CurrentSet.Name</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
-        <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username" />
+        <SetsSubNav />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder" CurrentSet="@SetService.CurrentSet" />
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
 
             <div class="container-fluid row border-bottom py-3 pe-0">
                 <div class="col-6 col-sm-auto pe-1">
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Success" Class="w-100 h-100" @onclick="OpenExerciseSheetModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square me-1" viewBox="0 0 16 16">
-                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                        </svg>
-                        @Loc["NewExerciseSheet"]
-                    </Button>
+                    <ExerciseSheetModal />
                 </div>
                 <div class="col-6 col-sm-auto">
-                    <BlazorLanguageLearningApp.Client.Components.DeleteExerciseSheetModal Username="@Username" ExerciseSheet="@_exerciseSheet" RefreshExercisePage="StateHasChanged"/>
+                    <DeleteExerciseSheetModal ExerciseSheet="@_exerciseSheet" RefreshExercisePage="StateHasChanged"/>
                 </div>
                 <div class="col-12 col-sm-auto pt-2 pt-sm-0 ps-sm-1">
                     <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="GetQuickQuestion">
@@ -85,20 +80,13 @@ else
     {
         try
         {
-            await FolderService.GetFolderById(FolderId);
-            if (FolderService.CurrentFolder!.Owner != Username)
-                throw new HttpRequestException();
-            await SetService.SetCurrentSetById(SetId);
+            await FolderService.SetFolderById(Username, FolderId);
+            await SetService.SetCurrentSetById(Username, FolderId, SetId);
         }
         catch (HttpRequestException)
         {
             Navigation.NavigateTo("page-not-found");
         }
-    }
-
-    private void OpenExerciseSheetModal()
-    {
-        
     }
 
     private void GetQuickQuestion()

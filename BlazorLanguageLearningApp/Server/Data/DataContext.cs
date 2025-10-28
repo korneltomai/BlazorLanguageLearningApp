@@ -7,6 +7,7 @@ namespace BlazorLanguageLearningApp.Server.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
+        public DbSet<User>  Users { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<Card> Cards { get; set; }

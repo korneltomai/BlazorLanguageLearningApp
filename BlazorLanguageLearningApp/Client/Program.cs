@@ -12,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddBootstrapSelect();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FolderService>();
 builder.Services.AddScoped<SetService>();
 builder.Services.AddScoped<CardService>();

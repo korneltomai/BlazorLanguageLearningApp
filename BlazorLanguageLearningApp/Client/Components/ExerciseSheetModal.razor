@@ -1,0 +1,68 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+@inject UserService UserService
+@inject FolderService FolderService
+@inject NavigationManager Navigation
+@inject IStringLocalizer<Pages.Exercises> Loc
+
+<Modal @ref="modal" Title="@Loc["CreateNewExerciseSheet"]" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <h4><label for="numberOfExercisesSelect">@Loc["NumberOfExercises"]</label></h4>
+        <div class="ps-3">
+            <InputSelect class="form-select h-100" id="numberOfExercisesSelect" aria-label="Select the number of exercises to generate" @bind-Value="numberOfExercises">
+                <option selected value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+            </InputSelect>
+        </div>
+        <h4 class="mt-4">@Loc["ExerciseTypes"]</h4>
+        <div class="ps-3">
+            <CheckboxInput Label="@Loc["SelectionExercises"]" @bind-Value="selectionExerciseChecked" />
+            <CheckboxInput Label="@Loc["TrueOrFalseExercises"]" @bind-Value="trueOrFalseExerciseChecked" />
+            <CheckboxInput Label="@Loc["TypeInExercises"]" @bind-Value="typeInExerciseChecked" />
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="OnHideModalClick">@Loc["Close"]</Button>
+        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="float-end me-2" Disabled="noExerciseTypeSelected" @onclick="GetExerciseSheet">@Loc["Create"]</Button>
+    </FooterTemplate>
+</Modal>
+
+<Button Type="ButtonType.Button" Color="ButtonColor.Success" Class="w-100 h-100" @onclick="OnShowModalClick">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square me-1" viewBox="0 0 16 16">
+        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+    </svg>
+    @Loc["NewExerciseSheet"]
+</Button>
+
+@code {
+
+    private Modal modal = default!;
+
+    private int numberOfExercises = 10;
+    private bool selectionExerciseChecked = false;
+    private bool trueOrFalseExerciseChecked = false;
+    private bool typeInExerciseChecked = false;
+
+    private bool noExerciseTypeSelected => !(selectionExerciseChecked || trueOrFalseExerciseChecked || typeInExerciseChecked);
+
+    private async void GetExerciseSheet()
+    {
+        // Get exercise sheet from server based on selected options
+
+        await modal.HideAsync();
+    }
+
+    private async Task OnShowModalClick()
+    {
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+    }
+}

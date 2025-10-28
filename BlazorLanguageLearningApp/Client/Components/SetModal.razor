@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
@@ -86,26 +87,25 @@ else
     [Parameter]
     public bool Editing { get; set; }
 
-    [Parameter]
     public Set Set { get; set; } = new();
-
-    [Parameter]
-    public string? Username { get; set; }
 
     private string? Title { get; set; }
 
     private Modal modal = default!;
-    
+
 
     private EditContext? editContext;
 
     protected override void OnInitialized()
     {
+
         if (Editing)
+        {
             Title = Loc["EditSet"];
+            Set = SetService.CurrentSet!;
+        }
         else
             Title = Loc["CreateNewSet"];
-
 
         editContext = new EditContext(Set);
         base.OnInitialized();
@@ -123,7 +123,7 @@ else
             await modal.HideAsync();
 
             if (!Editing)
-                Navigation.NavigateTo($"{Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}");
+                Navigation.NavigateTo($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}");
         }
     }
 

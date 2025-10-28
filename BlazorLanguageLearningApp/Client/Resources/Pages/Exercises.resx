@@ -156,4 +156,25 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="NumberOfExercises" xml:space="preserve">
+    <value>Number of exercises</value>
+  </data>
+  <data name="SelectionExercises" xml:space="preserve">
+    <value>Selection exercises</value>
+  </data>
+  <data name="TrueOrFalseExercises" xml:space="preserve">
+    <value>True or false exercises</value>
+  </data>
+  <data name="TypeInExercises" xml:space="preserve">
+    <value>Type in exercises</value>
+  </data>
+  <data name="CreateNewExerciseSheet" xml:space="preserve">
+    <value>Create new exercise sheet</value>
+  </data>
+  <data name="ExerciseTypes" xml:space="preserve">
+    <value>Exercise types</value>
+  </data>
 </root>

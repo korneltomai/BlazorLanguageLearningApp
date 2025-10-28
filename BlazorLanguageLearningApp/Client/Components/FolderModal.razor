@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Sets> Loc
@@ -92,11 +93,7 @@ else
     [Parameter]
     public bool Editing { get; set; }
 
-    [Parameter]
     public Folder Folder { get; set; } = new();
-
-    [Parameter]
-    public string? Username { get; set; }
 
     private string? Title { get; set; }
 
@@ -106,6 +103,9 @@ else
 
     protected override void OnInitialized()
     {
+        if (Editing)
+            Folder = FolderService.CurrentFolder!;
+
         if (Editing)
             Title = Loc["EditFolder"];
         else
@@ -123,14 +123,13 @@ else
                 await FolderService.UpdateFolder(Folder);
             else
             {
-                Folder.Owner = Username;
-                await FolderService.CreateFolder(Folder);
+                await FolderService.CreateFolder(UserService.CurrentUser!.Username, Folder);
             }
 
             await modal.HideAsync();
 
             if (!Editing)
-                Navigation.NavigateTo($"{Username}/sets/{FolderService.CurrentFolder!.Id}");
+                Navigation.NavigateTo($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}");
         }
     }
 

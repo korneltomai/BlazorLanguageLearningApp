@@ -4,19 +4,31 @@
 
 @inject NavigationManager Navigation
 @inject IConfiguration Configuration
+@inject UserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<RemoteAuthenticatorView Action="@Action">
-    <LogOut>
-        @{
-            var authority = (string)Configuration["Auth0:Authority"]!;
-            var clientId = (string)Configuration["Auth0:ClientId"]!;
-
-            Navigation.NavigateTo($"{authority}/v2/logout?client_id={clientId}");
-        }
-    </LogOut>
-</RemoteAuthenticatorView>
+<RemoteAuthenticatorView 
+    Action="@Action"
+    OnLogInSucceeded="OnLoginSucceeded"
+    OnLogOutSucceeded="OnLogoutSucceeded" />
 
 @code {
     [Parameter]
     public string Action { get; set; } = string.Empty;
+
+    private async Task OnLoginSucceeded(RemoteAuthenticationState state)
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var username = authState.User.Claims.Where(c => c.Type.Equals("username")).Select(c => c.Value).FirstOrDefault();
+
+        if (username is not null)
+            await UserService.SetAuthenticatedUser(username);
+    }
+
+    private void OnLogoutSucceeded(RemoteAuthenticationState state)
+    {
+        var authority = Configuration["Auth0:Authority"]!;
+        var clientId = Configuration["Auth0:ClientId"]!;
+        //Navigation.NavigateTo($"{authority}/v2/logout?client_id={clientId}");
+    }
 }

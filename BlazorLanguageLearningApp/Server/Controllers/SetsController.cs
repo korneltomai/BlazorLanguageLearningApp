@@ -17,12 +17,21 @@ namespace BlazorLanguageLearningApp.Server.Controllers
             _context = context;
         }
 
-        [HttpGet("{setId}")]
-        public async Task<ActionResult<Set>> GetSetById(int setId)
+        [HttpGet("{username}/{folderId}/{setId}")]
+        public async Task<ActionResult<Set>> GetSetById(string username, int folderId, int setId)
         {
-            var set = await _context.Sets.Include("Cards").FirstOrDefaultAsync(s => s.Id == setId);
+            var user = await _context.Users.Include("Folders.Sets.Cards").FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return NotFound($"User {username} does not exist!");
+
+            var folder = user.Folders.FirstOrDefault(f => f.Id == folderId);
+            if (folder is null)
+                return NotFound("This folder does not exist!");
+
+            var set = folder.Sets.FirstOrDefault(s => s.Id == setId);
             if (set is null)
                 return NotFound("This set does not exist!");
+
             return Ok(set);
         }
 

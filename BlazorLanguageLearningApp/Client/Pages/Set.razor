@@ -4,6 +4,7 @@
 @using BlazorLanguageLearningApp.Client.Helpers
 @using System.Drawing
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject SetService SetService
 @inject CardService CardService
@@ -19,10 +20,10 @@ else
     <PageTitle>@SetService.CurrentSet.Name</PageTitle>
 
     <div class="row d-lg-flex m-0 p-0">
-        <SetsSubNav FolderId="@FolderId" SetId="@SetId" Username="@Username" />
+        <SetsSubNav />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder" CurrentSet="@SetService.CurrentSet"/>
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
             
             <div class="container-fluid mt-2">
                 <div class="row">
@@ -41,10 +42,10 @@ else
                     <div class="d-flex align-items-center col-12 col-sm-3 col-xxl-2 ps-sm-0">
                         <div class="d-flex d-sm-block w-100 p-0 m-0">
                             <div class="col-6 col-sm-12 pe-2 pe-sm-0">
-                                <SetModal Editing="true" Set="@SetService.CurrentSet"/>
+                                <SetModal Editing="true" />
                             </div>
                             <div class="col-6 col-sm-12 mt-sm-1 ps-2 ps-sm-0">
-                                <DeleteSetModal Username="@Username"/>
+                                <DeleteSetModal />
                             </div>
                         </div>
                     </div>
@@ -57,7 +58,7 @@ else
                         <CardModal UpdateSetList="@(() => StateHasChanged())"/>
                     </div>
                     <div class="me-auto col-12 col-md-auto mb-2 mb-md-0">
-                        <CardImportDropdown UpdateSetList="@(() => StateHasChanged())" Username="@Username" />
+                        <CardImportDropdown UpdateSetList="@(() => StateHasChanged())"/>
                     </div>
                     <div class="col-12 col-md-auto">
                         <div class="form-floating">
@@ -139,10 +140,12 @@ else
 
     protected async override Task OnParametersSetAsync()
     {
+        await UserService.SetCurrentUser(Username);
+
         try
         {
-            await FolderService.GetFolderById(FolderId);
-            await SetService.SetCurrentSetById(SetId);
+            await FolderService.SetFolderById(Username, FolderId);
+            await SetService.SetCurrentSetById(Username, FolderId, SetId);
         }
         catch (HttpRequestException)
         {

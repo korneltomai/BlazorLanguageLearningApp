@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Sets> Loc
@@ -31,9 +32,6 @@
 </Button>
 
 @code {
-    [Parameter]
-    public required string Username { get; set; }
-
     private Modal modal = default!;
 
     private async void DeleteFolder()
@@ -42,7 +40,7 @@
 
         await modal.HideAsync();
 
-        Navigation.NavigateTo($"{Username}/sets");
+        Navigation.NavigateTo($"{UserService.CurrentUser!.Username}/sets");
     }
 
     private async Task OnShowModalClick()

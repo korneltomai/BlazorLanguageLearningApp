@@ -6,6 +6,7 @@
 @using BlazorLanguageLearningApp.Client.Helpers
 @using System.Drawing
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
@@ -38,12 +39,12 @@ else
                 </div>
             </div>
             <div class="mt-2 my-2">
-                <FolderModal Username="@Username"/>
+                <FolderModal />
             </div>
         </div>
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" Username="@Username" CurrentFolder="@FolderService.CurrentFolder"/>
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
 
             <div class="d-flex container-fluid d-lg-none">
                 <div class="form-floating col-9 pe-2">
@@ -57,7 +58,7 @@ else
                     <label class="text-white small" for="folderSelect">@Loc["Folders"]</label>
                 </div>
                 <div class="col-3">
-                    <FolderModal Username="@Username"/>
+                    <FolderModal />
                 </div>
             </div>
             <hr class="d-lg-none mb-2" />
@@ -84,10 +85,10 @@ else
                         <div class="d-flex align-items-center col-12 col-sm-3 col-xxl-2 ps-sm-0">
                             <div class="d-flex d-sm-block w-100 p-0 m-0">
                                 <div class="col-6 col-sm-12 pe-2 pe-sm-0">
-                                    <FolderModal Editing="true" Folder="@FolderService.CurrentFolder"/>
+                                    <FolderModal Editing="true" />
                                 </div>
                                 <div class="col-6 col-sm-12 mt-sm-1 p-0 ps-2 ps-sm-0">
-                                    <DeleteFolderModal Username="@Username"/>
+                                    <DeleteFolderModal />
                                 </div>
                             </div>
                         </div>
@@ -97,7 +98,7 @@ else
                 <div class="container-fluid mb-3">
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="col-12 col-sm-auto me-auto mb-2 mb-sm-0">
-                            <SetModal Username="@Username"/>
+                            <SetModal />
                         </div>
                         <div class="form-floating col-12 col-sm-auto ms-auto p-0">
                             <InputSelect class="form-select bg-primary text-white" id="orderBySelect" aria-label="Order sets by" @bind-Value:get="Ordering" @bind-Value:set="OrderSets">
@@ -160,6 +161,8 @@ else
 
     protected async override Task OnParametersSetAsync()
     {
+        await UserService.SetCurrentUser(Username);
+
         var result = await FolderService.GetAllFoldersForUser(Username);
         if (result is not null)
             folders = result;

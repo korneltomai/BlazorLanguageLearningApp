@@ -1,26 +1,29 @@
 ﻿@using System.Text.RegularExpressions;
 
+@inject UserService UserService
+@inject FolderService FolderService
+@inject SetService SetService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<BreadcrumbNavigation> Loc
 
 <div class="container-fluid mt-2">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-2">
-            @if (Username is not null)
+            @if (UserService.CurrentUser?.Username is not null)
             {
-                <li class="breadcrumb-item"><a href="@($"{Username}/profile")">@Username</a></li>
+                <li class="breadcrumb-item"><a href="@($"{UserService.CurrentUser!.Username}/profile")">@UserService.CurrentUser!.Username</a></li>
 
                 @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets(/\d+)?"))
                 {
-                    <li class="breadcrumb-item"><a href="@($"{Username}/sets")">@Loc["Folders"]</a></li>
+                    <li class="breadcrumb-item"><a href="@($"{UserService.CurrentUser!.Username}/sets")">@Loc["Folders"]</a></li>
                 }
                 @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+"))
                 {
-                    <li class="breadcrumb-item"><a href="@($"{Username}/sets/{CurrentFolder!.Id}")">@CurrentFolder.Name</a></li>
+                    <li class="breadcrumb-item"><a href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}")">@FolderService.CurrentFolder.Name</a></li>
                 }
                 @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+"))
                 {
-                    <li class="breadcrumb-item"><a href="@($"{Username}/sets/{CurrentFolder!.Id}/{CurrentSet!.Id}")">@CurrentSet.Name</a></li>
+                    <li class="breadcrumb-item"><a href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}")">@SetService.CurrentSet.Name</a></li>
                 }
                 @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+/flashcards"))
                 {
@@ -39,14 +42,5 @@
 
     [Parameter]
     public required string CurrentPage { get; set; } = string.Empty;
-
-    [Parameter]
-    public string Username { get; set; } = string.Empty;
-
-    [Parameter]
-    public Folder? CurrentFolder { get; set; } 
-
-    [Parameter]
-    public Set? CurrentSet { get; set; }
 
 }
