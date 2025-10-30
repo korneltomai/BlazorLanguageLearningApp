@@ -60,7 +60,7 @@
                 </li>
             </ul>
 
-            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(flashcards|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(|flashcards|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
             {
                 <div class="d-lg-none">
                     <hr class="text-white" />
@@ -108,7 +108,6 @@
         {
             username = CurrentPage.Split('/')[3];
         }
-        
     }
 
     protected override void OnInitialized()

@@ -22,7 +22,7 @@
         var username = authState.User.Claims.Where(c => c.Type.Equals("username")).Select(c => c.Value).FirstOrDefault();
 
         if (username is not null)
-            await UserService.SetAuthenticatedUser(username);
+            await UserService.SetCurrentUser(username);
     }
 
     private void OnLogoutSucceeded(RemoteAuthenticationState state)

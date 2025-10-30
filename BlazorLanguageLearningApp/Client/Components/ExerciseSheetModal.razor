@@ -2,6 +2,7 @@
 
 @inject UserService UserService
 @inject FolderService FolderService
+@inject ExerciseService ExerciseService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Exercises> Loc
 
@@ -39,6 +40,8 @@
 </Button>
 
 @code {
+    [Parameter]
+    public EventCallback<ExerciseSheet> ExerciseSheetChanged { get; set; }
 
     private Modal modal = default!;
 
@@ -51,13 +54,20 @@
 
     private async void GetExerciseSheet()
     {
-        // Get exercise sheet from server based on selected options
+        var result = await ExerciseService.GenerateExerciseSheet(numberOfExercises, selectionExerciseChecked, trueOrFalseExerciseChecked, typeInExerciseChecked);
+        if (result is not null)
+            await ExerciseSheetChanged.InvokeAsync(result);
 
         await modal.HideAsync();
     }
 
     private async Task OnShowModalClick()
     {
+        numberOfExercises = 10;
+        selectionExerciseChecked = false;
+        trueOrFalseExerciseChecked = false;
+        typeInExerciseChecked = false;
+
         await modal.ShowAsync();
     }
 

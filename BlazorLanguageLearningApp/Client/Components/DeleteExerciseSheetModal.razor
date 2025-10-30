@@ -21,19 +21,15 @@
 
 @code {
     [Parameter]
-    public required ExerciseSheet ExerciseSheet { get; set; }
-
-    [Parameter]
-    public required Action RefreshExercisePage { get; set; }
+    public EventCallback<ExerciseSheet> ExerciseSheetChanged { get; set; }
 
     private Modal modal = default!;
 
     private async void DeleteExerciseSheet()
     {
         //TODO: Delete exercise sheet on server
-        ExerciseSheet.Exercises = new();
 
-        RefreshExercisePage.Invoke();
+        await ExerciseSheetChanged.InvokeAsync(new());
 
         await modal.HideAsync();
     }

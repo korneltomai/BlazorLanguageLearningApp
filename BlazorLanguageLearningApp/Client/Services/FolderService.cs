@@ -19,6 +19,7 @@ public class FolderService
     public async Task SetFolderById(string username, int folderId)
     {
         CurrentFolder = await _httpClient.GetFromJsonAsync<Folder?>($"api/folders/{username}/{folderId}");
+        NotifyStateChanged();
     }
 
     public async Task<List<Folder>?> GetAllFoldersForUser(string username)

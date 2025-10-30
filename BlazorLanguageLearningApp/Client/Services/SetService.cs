@@ -22,6 +22,7 @@ public class SetService
     public async Task SetCurrentSetById(string username, int folderId, int setId)
     {
         CurrentSet = await _httpClient.GetFromJsonAsync<Set?>($"api/sets/{username}/{folderId}/{setId}");
+        NotifyStateChanged();
     }
 
     public async Task CreateSet(Set set, int folderId)

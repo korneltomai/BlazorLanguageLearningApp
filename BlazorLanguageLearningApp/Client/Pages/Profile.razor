@@ -1,6 +1,7 @@
 ﻿@page "/{username}/profile"
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserService UserService
 
 <PageTitle>Profile</PageTitle>
 
@@ -13,4 +14,8 @@
     [Parameter]
     public required string Username { get; set; }
 
+    protected async override Task OnParametersSetAsync()
+    {
+        await UserService.SetCurrentUser(Username);
+    }
 }

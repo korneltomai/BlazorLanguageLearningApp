@@ -1,5 +1,6 @@
 ﻿@page "/{username}/sets/{folderId:int}/{setId:int}/flashcards"
 
+@inject UserService UserService
 @inject FolderService FolderService
 @inject SetService SetService
 @inject NavigationManager Navigation
@@ -133,6 +134,7 @@ else
     {
         try
         {
+            await UserService.SetCurrentUser(Username);
             await FolderService.SetFolderById(Username, FolderId);
             await SetService.SetCurrentSetById(Username, FolderId, SetId);
         }

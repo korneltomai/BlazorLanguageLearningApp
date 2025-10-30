@@ -15,7 +15,7 @@ public class Exercise
     }
 }
 
-public enum ExerciseType { TrueOrFalse, Selection, TypeIn }
+public enum ExerciseType { Selection, TrueOrFalse, TypeIn }
 
 public class ExerciseEntry 
 {

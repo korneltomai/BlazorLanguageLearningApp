@@ -3,17 +3,20 @@
 @inject SetService SetService
 @inject IStringLocalizer<SetsSubNav> Loc
 
-<div class="bg-light d-none d-lg-block col-3 col-xxl-2">
-    <div class="container justify-content-center mt-3">
-        <a class="btn btn-primary w-100 mb-1" href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}")">@Loc["ViewSet"]</a>
+@if (UserService.CurrentUser?.Username is not null)
+{
+    <div class="bg-light d-none d-lg-block col-3 col-xxl-2">
+        <div class="container justify-content-center mt-3">
+            <a class="btn btn-primary w-100 mb-1" href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}")">@Loc["ViewSet"]</a>
+        </div>
+        <div class="container justify-content-center">
+            <a class="btn btn-primary w-100 mb-1" href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}/flashcards")">@Loc["Flashcards"]</a>
+        </div>
+        <div class="container justify-content-center">
+            <a class="btn btn-primary w-100 mb-1" href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}/exercises")">@Loc["Exercises"]</a>
+        </div>
     </div>
-    <div class="container justify-content-center">
-        <a class="btn btn-primary w-100 mb-1" href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}/flashcards")">@Loc["Flashcards"]</a>
-    </div>
-    <div class="container justify-content-center">
-        <a class="btn btn-primary w-100 mb-1" href="@($"{UserService.CurrentUser!.Username}/sets/{FolderService.CurrentFolder!.Id}/{SetService.CurrentSet!.Id}/exercises")">@Loc["Exercises"]</a>
-    </div>
-</div>
+}
 
 @code {
 

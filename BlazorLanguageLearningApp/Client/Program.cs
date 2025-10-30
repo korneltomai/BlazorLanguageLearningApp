@@ -16,6 +16,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FolderService>();
 builder.Services.AddScoped<SetService>();
 builder.Services.AddScoped<CardService>();
+builder.Services.AddScoped<ExerciseService>();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
