@@ -93,7 +93,7 @@ else
 
     private async void GetQuickQuestion()
     {
-        var result = await ExerciseService.GenerateExerciseSheet(1, true, true, true);
+        var result = await ExerciseService.GenerateExerciseSheet(1, true, true, true, true, true, true);
         if (result is not null)
             _exerciseSheet = result;
 

@@ -49,12 +49,22 @@
     private bool selectionExerciseChecked = false;
     private bool trueOrFalseExerciseChecked = false;
     private bool typeInExerciseChecked = false;
+    private bool generateDuplicatesChecked = true;
+    private bool generateTermSide = true;
+    private bool generateDefinitionSide = true;
 
     private bool noExerciseTypeSelected => !(selectionExerciseChecked || trueOrFalseExerciseChecked || typeInExerciseChecked);
 
     private async void GetExerciseSheet()
     {
-        var result = await ExerciseService.GenerateExerciseSheet(numberOfExercises, selectionExerciseChecked, trueOrFalseExerciseChecked, typeInExerciseChecked);
+        var result = await ExerciseService.GenerateExerciseSheet(
+            numberOfExercises, 
+            selectionExerciseChecked, 
+            trueOrFalseExerciseChecked, 
+            typeInExerciseChecked, 
+            generateDuplicatesChecked,
+            generateTermSide,
+            generateDefinitionSide);
         if (result is not null)
             await ExerciseSheetChanged.InvokeAsync(result);
 
@@ -67,6 +77,7 @@
         selectionExerciseChecked = false;
         trueOrFalseExerciseChecked = false;
         typeInExerciseChecked = false;
+        generateDuplicatesChecked = true;
 
         await modal.ShowAsync();
     }

@@ -1,4 +1,5 @@
 ﻿using BlazorLanguageLearningApp.Server.Data;
+using BlazorLanguageLearningApp.Server.Helpers;
 using BlazorLanguageLearningApp.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,17 @@ public class ExercisesController : Controller
     }
 
     [HttpGet("{username}/{folderId}/{setId}")]
-    public async Task<ActionResult<ExerciseSheet>> GetExercises(string username, int folderId, int setId, int count, bool generateSelectionExercise, bool generateTrueOrFalseExercise, bool generateTypeInExercise)
+    public async Task<ActionResult<ExerciseSheet>> GetExercises(
+        string username, 
+        int folderId, 
+        int setId, 
+        int count, 
+        bool generateSelectionExercise, 
+        bool generateTrueOrFalseExercise, 
+        bool generateTypeInExercise, 
+        bool generateDuplicates, 
+        bool generateTermSide, 
+        bool generateDefinitionSide)
     {
         var user = await _context.Users.Include("Folders.Sets.Cards").FirstOrDefaultAsync(u => u.Username == username);
         if (user == null)
@@ -31,69 +42,21 @@ public class ExercisesController : Controller
         if (set is null)
             return NotFound("This set does not exist!");
 
-        Random random = new Random();
-        ExerciseSheet exerciseSheet = new();
+        if (!generateDuplicates && count > set.Cards.Count)
+            return BadRequest($"Cannot generate exercise sheet with {count} exercises, because the set only contains {set.Cards.Count} cards.");
 
-        for (int i = 0; i < count; i++)
-        {
-            List<ExerciseType> possibleExerciseTypes = new();
-            if (generateSelectionExercise)
-                possibleExerciseTypes.Add(ExerciseType.Selection);
-            if (generateTrueOrFalseExercise)
-                possibleExerciseTypes.Add(ExerciseType.TrueOrFalse);
-            if (generateTypeInExercise)
-                possibleExerciseTypes.Add(ExerciseType.TypeIn);
-
-            ExerciseType exerciseType = possibleExerciseTypes[random.Next(0, possibleExerciseTypes.Count)];
-            Exercise exercise = exerciseType switch
-            {
-                ExerciseType.Selection => GenerateSelectionExercise(),
-                ExerciseType.TrueOrFalse => GenerateTrueOrFalseExercise(),
-                ExerciseType.TypeIn => GenerateTypeInExercise(),
-                _ => throw new InvalidOperationException("Invalid exercise type.")
-            };
-            exerciseSheet.Exercises.Add(exercise);
-        }
+        var exerciseSheet = CardSelector.GenerateExerciseSheet(
+            set.Cards.ToList(),
+            count, 
+            generateSelectionExercise, 
+            generateTrueOrFalseExercise, 
+            generateTypeInExercise, 
+            generateDuplicates,
+            generateTermSide,
+            generateDefinitionSide);
 
         return Ok(exerciseSheet);
     }
 
-    public Exercise GenerateSelectionExercise()
-    {
-        return new Exercise(
-            ExerciseType.Selection,
-            new ExerciseEntry("Capybara", "english"),
-            new()
-            {
-                new ExerciseEntry("Vizidisznó", "magyar"),
-                new ExerciseEntry("Egér", "magyar"),
-                new ExerciseEntry("Tehén", "magyar"),
-                new ExerciseEntry("Ló", "magyar")
-            }
-        );
-    }
-
-    public Exercise GenerateTrueOrFalseExercise()
-    {
-        return new Exercise(
-            ExerciseType.TrueOrFalse,
-            new ExerciseEntry("Capybara", "english"),
-            new()
-                {
-                    new ExerciseEntry("Vizidisznó", "magyar"),
-                }
-        );
-    }
-
-    public Exercise GenerateTypeInExercise()
-    {
-        return new Exercise(
-            ExerciseType.TypeIn,
-            new ExerciseEntry("Capybara", "english"),
-            new()
-                {
-                    new ExerciseEntry("", "magyar"),
-                }
-        );
-    }
+    
 }

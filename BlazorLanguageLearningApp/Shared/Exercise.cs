@@ -4,13 +4,15 @@ public class Exercise
 {
     public ExerciseType Type { get; set; }
     public ExerciseEntry Question { get; set; }
+    public ExerciseEntry Answer { get; set; }
     public List<ExerciseEntry> PossibleAnswers { get; set; }
     public ExerciseEntry UserAnswer { get; set; } = new();
 
-    public Exercise(ExerciseType type, ExerciseEntry question, List<ExerciseEntry> possibleAnswers)
+    public Exercise(ExerciseType type, ExerciseEntry question, ExerciseEntry answer, List<ExerciseEntry> possibleAnswers)
     {
         Type = type;
         Question = question;
+        Answer = answer;
         PossibleAnswers = possibleAnswers;
     }
 }

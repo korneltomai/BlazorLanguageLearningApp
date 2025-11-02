@@ -18,9 +18,24 @@ public class ExerciseService
         _setService = setService;
     }
 
-    public async Task<ExerciseSheet?> GenerateExerciseSheet(int count, bool generateSelectionExercise, bool generateTrueOrFalseExercise, bool generateTypeInExercise)
+    public async Task<ExerciseSheet?> GenerateExerciseSheet(
+        int count, 
+        bool generateSelectionExercise, 
+        bool generateTrueOrFalseExercise, 
+        bool generateTypeInExercise, 
+        bool generateDuplicates,
+        bool generateTermSide,
+        bool generateDefinitionSide)
     {
-        return await _httpClient.GetFromJsonAsync<ExerciseSheet>($"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}/?count={count}&generateSelectionExercise={generateSelectionExercise}&generateTrueOrFalseExercise={generateTrueOrFalseExercise}&generateTypeInExercise={generateTypeInExercise}");
+        return await _httpClient.GetFromJsonAsync<ExerciseSheet>(
+            $"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}/" +
+            $"?count={count}" +
+            $"&generateSelectionExercise={generateSelectionExercise}" +
+            $"&generateTrueOrFalseExercise={generateTrueOrFalseExercise}" +
+            $"&generateTypeInExercise={generateTypeInExercise}" +
+            $"&generateDuplicates={generateDuplicates}" +
+            $"&generateTermSide={generateTermSide}" +
+            $"&generateDefinitionSide={generateDefinitionSide}");
     }
 }
 
