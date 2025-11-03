@@ -1,6 +1,6 @@
 ﻿@inject IStringLocalizer<Pages.Exercises> Loc
 
-<div class="border border-2 rounded-3 my-5">
+<div class="border border-2 rounded-3 my-5 @exerciseValidationStyle">
     <div class="pt-3 px-3">
         <span class="h5">@Loc["TypeInExerciseHeader"]</span>
     </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="text-center w-100">
             <div class="my-2 px-3">
-                <TextInput Class="text-center fs-3" Placeholder="@Loc["TypeInYourAnswer"]" MaxLength="50" Value="@_answer" ValueExpression="() => _answer" ValueChanged="(value) => OnUserAnswered.InvokeAsync((new ExerciseEntry(value, Exercise.PossibleAnswers[0].Language), ExerciseNumber))" />
+                <TextInput Class="text-center fs-3" Placeholder="@Loc["TypeInYourAnswer"]" MaxLength="50" Value="@_answer" ValueExpression="() => _answer" ValueChanged="(value) => UpdateAnswer(new ExerciseEntry(value, Exercise.PossibleAnswers[0].Language))"/>
             </div>
             <div class="small mb-4">@Exercise.PossibleAnswers[0].Language</div>
         </div>
@@ -32,7 +32,19 @@
     public required Exercise Exercise { get; set; }
 
     [Parameter]
-    public EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
+    public required EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
+
+    [Parameter]
+    public required bool ExerciseSheetSolved { get; set; }
 
     private string _answer = "";
+
+    private string exerciseValidationStyle => (ExerciseSheetSolved && Exercise.UserAnswer == Exercise.Answer) ? "border-success" : "";
+
+    private void UpdateAnswer(ExerciseEntry answer)
+    {
+        _answer = answer.Expression;
+        Exercise.UserAnswer = answer;
+        OnUserAnswered.InvokeAsync((answer, ExerciseNumber));
+    }
 }

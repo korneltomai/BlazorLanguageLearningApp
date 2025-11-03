@@ -32,52 +32,50 @@ else
         <SetsSubNav />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <div class="exercise-page-container">
-                <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
+            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
 
-                <div class="container-fluid row border-bottom py-3 pe-0">
-                    <div class="col-6 col-sm-auto pe-1">
-                        <ExerciseSheetModal ExerciseSheetExists="_exerciseSheetExists" ExerciseSheetChanged="OnExerciseSheetChanged" />
-                    </div>
-                    <div class="col-6 col-sm-auto">
-                        <DeleteExerciseSheetModal ExerciseSheetExists="_exerciseSheetExists" ExerciseSheetChanged="OnExerciseSheetChanged" />
-                    </div>
-                    <div class="col-12 col-sm-auto pt-2 pt-sm-0 ps-sm-1">
-                        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="OnGetQuickQuestionClicked">
-                            @Loc["QuickQuestion"]
+            <div class="container-fluid row border-bottom py-3 pe-0">
+                <div class="col-6 col-sm-auto pe-1">
+                    <ExerciseSheetModal ExerciseSheetExists="_exerciseSheetExists" ExerciseSheetChanged="OnExerciseSheetChanged" />
+                </div>
+                <div class="col-6 col-sm-auto">
+                    <DeleteExerciseSheetModal ExerciseSheetExists="_exerciseSheetExists" ExerciseSheetChanged="OnExerciseSheetChanged" />
+                </div>
+                <div class="col-12 col-sm-auto pt-2 pt-sm-0 ps-sm-1">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="OnGetQuickQuestionClicked">
+                        @Loc["QuickQuestion"]
+                    </Button>
+                </div>
+                @if (_exerciseSheetExists)
+                {
+                    <div class="d-none d-sm-block d-flex justify-content-end col-sm-auto ms-auto">
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="SubmitExerciseSheet" Disabled="CannotSubmit">
+                            @Loc["Submit"]
                         </Button>
                     </div>
-                    @if (_exerciseSheetExists)
-                    {
-                        <div class="d-none d-sm-block d-flex justify-content-end col-sm-auto ms-auto">
-                            <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="SubmitExerciseSheet" Disabled="CannotSubmit">
-                                @Loc["Submit"]
-                            </Button>
-                        </div>
-                    }
-                </div>
-                <div class="exercise-sheet-container container-fluid">
-                    @if (_exerciseSheetExists)
-                    {
-                        <div class="container-fluid" style="max-width: 900px;">
-                            @for (int i = 0; i < _exerciseSheet!.Exercises.Count(); i++)
+                }
+            </div>
+            <div class="exercise-sheet-container container-fluid">
+                @if (_exerciseSheetExists)
+                {
+                    <div class="container-fluid" style="max-width: 900px;">
+                        @for (int i = 0; i < _exerciseSheet!.Exercises.Count(); i++)
+                        {
+                            @if (_exerciseSheet.Exercises[i].Type == ExerciseType.Selection)
                             {
-                                @if (_exerciseSheet.Exercises[i].Type == ExerciseType.Selection)
-                                {
-                                    <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" />
-                                }
-                                @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TrueOrFalse)
-                                {
-                                    <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" />
-                                }
-                                @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TypeIn)
-                                {
-                                    <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" />
-                                }
+                                <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" ExerciseSheetSolved="@_exerciseSheet.Solved" @key="randomGuids[i]" />
                             }
-                        </div>
-                    }
-                </div>
+                            @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TrueOrFalse)
+                            {
+                                <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" ExerciseSheetSolved="@_exerciseSheet.Solved" @key="randomGuids[i]" />
+                            }
+                            @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TypeIn)
+                            {
+                                <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" ExerciseSheetSolved="@_exerciseSheet.Solved" @key="randomGuids[i]" />
+                            }
+                        }
+                    </div>
+                }
             </div>
             @if (_exerciseSheetExists)
             {
@@ -107,6 +105,8 @@ else
     private ExerciseSheet? _exerciseSheet;
     private bool _exerciseSheetExists => (_exerciseSheet is not null);
     private bool CannotSubmit => _exerciseSheet!.Solved || _exerciseSheet.Exercises.Any(e => !e.Solved);
+
+    private List<Guid> randomGuids = new();
 
     protected override void OnInitialized()
     {
@@ -140,6 +140,9 @@ else
         var result = await ExerciseService.GenerateExerciseSheet(1, true, true, true, true, true, true);
         if (result is not null)
             _exerciseSheet = result;
+        randomGuids.Clear();
+        foreach (var exercise in _exerciseSheet.Exercises)
+            randomGuids.Add(Guid.NewGuid());
 
         await overwriteExerciseSheetModal.HideAsync();
         StateHasChanged();
@@ -148,6 +151,9 @@ else
     private void OnExerciseSheetChanged(ExerciseSheet newSheet)
     {
         _exerciseSheet = newSheet;
+        randomGuids.Clear();
+        foreach (var exercise in _exerciseSheet.Exercises)
+            randomGuids.Add(Guid.NewGuid());
         StateHasChanged();
     }
 
@@ -160,5 +166,6 @@ else
     private async void SubmitExerciseSheet()
     {
         _exerciseSheet!.Solved = true;
+        StateHasChanged();
     }
 }

@@ -4,17 +4,19 @@
     }
 }
 
+.exercise-sheet-container {
+    position: relative;
+}
+
 @media (width>=576px) {
     .exercise-sheet-container {
         overflow: auto;
-        position: relative;
     }
 }
 
 @media (width<576px) {
     .exercise-page-container {
         overflow: auto;
-        position: relative;
     }
 }
 
