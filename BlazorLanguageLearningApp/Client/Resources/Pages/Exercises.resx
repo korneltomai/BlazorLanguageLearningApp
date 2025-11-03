@@ -177,4 +177,34 @@
   <data name="ExerciseTypes" xml:space="preserve">
     <value>Exercise types</value>
   </data>
+  <data name="AskForWhichSide" xml:space="preserve">
+    <value>Ask for which side of the cards?</value>
+  </data>
+  <data name="GenerateDuplicates" xml:space="preserve">
+    <value>Generate duplicates</value>
+  </data>
+  <data name="GenerateDuplicatesWarning" xml:space="preserve">
+    <value>There are not enough cards in the set.</value>
+  </data>
+  <data name="Term" xml:space="preserve">
+    <value>Term</value>
+  </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="Both" xml:space="preserve">
+    <value>Both</value>
+  </data>
+  <data name="OverwriteExerciseSheetModalText" xml:space="preserve">
+    <value>You already have an exercise sheet. Creating a new one will overwrite and delete the current one. Are you sure you want to generate a new one?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="OverwriteExerciseSheetModalTitle" xml:space="preserve">
+    <value>Overwriting exercise sheet</value>
+  </data>
 </root>

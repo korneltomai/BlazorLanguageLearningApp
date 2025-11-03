@@ -2,21 +2,52 @@
 
 @inject UserService UserService
 @inject FolderService FolderService
+@inject SetService SetService
 @inject ExerciseService ExerciseService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Exercises> Loc
 
-<Modal @ref="modal" Title="@Loc["CreateNewExerciseSheet"]" IsVerticallyCentered="true">
+<Modal @ref="overwriteExerciseSheetModal" Title="@Loc["OverwriteExerciseSheetModalTitle"]" IsVerticallyCentered="true">
     <BodyTemplate>
-        <h4><label for="numberOfExercisesSelect">@Loc["NumberOfExercises"]</label></h4>
-        <div class="ps-3">
-            <InputSelect class="form-select h-100" id="numberOfExercisesSelect" aria-label="Select the number of exercises to generate" @bind-Value="numberOfExercises">
-                <option selected value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
-            </InputSelect>
+        @Loc["OverwriteExerciseSheetModalText"]
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => overwriteExerciseSheetModal.HideAsync()">@Loc["No"]</Button>
+        <Button Color="ButtonColor.Primary" @onclick="ShowExerciseSheetModal">@Loc["Yes"]</Button>
+    </FooterTemplate>
+</Modal>
+
+<Modal @ref="exerciseSheetModal" Title="@Loc["CreateNewExerciseSheet"]" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <div class="row mb-2">
+            <div class="col-7 d-flex align-items-center">
+                <label for="numberOfExercisesSelect">@Loc["NumberOfExercises"]:</label>
+            </div>
+            <div class="col-5">
+                <InputSelect class="form-select h-100" id="numberOfExercisesSelect" @bind-Value="numberOfExercises">
+                    <option selected value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                </InputSelect>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-7 d-flex align-items-center">
+                <label for="askForWhichSideSelect">@Loc["AskForWhichSide"]</label>
+            </div>
+            <div class="col-5">
+                <InputSelect class="form-select h-100" id="askForWhichSideSelect" @bind-Value="selectedCardSide">
+                    <option selected value="Definition">@Loc["Definition"]</option>
+                    <option value="Term">@Loc["Term"]</option>
+                    <option value="Both">@Loc["Both"]</option>
+                </InputSelect>
+            </div>
+        </div>
+        <div class="mt-2">
+            <CheckboxInput Label="@Loc["GenerateDuplicates"]" @bind-Value="generateDuplicatesChecked" />
+            <span class="text-danger @allowDuplicatesWarningStyle">@Loc["GenerateDuplicatesWarning"]</span>
         </div>
         <h4 class="mt-4">@Loc["ExerciseTypes"]</h4>
         <div class="ps-3">
@@ -26,8 +57,8 @@
         </div>
     </BodyTemplate>
     <FooterTemplate>
-        <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="OnHideModalClick">@Loc["Close"]</Button>
-        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="float-end me-2" Disabled="noExerciseTypeSelected" @onclick="GetExerciseSheet">@Loc["Create"]</Button>
+        <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end me-2" @onclick="() => exerciseSheetModal.HideAsync()">@Loc["Close"]</Button>
+        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="float-end me-2" Disabled="cannotGenerateExerciseSheet" @onclick="GetExerciseSheet">@Loc["Create"]</Button>
     </FooterTemplate>
 </Modal>
 
@@ -41,19 +72,27 @@
 
 @code {
     [Parameter]
+    public bool ExerciseSheetExists { get; set; }
+
+    [Parameter]
     public EventCallback<ExerciseSheet> ExerciseSheetChanged { get; set; }
 
-    private Modal modal = default!;
+    private Modal exerciseSheetModal = default!;
+    private Modal overwriteExerciseSheetModal = default!;
 
     private int numberOfExercises = 10;
+    private string selectedCardSide = "Definition";
     private bool selectionExerciseChecked = false;
     private bool trueOrFalseExerciseChecked = false;
     private bool typeInExerciseChecked = false;
     private bool generateDuplicatesChecked = true;
-    private bool generateTermSide = true;
-    private bool generateDefinitionSide = true;
+    private bool generateTermSide => selectedCardSide == "Term" || selectedCardSide == "Both";
+    private bool generateDefinitionSide => selectedCardSide == "Definition" || selectedCardSide == "Both";
 
     private bool noExerciseTypeSelected => !(selectionExerciseChecked || trueOrFalseExerciseChecked || typeInExerciseChecked);
+    private bool notEnoughCardsWithoutDuplicates => (generateDuplicatesChecked && numberOfExercises > SetService.CurrentSet!.Cards.Count);
+    private bool cannotGenerateExerciseSheet => noExerciseTypeSelected && notEnoughCardsWithoutDuplicates;
+    private string allowDuplicatesWarningStyle => notEnoughCardsWithoutDuplicates ? "d-none" : "";
 
     private async void GetExerciseSheet()
     {
@@ -68,22 +107,32 @@
         if (result is not null)
             await ExerciseSheetChanged.InvokeAsync(result);
 
-        await modal.HideAsync();
+        await exerciseSheetModal.HideAsync();
+    }
+
+    private async void ShowExerciseSheetModal()
+    {
+        await overwriteExerciseSheetModal.HideAsync();
+        await exerciseSheetModal.ShowAsync();
     }
 
     private async Task OnShowModalClick()
     {
+        if (ExerciseSheetExists)
+            await overwriteExerciseSheetModal.ShowAsync();
+        else
+            await exerciseSheetModal.ShowAsync();
+    }
+
+    private async Task OnShowExerciseSheetModalClick()
+    {
         numberOfExercises = 10;
+        selectedCardSide = "Definition";
         selectionExerciseChecked = false;
         trueOrFalseExerciseChecked = false;
         typeInExerciseChecked = false;
         generateDuplicatesChecked = true;
 
-        await modal.ShowAsync();
-    }
-
-    private async Task OnHideModalClick()
-    {
-        await modal.HideAsync();
+        await exerciseSheetModal.ShowAsync();
     }
 }
