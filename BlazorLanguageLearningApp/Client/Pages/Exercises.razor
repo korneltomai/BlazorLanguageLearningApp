@@ -32,43 +32,62 @@ else
         <SetsSubNav />
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
+            <div class="exercise-page-container">
+                <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
 
-            <div class="container-fluid row border-bottom py-3 pe-0">
-                <div class="col-6 col-sm-auto pe-1">
-                    <ExerciseSheetModal ExerciseSheetExists="@(_exerciseSheet is not null)" ExerciseSheetChanged="OnExerciseSheetChanged" />
+                <div class="container-fluid row border-bottom py-3 pe-0">
+                    <div class="col-6 col-sm-auto pe-1">
+                        <ExerciseSheetModal ExerciseSheetExists="_exerciseSheetExists" ExerciseSheetChanged="OnExerciseSheetChanged" />
+                    </div>
+                    <div class="col-6 col-sm-auto">
+                        <DeleteExerciseSheetModal ExerciseSheetExists="_exerciseSheetExists" ExerciseSheetChanged="OnExerciseSheetChanged" />
+                    </div>
+                    <div class="col-12 col-sm-auto pt-2 pt-sm-0 ps-sm-1">
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="OnGetQuickQuestionClicked">
+                            @Loc["QuickQuestion"]
+                        </Button>
+                    </div>
+                    @if (_exerciseSheetExists)
+                    {
+                        <div class="d-none d-sm-block d-flex justify-content-end col-sm-auto ms-auto">
+                            <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="SubmitExerciseSheet" Disabled="CannotSubmit">
+                                @Loc["Submit"]
+                            </Button>
+                        </div>
+                    }
                 </div>
-                <div class="col-6 col-sm-auto">
-                    <DeleteExerciseSheetModal ExerciseSheetExists="@(_exerciseSheet is not null)" ExerciseSheetChanged="OnExerciseSheetChanged"/>
+                <div class="exercise-sheet-container container-fluid">
+                    @if (_exerciseSheetExists)
+                    {
+                        <div class="container-fluid" style="max-width: 900px;">
+                            @for (int i = 0; i < _exerciseSheet!.Exercises.Count(); i++)
+                            {
+                                @if (_exerciseSheet.Exercises[i].Type == ExerciseType.Selection)
+                                {
+                                    <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" />
+                                }
+                                @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TrueOrFalse)
+                                {
+                                    <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" />
+                                }
+                                @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TypeIn)
+                                {
+                                    <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" />
+                                }
+                            }
+                        </div>
+                    }
                 </div>
-                <div class="col-12 col-sm-auto pt-2 pt-sm-0 ps-sm-1">
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="w-100 h-100" @onclick="OnGetQuickQuestionClicked">
-                        @Loc["QuickQuestion"]
+            </div>
+            @if (_exerciseSheetExists)
+            {
+                <hr class="d-block d-sm-none" />
+                <div class="d-flex justify-content-center d-block d-sm-none pb-3">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Success" Class="w-50" @onclick="SubmitExerciseSheet" Disabled="CannotSubmit">
+                        @Loc["Submit"]
                     </Button>
                 </div>
-            </div>
-            <div class="exercise-sheet-container container-fluid">
-                @if (_exerciseSheet is not null)
-                {
-                    <div class="container-fluid" style="max-width: 900px;">
-                    @for (int i = 0; i < _exerciseSheet.Exercises.Count(); i++)
-                    {
-                        @if (_exerciseSheet.Exercises[i].Type == ExerciseType.Selection)
-                        {
-                            <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" />
-                        }
-                        @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TrueOrFalse)
-                        {
-                            <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" />
-                        }
-                        @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TypeIn)
-                        {
-                            <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" />
-                        }
-                    }
-                    </div>
-                }
-            </div>
+            }
         </div>
     </div>
 }
@@ -86,6 +105,8 @@ else
     private Modal overwriteExerciseSheetModal = default!;
 
     private ExerciseSheet? _exerciseSheet;
+    private bool _exerciseSheetExists => (_exerciseSheet is not null);
+    private bool CannotSubmit => _exerciseSheet!.Solved || _exerciseSheet.Exercises.Any(e => !e.Solved);
 
     protected override void OnInitialized()
     {
@@ -108,7 +129,7 @@ else
 
     private async void OnGetQuickQuestionClicked()
     {
-        if (_exerciseSheet is null)
+        if (!_exerciseSheetExists || _exerciseSheet!.Exercises.Count == 1)
             GetQuickQuestion();
         else
             await overwriteExerciseSheetModal.ShowAsync();
@@ -128,5 +149,16 @@ else
     {
         _exerciseSheet = newSheet;
         StateHasChanged();
+    }
+
+    private void UpdateUserAnswer((ExerciseEntry userAnswer, int exerciseNumber) answer)
+    {
+        _exerciseSheet!.Exercises[answer.exerciseNumber].UserAnswer = answer.userAnswer;
+        StateHasChanged();
+    }
+
+    private async void SubmitExerciseSheet()
+    {
+        _exerciseSheet!.Solved = true;
     }
 }

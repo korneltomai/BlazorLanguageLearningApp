@@ -207,4 +207,7 @@
   <data name="OverwriteExerciseSheetModalTitle" xml:space="preserve">
     <value>Overwriting exercise sheet</value>
   </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
 </root>

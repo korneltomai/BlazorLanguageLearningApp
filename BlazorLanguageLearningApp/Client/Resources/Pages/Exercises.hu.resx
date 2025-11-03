@@ -207,4 +207,7 @@
   <data name="OverwriteExerciseSheetModalTitle" xml:space="preserve">
     <value>Feladatsor felülírása</value>
   </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Beküldés</value>
+  </data>
 </root>

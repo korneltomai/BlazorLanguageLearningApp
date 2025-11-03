@@ -25,13 +25,13 @@
     </div>
     <div class="row p-3">
         <div class="col-12 col-md-6 mb-2 mb-md-0">
-            <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}Correct", ExerciseNumber)" @onchange="@(() => Exercise.UserAnswer = new("TRUE", "TRUE"))" autocomplete="off">
+            <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}Correct", ExerciseNumber)" @onchange="@(() => OnUserAnswered.InvokeAsync((new ExerciseEntry("TRUE", "TRUE"), ExerciseNumber)))" autocomplete="off">
             <label class="btn btn-outline-success w-100" for="@String.Format("answer{0}Correct", ExerciseNumber)">
                 <span class="d-block"><strong>@Loc["Correct"]</strong></span>
             </label>
         </div>
         <div class="col-12 col-md-6">
-            <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}Incorrect", ExerciseNumber)" @onchange="@(() => Exercise.UserAnswer = new("FALSE", "FALSE"))" autocomplete="off">
+            <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}Incorrect", ExerciseNumber)" @onchange="@(() => OnUserAnswered.InvokeAsync((new ExerciseEntry("FALSE", "FALSE"), ExerciseNumber)))" autocomplete="off">
             <label class="btn btn-outline-danger w-100" for="@String.Format("answer{0}Incorrect", ExerciseNumber)">
                 <span class="d-block"><strong>@Loc["Incorrect"]</strong></span>
             </label>
@@ -45,4 +45,7 @@
 
     [Parameter]
     public required Exercise Exercise { get; set; }
+
+    [Parameter]
+    public EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
 }

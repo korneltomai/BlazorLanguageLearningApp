@@ -6,7 +6,8 @@ public class Exercise
     public ExerciseEntry Question { get; set; }
     public ExerciseEntry Answer { get; set; }
     public List<ExerciseEntry> PossibleAnswers { get; set; }
-    public ExerciseEntry UserAnswer { get; set; } = new();
+    public ExerciseEntry? UserAnswer { get; set; }
+    public bool Solved => UserAnswer is not null;
 
     public Exercise(ExerciseType type, ExerciseEntry question, ExerciseEntry answer, List<ExerciseEntry> possibleAnswers)
     {

@@ -17,9 +17,9 @@
         </div>
         <div class="text-center w-100">
             <div class="my-2 px-3">
-                <TextInput Class="text-center fs-3" @bind-Value="@Exercise.UserAnswer.Expression" Placeholder="@Loc["TypeInYourAnswer"]" MaxLength="50" />
+                <TextInput Class="text-center fs-3" Placeholder="@Loc["TypeInYourAnswer"]" MaxLength="50" Value="@_answer" ValueExpression="() => _answer" ValueChanged="(value) => OnUserAnswered.InvokeAsync((new ExerciseEntry(value, Exercise.PossibleAnswers[0].Language), ExerciseNumber))" />
             </div>
-            <div class="small mb-4">@Exercise.UserAnswer.Language</div>
+            <div class="small mb-4">@Exercise.PossibleAnswers[0].Language</div>
         </div>
     </div>
 </div>
@@ -31,8 +31,8 @@
     [Parameter]
     public required Exercise Exercise { get; set; }
 
-    protected override void OnParametersSet()
-    {
-        Exercise.UserAnswer.Language = Exercise.PossibleAnswers.First().Language;
-    }
+    [Parameter]
+    public EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
+
+    private string _answer = "";
 }

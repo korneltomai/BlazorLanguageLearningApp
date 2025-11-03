@@ -13,7 +13,7 @@
         @foreach (var answer in Exercise.PossibleAnswers)
         {
             <div class="mt-2">
-                <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}{1}", ExerciseNumber, answer.Expression)" @onchange="@(() => Exercise.UserAnswer = answer)" autocomplete="off">
+                <input type="radio" class="btn-check" name="@String.Format("answer{0}", ExerciseNumber)" id="@String.Format("answer{0}{1}", ExerciseNumber, answer.Expression)" @onchange="@(() => OnUserAnswered.InvokeAsync((answer, ExerciseNumber)))" autocomplete="off">
                 <label class="btn btn-outline-primary w-100" for="@String.Format("answer{0}{1}", ExerciseNumber, answer.Expression)">
                     <span class="d-block"><strong>@answer.Expression</strong></span>
                     <span class="small d-block">@answer.Language</span>
@@ -29,4 +29,7 @@
 
     [Parameter]
     public required Exercise Exercise { get; set; }
+
+    [Parameter]
+    public EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
 }
