@@ -119,7 +119,7 @@ else
                         @foreach (BlazorLanguageLearningApp.Shared.Set set in FolderService.CurrentFolder.Sets)
                         {
                             <a class="setLink mb-3" href="@($"{Username}/sets/{FolderId}/{set.Id}")">
-                                <div class="d-flex row border border-black rounded-3 mx-0">
+                                <div class="d-flex row border border-2 rounded-3 mx-0">
                                     <div class="col-10 col-md-11 my-3 pe-0">
                                         <div class="d-flex justify-content-center px-1">
                                             <span class="h4 mb-0">@set.Name</span>

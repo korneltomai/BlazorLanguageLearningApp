@@ -83,26 +83,25 @@ else
                     @foreach (BlazorLanguageLearningApp.Shared.Card card in SetService.CurrentSet.Cards)
                     {
                         <CardModal Editing="true" Card="@card" UpdateSetList="@(() => StateHasChanged())">
-                            <div class="d-flex row border border-black rounded-3 mx-0">
+                            <div class="d-flex row border border-2 rounded-3 mx-0">
                                 <div class="row g-0 col-10 col-md-11 me-auto">
-                                    <div class="col-12 col-md-6 p-3 pe-0 pe-md-3 pb-0 pb-md-3">
-                                        <div class="border border-black rounded-3 py-3">
-                                            <div class="d-flex justify-content-center">
-                                                <span class="h4 mb-0">@card.Term</span>
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <span class="text-secondary small">@card.TermLanguage</span>
-                                            </div>
+                                    <div class="col-12 col-md-6 p-3 pe-0 pe-md-3">
+                                        <div class="d-flex justify-content-center">
+                                            <span class="h4 mb-0">@card.Term</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <span class="text-secondary small">@card.TermLanguage</span>
                                         </div>
                                     </div>
+                                    <div class="d-block d-md-none d-flex justify-content-center ps-3">
+                                        <hr class="m-0 w-100" style="max-width:150px;" />
+                                    </div>
                                     <div class="col-12 col-md-6 p-3 pe-0 ps-md-0">
-                                        <div class="border border-black rounded-3 py-3">
-                                            <div class="d-flex justify-content-center">
-                                                <span class="h4 mb-0">@card.Definition</span>
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <span class="text-secondary small">@card.DefinitionLanguage</span>
-                                            </div>
+                                        <div class="d-flex justify-content-center">
+                                            <span class="h4 mb-0">@card.Definition</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <span class="text-secondary small">@card.DefinitionLanguage</span>
                                         </div>
                                     </div>
                                 </div>
