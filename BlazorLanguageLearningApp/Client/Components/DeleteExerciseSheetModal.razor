@@ -30,10 +30,7 @@
 
     private async void DeleteExerciseSheet()
     {
-        //TODO: Delete exercise sheet on server
-
         await ExerciseSheetChanged.InvokeAsync(null);
-
         await modal.HideAsync();
     }
 

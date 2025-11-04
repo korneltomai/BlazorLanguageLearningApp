@@ -120,6 +120,13 @@ else
             await UserService.SetCurrentUser(Username);
             await FolderService.SetFolderById(Username, FolderId);
             await SetService.SetCurrentSetById(Username, FolderId, SetId);
+            _exerciseSheet = await ExerciseService.GetExerciseSheetForSet();
+            if (_exerciseSheetExists)
+            {
+                randomGuids.Clear();
+                foreach (var exercise in _exerciseSheet!.Exercises)
+                    randomGuids.Add(Guid.NewGuid());
+            }
         }
         catch (HttpRequestException)
         {
@@ -139,21 +146,27 @@ else
     {
         var result = await ExerciseService.GenerateExerciseSheet(1, true, true, true, true, true, true);
         if (result is not null)
+        {
             _exerciseSheet = result;
-        randomGuids.Clear();
-        foreach (var exercise in _exerciseSheet.Exercises)
-            randomGuids.Add(Guid.NewGuid());
-
-        await overwriteExerciseSheetModal.HideAsync();
-        StateHasChanged();
+            randomGuids = new() { Guid.NewGuid() };
+            await overwriteExerciseSheetModal.HideAsync();
+            StateHasChanged();
+        }
     }
 
-    private void OnExerciseSheetChanged(ExerciseSheet newSheet)
+    private async void OnExerciseSheetChanged(ExerciseSheet? newSheet)
     {
         _exerciseSheet = newSheet;
-        randomGuids.Clear();
-        foreach (var exercise in _exerciseSheet.Exercises)
-            randomGuids.Add(Guid.NewGuid());
+
+        if (_exerciseSheet is null)
+            await ExerciseService.DeleteExerciseSheet();
+        else
+        {
+            randomGuids.Clear();
+            foreach (var exercise in _exerciseSheet.Exercises)
+                randomGuids.Add(Guid.NewGuid());
+        }
+
         StateHasChanged();
     }
 
@@ -165,7 +178,10 @@ else
 
     private async void SubmitExerciseSheet()
     {
-        _exerciseSheet!.Solved = true;
+        Console.WriteLine(_exerciseSheetExists);
+        Console.WriteLine(_exerciseSheet.Exercises.Count);
+        Console.WriteLine(_exerciseSheet.Solved);
+        //_exerciseSheet!.Solved = true;
         StateHasChanged();
     }
 }

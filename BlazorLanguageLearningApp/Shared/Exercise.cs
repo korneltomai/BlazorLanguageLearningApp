@@ -9,6 +9,13 @@ public class Exercise
     public ExerciseEntry? UserAnswer { get; set; }
     public bool Solved => UserAnswer is not null;
 
+    public Exercise() 
+    {
+        Question = new();
+        Answer = new();
+        PossibleAnswers = new();
+    }
+
     public Exercise(ExerciseType type, ExerciseEntry question, ExerciseEntry answer, List<ExerciseEntry> possibleAnswers)
     {
         Type = type;

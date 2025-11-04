@@ -1,7 +1,10 @@
 ﻿namespace BlazorLanguageLearningApp.Client.Services;
 
 using BlazorLanguageLearningApp.Shared;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 public class ExerciseService
 {
@@ -28,7 +31,7 @@ public class ExerciseService
         bool generateDefinitionSide)
     {
         return await _httpClient.GetFromJsonAsync<ExerciseSheet>(
-            $"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}/" +
+            $"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}/new" +
             $"?count={count}" +
             $"&generateSelectionExercise={generateSelectionExercise}" +
             $"&generateTrueOrFalseExercise={generateTrueOrFalseExercise}" +
@@ -36,6 +39,18 @@ public class ExerciseService
             $"&generateDuplicates={generateDuplicates}" +
             $"&generateTermSide={generateTermSide}" +
             $"&generateDefinitionSide={generateDefinitionSide}");
+    }
+
+    public async Task<ExerciseSheet?> GetExerciseSheetForSet() 
+    {
+        var response = await _httpClient.GetAsync($"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}");
+        var content = await response.Content.ReadAsStringAsync();
+        return string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<ExerciseSheet>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+
+    public async Task DeleteExerciseSheet()
+    {
+        await _httpClient.DeleteAsync($"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}");
     }
 }
 

@@ -33,7 +33,7 @@ namespace BlazorLanguageLearningApp.Server.Controllers
                 return NotFound("This set does not exist!");
 
             // CalculateCardScores(set);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
             return Ok(set);
         }

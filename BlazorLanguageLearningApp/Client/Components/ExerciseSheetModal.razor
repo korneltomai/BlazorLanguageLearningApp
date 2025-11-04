@@ -112,13 +112,6 @@
 
     private async void ShowExerciseSheetModal()
     {
-        numberOfExercises = 10;
-        selectedCardSide = "Definition";
-        selectionExerciseChecked = false;
-        trueOrFalseExerciseChecked = false;
-        typeInExerciseChecked = false;
-        generateDuplicatesChecked = true;
-
         await overwriteExerciseSheetModal.HideAsync();
         await exerciseSheetModal.ShowAsync();
     }
@@ -136,17 +129,5 @@
             await overwriteExerciseSheetModal.ShowAsync();
         else
             await exerciseSheetModal.ShowAsync();
-    }
-
-    private async Task OnShowExerciseSheetModalClick()
-    {
-        numberOfExercises = 10;
-        selectedCardSide = "Definition";
-        selectionExerciseChecked = false;
-        trueOrFalseExerciseChecked = false;
-        typeInExerciseChecked = false;
-        generateDuplicatesChecked = true;
-
-        await exerciseSheetModal.ShowAsync();
     }
 }
