@@ -63,15 +63,15 @@ else
                         {
                             @if (_exerciseSheet.Exercises[i].Type == ExerciseType.Selection)
                             {
-                                <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" ExerciseSheetSolved="@_exerciseSheet.Solved" @key="randomGuids[i]" />
+                                <SelectionExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" OnExerciseSheetSolved="AddExcerciseToListeners" @key="randomGuids[i]" />
                             }
                             @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TrueOrFalse)
                             {
-                                <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" ExerciseSheetSolved="@_exerciseSheet.Solved" @key="randomGuids[i]" />
+                                <TrueOrFalseExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" OnExerciseSheetSolved="AddExcerciseToListeners" @key="randomGuids[i]" />
                             }
                             @if (_exerciseSheet.Exercises[i].Type == ExerciseType.TypeIn)
                             {
-                                <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" ExerciseSheetSolved="@_exerciseSheet.Solved" @key="randomGuids[i]" />
+                                <TypeInExerciseComponent Exercise="_exerciseSheet.Exercises[i]" ExerciseNumber="@i" OnUserAnswered="UpdateUserAnswer" OnExerciseSheetSolved="AddExcerciseToListeners" @key="randomGuids[i]" />
                             }
                         }
                     </div>
@@ -105,6 +105,8 @@ else
     private ExerciseSheet? _exerciseSheet;
     private bool _exerciseSheetExists => (_exerciseSheet is not null);
     private bool CannotSubmit => _exerciseSheet!.Solved || _exerciseSheet.Exercises.Any(e => !e.Solved);
+
+    private List<Action> _exerciseUpdateMethods = new();
 
     private List<Guid> randomGuids = new();
 
@@ -176,12 +178,18 @@ else
         StateHasChanged();
     }
 
+    private bool GetExerciseSheetState() => _exerciseSheet!.Solved;
+
+    private void AddExcerciseToListeners(Action exerciseUpdateMethod)
+    {
+        _exerciseUpdateMethods.Add(exerciseUpdateMethod);
+    }
+
     private async void SubmitExerciseSheet()
     {
-        Console.WriteLine(_exerciseSheetExists);
-        Console.WriteLine(_exerciseSheet.Exercises.Count);
-        Console.WriteLine(_exerciseSheet.Solved);
-        //_exerciseSheet!.Solved = true;
+        _exerciseSheet!.Solved = true;
+        foreach (var a in _exerciseUpdateMethods)
+            a.Invoke();
         StateHasChanged();
     }
 }

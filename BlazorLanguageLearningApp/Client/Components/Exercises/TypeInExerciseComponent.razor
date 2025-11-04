@@ -35,16 +35,25 @@
     public required EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
 
     [Parameter]
-    public required bool ExerciseSheetSolved { get; set; }
+    public required Action<Action> OnExerciseSheetSolved { get; set; }
 
     private string _answer = "";
 
-    private string exerciseValidationStyle => (ExerciseSheetSolved && Exercise.UserAnswer == Exercise.Answer) ? "border-success" : "";
+    private string exerciseValidationStyle = "";
+
+    protected override void OnInitialized()
+    {
+        OnExerciseSheetSolved(UpdateStateToSolved);
+    }
 
     private void UpdateAnswer(ExerciseEntry answer)
     {
-        _answer = answer.Expression;
         Exercise.UserAnswer = answer;
         OnUserAnswered.InvokeAsync((answer, ExerciseNumber));
+    }
+
+    private void UpdateStateToSolved()
+    {
+        exerciseValidationStyle = "border-success";
     }
 }

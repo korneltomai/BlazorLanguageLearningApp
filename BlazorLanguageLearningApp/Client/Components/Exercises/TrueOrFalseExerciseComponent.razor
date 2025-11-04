@@ -47,19 +47,31 @@
     public required Exercise Exercise { get; set; }
 
     [Parameter]
-    public EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
+    public required EventCallback<(ExerciseEntry, int)> OnUserAnswered { get; set; }
 
     [Parameter]
-    public bool ExerciseSheetSolved { get; set; }
+    public required Action<Action> OnExerciseSheetSolved { get; set; }
 
     private ExerciseEntry TrueEntry = new ExerciseEntry("TRUE", "TRUE");
     private ExerciseEntry FalseEntry = new ExerciseEntry("FALSE", "FALSE");
 
-    private string exerciseValidationStyle => (ExerciseSheetSolved && Exercise.UserAnswer == Exercise.Answer) ? "border-success" : "";
+    private string exerciseValidationStyle = "";
+
+    protected override void OnInitialized()
+    {
+        OnExerciseSheetSolved(UpdateStateToSolved);
+    }
 
     private void UpdateAnswer(ExerciseEntry answer)
     {
         Exercise.UserAnswer = answer;
         OnUserAnswered.InvokeAsync((answer, ExerciseNumber));
     }
+
+    private void UpdateStateToSolved()
+    {
+        exerciseValidationStyle = "border-success";
+    }
+
+    
 }
