@@ -1,6 +1,6 @@
 ﻿@inject IStringLocalizer<Pages.Exercises> Loc
 
-<div class="border border-2 rounded-3 my-5 @exerciseValidationStyle">
+<div class="border border-2 rounded-3 my-5 @validationStyle">
     <div class="pt-3 px-3">
         <span class="h5">@Loc["TypeInExerciseHeader"]</span>
     </div>
@@ -17,9 +17,12 @@
         </div>
         <div class="text-center w-100">
             <div class="my-2 px-3">
-                <TextInput Class="text-center fs-3" Placeholder="@Loc["TypeInYourAnswer"]" MaxLength="50" Value="@_answer" ValueExpression="() => _answer" ValueChanged="(value) => UpdateAnswer(new ExerciseEntry(value, Exercise.PossibleAnswers[0].Language))"/>
+                <TextInput Class="@validationButtonStyle" Placeholder="@Loc["TypeInYourAnswer"]" MaxLength="50" Value="@_answer" ValueExpression="() => _answer" ValueChanged="(value) => UpdateAnswer(new ExerciseEntry(value, Exercise.PossibleAnswers[0].Language))" Disabled="_disableButtons"/>
             </div>
             <div class="small mb-4">@Exercise.PossibleAnswers[0].Language</div>
+            <div class="mb-4 text-danger @correctAnswerStyle">
+                @Loc["TheCorrectAnswerIs"]: @Exercise.Answer.Expression
+            </div>
         </div>
     </div>
 </div>
@@ -39,7 +42,12 @@
 
     private string _answer = "";
 
-    private string exerciseValidationStyle = "";
+    private bool _correctAnswer => Exercise.UserAnswer?.Equals(Exercise.Answer) ?? false;
+    private bool _disableButtons = false;
+
+    private string validationStyle = "";
+    private string validationButtonStyle = "text-center fs-3";
+    private string correctAnswerStyle = "d-none";
 
     protected override void OnInitialized()
     {
@@ -54,6 +62,18 @@
 
     private void UpdateStateToSolved()
     {
-        exerciseValidationStyle = "border-success";
+        _disableButtons = true;
+
+        if (_correctAnswer)
+        {
+            validationStyle = "border-3 border-success";
+            validationButtonStyle = "text-center fs-3 border border-3 border-success rounded-3";
+        }
+        else
+        {
+            validationStyle = "border-3 border-danger";
+            validationButtonStyle = "text-center fs-3 border border-3 border-danger rounded-3";
+            correctAnswerStyle = "";
+        }
     }
 }

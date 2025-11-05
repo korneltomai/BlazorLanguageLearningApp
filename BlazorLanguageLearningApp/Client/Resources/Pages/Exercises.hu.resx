@@ -210,4 +210,7 @@
   <data name="Submit" xml:space="preserve">
     <value>Beküldés</value>
   </data>
+  <data name="TheCorrectAnswerIs" xml:space="preserve">
+    <value>A helyes válasz</value>
+  </data>
 </root>

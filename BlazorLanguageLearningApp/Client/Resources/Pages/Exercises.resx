@@ -210,4 +210,7 @@
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
   </data>
+  <data name="TheCorrectAnswerIs" xml:space="preserve">
+    <value>The correct answer is</value>
+  </data>
 </root>

@@ -43,4 +43,19 @@ public class ExerciseEntry
         Expression = expression;
         Language = language;
     }
+
+    public override bool Equals(Object? obj)
+    {
+        if (obj == null || obj is not ExerciseEntry)
+            return false;
+        else
+            return Expression.ToLowerInvariant() == ((ExerciseEntry)obj).Expression.ToLowerInvariant() 
+                   && Language.ToLowerInvariant() == ((ExerciseEntry)obj).Language.ToLowerInvariant();
+    }
+
+    public override int GetHashCode()
+    {
+        return Expression.GetHashCode() + Language.GetHashCode();
+    }
+
 }

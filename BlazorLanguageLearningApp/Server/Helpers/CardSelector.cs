@@ -124,15 +124,22 @@ public static class CardSelector
 
         List<ExerciseEntry> possibleAnswers = new();
 
-        var possibleFalseAnswerCards = new List<Card>(cards);
-        possibleFalseAnswerCards.Remove(card);
-        var falseAnswerCards = GetRandomCards(possibleFalseAnswerCards, 1, false);
-
-        foreach (var falseAnswerCard in falseAnswerCards)
+        Random random = new Random();
+        var r = random.Next(2);
+        if (r < 1)
+            possibleAnswers.Add(answerSide);
+        else
         {
-            var answerCardSide = askedCardSide == CardSide.DefinitionSide ? CardSide.DefinitionSide : CardSide.TermSide;
-            (ExerciseEntry cardSide, _) = GetCardSides(falseAnswerCard, answerCardSide);
-            possibleAnswers.Add(cardSide);
+            var possibleFalseAnswerCards = new List<Card>(cards);
+            possibleFalseAnswerCards.Remove(card);
+            var falseAnswerCards = GetRandomCards(possibleFalseAnswerCards, 1, false);
+
+            foreach (var falseAnswerCard in falseAnswerCards)
+            {
+                var answerCardSide = askedCardSide == CardSide.DefinitionSide ? CardSide.DefinitionSide : CardSide.TermSide;
+                (ExerciseEntry cardSide, _) = GetCardSides(falseAnswerCard, answerCardSide);
+                possibleAnswers.Add(cardSide);
+            }
         }
 
         return new Exercise(
