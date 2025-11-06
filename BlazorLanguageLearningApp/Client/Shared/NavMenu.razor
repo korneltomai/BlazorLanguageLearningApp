@@ -63,26 +63,42 @@
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(|flashcards|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
             {
                 <div class="d-lg-none">
-                    <hr class="text-white" />
+                    <hr class="text-white my-2" />
                     <ul class="navbar-nav w-100">
                         <li class="nav-item">
-                            <NavLink class="nav-link p-0" href="@($"{username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}")" Match="NavLinkMatch.All">
+                            <NavLink class="nav-link p-0" href="@($"{_username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}")" Match="NavLinkMatch.All">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Loc["ViewSet"]
                                 </div>
                             </NavLink>
                         </li>
                         <li class="nav-item">
-                            <NavLink class="nav-link p-0" href="@($"{username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/flashcards")">
+                            <NavLink class="nav-link p-0" href="@($"{_username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/flashcards")">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Loc["Flashcards"]
                                 </div>
                             </NavLink>
                         </li>
                         <li class="nav-item">
-                            <NavLink class="nav-link p-0" href="@($"{username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/exercises")">
+                            <NavLink class="nav-link p-0" href="@($"{_username}/sets/{FolderService.CurrentFolder.Id}/{@SetService.CurrentSet.Id}/exercises")">
                                 <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
                                     @Loc["Exercises"]
+                                </div>
+                            </NavLink>
+                        </li>
+                    </ul>  
+                </div>
+            }
+
+            @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/profile$"))
+            {
+                 <div class="d-lg-none">
+                    <hr class="text-white my-2" />
+                    <ul class="navbar-nav w-100">
+                        <li class="nav-item">
+                            <NavLink class="nav-link p-0" href="@($"{_username}/sets")">
+                                <div class="py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                    @Loc["Sets"]
                                 </div>
                             </NavLink>
                         </li>
@@ -100,13 +116,13 @@
     [Parameter]
     public string CurrentPage { get; set; } = string.Empty;
 
-    private string? username;
+    private string? _username;
 
     protected override void OnParametersSet()
     {
         if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(flashcards$|exercises))?$"))
         {
-            username = CurrentPage.Split('/')[3];
+            _username = CurrentPage.Split('/')[3];
         }
     }
 

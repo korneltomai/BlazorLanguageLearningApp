@@ -18,4 +18,9 @@ public class UserService
     {
         CurrentUser = await _httpClient.GetFromJsonAsync<User?>($"api/users/{username}");
     }
+
+    public async Task<User?> GetUser(string username)
+    {
+        return await _httpClient.GetFromJsonAsync<User?>($"api/users/{username}");
+    }
 }

@@ -117,34 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
   <data name="Sets" xml:space="preserve">
     <value>Sets</value>
-  </data>
-  <data name="Profile" xml:space="preserve">
-    <value>Profile</value>
-  </data>
-  <data name="UserSettings" xml:space="preserve">
-    <value>User Settings</value>
-  </data>
-  <data name="ViewSet" xml:space="preserve">
-    <value>View set</value>
-  </data>
-  <data name="Flashcards" xml:space="preserve">
-    <value>Flashcards</value>
-  </data>
-  <data name="Exercises" xml:space="preserve">
-    <value>Exercises</value>
-  </data>
-  <data name="LogIn" xml:space="preserve">
-    <value>Log in</value>
-  </data>
-  <data name="SignOut" xml:space="preserve">
-    <value>Sign out</value>
-  </data>
-  <data name="Practice" xml:space="preserve">
-    <value>Practice</value>
   </data>
 </root>
