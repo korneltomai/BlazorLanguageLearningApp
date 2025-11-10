@@ -213,4 +213,22 @@
   <data name="TheCorrectAnswerIs" xml:space="preserve">
     <value>The correct answer is</value>
   </data>
+  <data name="CorrectAnswers" xml:space="preserve">
+    <value>Correct answers</value>
+  </data>
+  <data name="ExpGained" xml:space="preserve">
+    <value>Experience points gained</value>
+  </data>
+  <data name="GemsGained" xml:space="preserve">
+    <value>Gems gained</value>
+  </data>
+  <data name="ShowResults" xml:space="preserve">
+    <value>Show results</value>
+  </data>
+  <data name="SheetValidationResultModalTitle" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
 </root>

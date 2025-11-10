@@ -103,6 +103,8 @@ public class ExercisesController : Controller
             return NotFound("This exercise sheet does not exist!");
 
         var validationResult = await ExerciseSheetHandler.ValidateExerciseSheet(username, setId, exerciseSheet, userAnswers);
+        exerciseSheet.ValidationResult = validationResult;
+        await ExerciseSheetHandler.SaveExerciseSheet(username, setId, exerciseSheet);
 
         return Ok(validationResult);
     }

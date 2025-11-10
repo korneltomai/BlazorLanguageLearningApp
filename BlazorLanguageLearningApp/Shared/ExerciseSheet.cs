@@ -3,7 +3,15 @@
 public class ExerciseSheet
 {
     public List<Exercise> Exercises { get; set; }
+    public SheetValidationResult? ValidationResult { get; set; }
     public bool Solved { get; set; }
+
+    public int GetCorrectExerciseCount()
+    {
+        if (Exercises.Any(e => e.Answer is null || e.UserAnswer is null))
+            throw new InvalidOperationException("Cannot count correct exercises for an incomplete exercise sheet!");
+        return Exercises.Count(e => e.Answer!.Equals(e.UserAnswer));
+    }
 
     public ExerciseSheet() 
     {

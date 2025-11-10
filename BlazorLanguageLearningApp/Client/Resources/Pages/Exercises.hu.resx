@@ -213,4 +213,22 @@
   <data name="TheCorrectAnswerIs" xml:space="preserve">
     <value>A helyes válasz</value>
   </data>
+  <data name="CorrectAnswers" xml:space="preserve">
+    <value>Helyes válaszok</value>
+  </data>
+  <data name="ExpGained" xml:space="preserve">
+    <value>Szerzett tapasztalati pontok</value>
+  </data>
+  <data name="GemsGained" xml:space="preserve">
+    <value>Szerzett ékkövek</value>
+  </data>
+  <data name="ShowResults" xml:space="preserve">
+    <value>Eredmény mutatása</value>
+  </data>
+  <data name="SheetValidationResultModalTitle" xml:space="preserve">
+    <value>Eredmények</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Bezár</value>
+  </data>
 </root>

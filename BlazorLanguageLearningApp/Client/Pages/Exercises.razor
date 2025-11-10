@@ -10,13 +10,36 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Pages.Exercises> Loc
 
-<Modal @ref="overwriteExerciseSheetModal" Title="@Loc["OverwriteExerciseSheetModalTitle"]" IsVerticallyCentered="true">
+<Modal @ref="_overwriteExerciseSheetModal" Title="@Loc["OverwriteExerciseSheetModalTitle"]" IsVerticallyCentered="true">
     <BodyTemplate>
         @Loc["OverwriteExerciseSheetModalText"]
     </BodyTemplate>
     <FooterTemplate>
-        <Button Color="ButtonColor.Secondary" @onclick="() => overwriteExerciseSheetModal.HideAsync()">@Loc["No"]</Button>
+        <Button Color="ButtonColor.Secondary" @onclick="() => _overwriteExerciseSheetModal.HideAsync()">@Loc["No"]</Button>
         <Button Color="ButtonColor.Primary" @onclick="GetQuickQuestion">@Loc["Yes"]</Button>
+    </FooterTemplate>
+</Modal>
+
+<Modal @ref="_sheetValidationResultModal" Title="@Loc["SheetValidationResultModalTitle"]" IsVerticallyCentered="true">
+    <BodyTemplate>
+        @if (_exerciseSheetExists && _exerciseSheet!.Solved && _exerciseSheet.ValidationResult is not null)
+        {
+            <div class="d-flex">
+                <div>@Loc["CorrectAnswers"]:</div>
+                <div class="ms-auto">@_exerciseSheet.GetCorrectExerciseCount()/@_exerciseSheet.Exercises.Count (@((double)_exerciseSheet.GetCorrectExerciseCount() / _exerciseSheet.Exercises.Count * 100)%)</div>
+            </div>
+            <div class="d-flex">
+                <div>@Loc["ExpGained"]:</div>
+                <div class="ms-auto">@_exerciseSheet.ValidationResult!.ExpGained</div>
+            </div>
+            <div class="d-flex">
+                <div>@Loc["GemsGained"]:</div>
+                <div class="ms-auto">@_exerciseSheet.ValidationResult!.GemsGained</div>
+            </div>
+        }
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => _sheetValidationResultModal.HideAsync()">@Loc["Ok"]</Button>
     </FooterTemplate>
 </Modal>
 
@@ -48,10 +71,16 @@ else
                 </div>
                 @if (_exerciseSheetExists)
                 {
-                    <div class="d-none d-sm-block d-flex justify-content-end col-sm-auto ms-auto">
+                    <div class="d-none d-sm-block d-flex justify-content-end col-12 col-xl-auto ms-xl-auto mt-2 mt-xl-0">
                         <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="SubmitExerciseSheet" Disabled="CannotSubmit">
                             @Loc["Submit"]
                         </Button>
+                        @if (_exerciseSheet!.Solved)
+                        {
+                            <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="ms-2" @onclick="() => _sheetValidationResultModal.ShowAsync()">
+                                @Loc["ShowResults"]
+                            </Button>
+                        }
                     </div>
                 }
             </div>
@@ -84,6 +113,12 @@ else
                     <Button Type="ButtonType.Button" Color="ButtonColor.Success" Class="w-50" @onclick="SubmitExerciseSheet" Disabled="CannotSubmit">
                         @Loc["Submit"]
                     </Button>
+                    @if (_exerciseSheet!.Solved)
+                    {
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="ms-2" @onclick="() => _sheetValidationResultModal.ShowAsync()">
+                            @Loc["ShowResults"]
+                        </Button>
+                    }
                 </div>
             }
         </div>
@@ -100,7 +135,8 @@ else
     [Parameter]
     public int SetId { get; set; }
 
-    private Modal overwriteExerciseSheetModal = default!;
+    private Modal _overwriteExerciseSheetModal = default!;
+    private Modal _sheetValidationResultModal = default!;
 
     private ExerciseSheet? _exerciseSheet;
     private bool _exerciseSheetExists => (_exerciseSheet is not null);
@@ -141,7 +177,7 @@ else
         if (!_exerciseSheetExists || _exerciseSheet!.Exercises.Count == 1)
             GetQuickQuestion();
         else
-            await overwriteExerciseSheetModal.ShowAsync();
+            await _overwriteExerciseSheetModal.ShowAsync();
     }
 
     private async void GetQuickQuestion()
@@ -151,7 +187,7 @@ else
         {
             _exerciseSheet = result;
             randomGuids = new() { Guid.NewGuid() };
-            await overwriteExerciseSheetModal.HideAsync();
+            await _overwriteExerciseSheetModal.HideAsync();
             StateHasChanged();
         }
     }
@@ -190,10 +226,10 @@ else
         if (_exerciseSheet is null)
             return;
 
-        SheetValidationResult validationResult = await ExerciseService.ValidateExerciseSheet(_exerciseSheet);
+        _exerciseSheet.ValidationResult = await ExerciseService.ValidateExerciseSheet(_exerciseSheet);
         foreach (var exercise in _exerciseSheet.Exercises)
         {
-            foreach (var answer in validationResult.Answers)
+            foreach (var answer in _exerciseSheet.ValidationResult.Answers)
             {
                 exercise.Answer = answer;
             }
@@ -204,5 +240,7 @@ else
             a.Invoke();
 
         StateHasChanged();
+
+        await _sheetValidationResultModal.ShowAsync();
     }
 }
