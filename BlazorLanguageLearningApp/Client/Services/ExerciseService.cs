@@ -1,6 +1,7 @@
 ﻿namespace BlazorLanguageLearningApp.Client.Services;
 
 using BlazorLanguageLearningApp.Shared;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -48,9 +49,21 @@ public class ExerciseService
         return string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<ExerciseSheet>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
+    public async Task<SheetValidationResult> ValidateExerciseSheet(ExerciseSheet exerciseSheet)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}", exerciseSheet.Exercises.Select(e => e.UserAnswer).ToList());
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<SheetValidationResult>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (result is null)
+            throw new InvalidOperationException("Invalid validation data!");
+        return result;
+    }
+
     public async Task DeleteExerciseSheet()
     {
         await _httpClient.DeleteAsync($"api/exercises/{_userService.CurrentUser!.Username}/{_folderService.CurrentFolder!.Id}/{_setService.CurrentSet!.Id}");
     }
+
+    
 }
 

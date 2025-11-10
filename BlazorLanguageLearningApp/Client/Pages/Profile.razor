@@ -21,7 +21,35 @@ else
         </div>
 
         <div class="content d-flex flex-column col-lg-9 col-xxl-10 px-0">
-            Profil
+            <div class="d-flex flex-column py-4 border-bottom border-2" style="@profileBackgroundStyle">
+                <div class="text-center my-3">
+                    <div class="profile-image mx-auto">
+                        <Image Src="https://demos.blazorbootstrap.com/images/placeholder.png" Class="w-100 h-100 border border-3 rounded-circle" IsResponsive="false" Alt="placeholder" />
+                    </div>
+                </div>
+                <div class="text-center">
+                    <span class="fs-2 text-shadow">@_user.Nickname</span>
+                </div>
+                <div class="text-center">
+                    <span class="text-shadow">Level @_user.Level</span>
+                </div>
+            </div>
+
+            <!-- BIG SCREEN -->
+            <div class="d-none d-md-flex row h-100">
+                <div class="col-9 pe-0">
+                    <div class="p-3 border-bottom">
+                        <h3>@Loc["AboutMe"]</h3>
+                        <div>
+                            Laci vagyok szeretem a nyelveket
+                            <br />Barkit visszaigazolok jeloljetek nyugodtan
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 bg-primary h-100">
+
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -32,6 +60,8 @@ else
     public required string Username { get; set; }
 
     private User? _user;
+
+    private string profileBackgroundStyle = "background-color: #BB2222;";
 
     protected async override Task OnParametersSetAsync()
     {

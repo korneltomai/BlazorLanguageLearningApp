@@ -1,0 +1,18 @@
+﻿.profile-image {
+    height: 200px !important;
+    width: 200px !important;
+}
+
+@media (width>=576px) {
+    .profile-image {
+        height: 225px !important;
+        width: 225px !important;
+    }
+}
+
+@media (width>=768px) {
+    .profile-image {
+        height: 250px !important;
+        width: 250px !important;
+    }
+}

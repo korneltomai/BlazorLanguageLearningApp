@@ -4,10 +4,10 @@ public class Exercise
 {
     public ExerciseType Type { get; set; }
     public ExerciseEntry Question { get; set; }
-    public ExerciseEntry Answer { get; set; }
+    public ExerciseEntry? Answer { get; set; }
     public List<ExerciseEntry> PossibleAnswers { get; set; }
     public ExerciseEntry? UserAnswer { get; set; }
-    public bool Solved => UserAnswer is not null;
+    public bool IsSolved() => UserAnswer is not null;
 
     public Exercise() 
     {

@@ -104,7 +104,7 @@ else
 
     private ExerciseSheet? _exerciseSheet;
     private bool _exerciseSheetExists => (_exerciseSheet is not null);
-    private bool CannotSubmit => _exerciseSheet!.Solved || _exerciseSheet.Exercises.Any(e => !e.Solved);
+    private bool CannotSubmit => _exerciseSheet!.Solved || _exerciseSheet.Exercises.Any(e => !e.IsSolved());
 
     private List<Action> _exerciseUpdateMethods = new();
 
@@ -187,9 +187,22 @@ else
 
     private async void SubmitExerciseSheet()
     {
-        _exerciseSheet!.Solved = true;
+        if (_exerciseSheet is null)
+            return;
+
+        SheetValidationResult validationResult = await ExerciseService.ValidateExerciseSheet(_exerciseSheet);
+        foreach (var exercise in _exerciseSheet.Exercises)
+        {
+            foreach (var answer in validationResult.Answers)
+            {
+                exercise.Answer = answer;
+            }
+        }
+        _exerciseSheet.Solved = true;
+
         foreach (var a in _exerciseUpdateMethods)
             a.Invoke();
+
         StateHasChanged();
     }
 }

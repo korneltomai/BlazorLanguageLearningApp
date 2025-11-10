@@ -71,6 +71,9 @@
     protected override void OnInitialized()
     {
         OnExerciseSheetSolved(UpdateStateToSolved);
+
+        if (Exercise.IsSolved())
+            UpdateStateToSolved();
     }
 
     private void UpdateAnswer(ExerciseEntry answer)

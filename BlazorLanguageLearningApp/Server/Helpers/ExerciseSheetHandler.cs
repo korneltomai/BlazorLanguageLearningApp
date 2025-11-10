@@ -1,9 +1,10 @@
 ﻿using BlazorLanguageLearningApp.Shared;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace BlazorLanguageLearningApp.Server.Helpers;
 
-public static class ExerciseSheetFileHandler
+public static class ExerciseSheetHandler
 {
     private const string EXERCISE_SHEETS_BASEPATH = @"\sitedata\sheets";
 
@@ -32,5 +33,24 @@ public static class ExerciseSheetFileHandler
         string filePath = GetPathForExerciseSheet(username, setId);
         if (File.Exists(filePath))
             File.Delete(filePath);
+    }
+
+    public async static Task<SheetValidationResult> ValidateExerciseSheet(string username, int setId, ExerciseSheet exerciseSheet, List<ExerciseEntry> userAnswers)
+    {
+        foreach (var exercise in exerciseSheet.Exercises)
+        {
+            foreach (var answer in userAnswers)
+            {
+                exercise.UserAnswer = answer;
+            }
+        }
+        exerciseSheet.Solved = true;
+        await SaveExerciseSheet(username, setId, exerciseSheet);
+
+        List<ExerciseEntry> answers = exerciseSheet.Exercises.Select(e => e.Answer).ToList()!;
+        int expGained = 1;
+        int gemsGained = 2;
+
+        return new SheetValidationResult(answers, expGained, gemsGained);
     }
 }

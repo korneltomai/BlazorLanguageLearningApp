@@ -120,4 +120,7 @@
   <data name="Sets" xml:space="preserve">
     <value>Sets</value>
   </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>About me</value>
+  </data>
 </root>

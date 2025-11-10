@@ -15,3 +15,17 @@ public class ExerciseSheet
         Exercises = exercises;
     }
 }
+
+public class SheetValidationResult
+{
+    public List<ExerciseEntry> Answers { get; set; } = new();
+    public int ExpGained { get; set; }
+    public int GemsGained { get; set; }
+
+    public SheetValidationResult(List<ExerciseEntry> answers, int expGained, int gemsGained)
+    {
+        Answers = answers;
+        ExpGained = expGained;
+        GemsGained = gemsGained;
+    }
+}

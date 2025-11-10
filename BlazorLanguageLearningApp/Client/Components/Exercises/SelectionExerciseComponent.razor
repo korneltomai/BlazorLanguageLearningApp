@@ -51,6 +51,9 @@
         validationButtonStyle.Clear();
         foreach (var answer in Exercise.PossibleAnswers)
             validationButtonStyle.Add("");
+
+        if (Exercise.IsSolved())
+            UpdateStateToSolved();
     }
 
     private void UpdateAnswer(ExerciseEntry answer)

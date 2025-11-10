@@ -13,4 +13,6 @@ public class User
     public int ExperiencePoints { get; set; } = 0;
     public int Gems { get; set; } = 0;
     public ICollection<Folder> Folders { get; set; } = new List<Folder>();
+
+    public int Level => (int)Math.Floor(Math.Pow(ExperiencePoints / 100, 0.5)) + 1;
 }
