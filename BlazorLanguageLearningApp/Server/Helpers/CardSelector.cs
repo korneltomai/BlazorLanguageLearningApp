@@ -109,6 +109,9 @@ public static class CardSelector
             possibleAnswers.Add(cardSide);
         }
 
+        Random random = new();
+        possibleAnswers = possibleAnswers.OrderBy(_ => random.Next()).ToList();
+
         return new Exercise(
             ExerciseType.Selection,
             askedSide,

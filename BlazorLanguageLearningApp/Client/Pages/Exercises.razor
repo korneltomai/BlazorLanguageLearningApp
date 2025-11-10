@@ -26,7 +26,7 @@
         {
             <div class="d-flex">
                 <div>@Loc["CorrectAnswers"]:</div>
-                <div class="ms-auto">@_exerciseSheet.GetCorrectExerciseCount()/@_exerciseSheet.Exercises.Count (@((double)_exerciseSheet.GetCorrectExerciseCount() / _exerciseSheet.Exercises.Count * 100)%)</div>
+                <div class="ms-auto">@_exerciseSheet.GetCorrectExerciseCount()/@_exerciseSheet.Exercises.Count (@_exerciseSheet.GetCorrectExercisePercentage()%)</div>
             </div>
             <div class="d-flex">
                 <div>@Loc["ExpGained"]:</div>
@@ -227,13 +227,8 @@ else
             return;
 
         _exerciseSheet.ValidationResult = await ExerciseService.ValidateExerciseSheet(_exerciseSheet);
-        foreach (var exercise in _exerciseSheet.Exercises)
-        {
-            foreach (var answer in _exerciseSheet.ValidationResult.Answers)
-            {
-                exercise.Answer = answer;
-            }
-        }
+        for (int i = 0; i < _exerciseSheet.Exercises.Count; i++)
+            _exerciseSheet.Exercises[i].Answer = _exerciseSheet.ValidationResult.Answers[i];
         _exerciseSheet.Solved = true;
 
         foreach (var a in _exerciseUpdateMethods)

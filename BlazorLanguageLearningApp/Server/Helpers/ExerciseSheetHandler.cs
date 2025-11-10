@@ -37,19 +37,15 @@ public static class ExerciseSheetHandler
 
     public async static Task<SheetValidationResult> ValidateExerciseSheet(string username, int setId, ExerciseSheet exerciseSheet, List<ExerciseEntry> userAnswers)
     {
-        foreach (var exercise in exerciseSheet.Exercises)
-        {
-            foreach (var answer in userAnswers)
-            {
-                exercise.UserAnswer = answer;
-            }
-        }
+        for (int i = 0; i < exerciseSheet.Exercises.Count; i++)
+            exerciseSheet.Exercises[i].UserAnswer = userAnswers[i];
+
         exerciseSheet.Solved = true;
         await SaveExerciseSheet(username, setId, exerciseSheet);
 
         List<ExerciseEntry> answers = exerciseSheet.Exercises.Select(e => e.Answer).ToList()!;
-        int expGained = 1;
-        int gemsGained = 2;
+        int expGained = exerciseSheet.GetExpReward();
+        int gemsGained = exerciseSheet.GetGemReward();
 
         return new SheetValidationResult(answers, expGained, gemsGained);
     }
