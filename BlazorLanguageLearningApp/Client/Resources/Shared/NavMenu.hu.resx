@@ -147,4 +147,7 @@
   <data name="Practice" xml:space="preserve">
     <value>Gyakorlás</value>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>{0}. Szint</value>
+  </data>
 </root>

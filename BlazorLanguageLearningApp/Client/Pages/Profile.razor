@@ -31,7 +31,7 @@ else
                     <span class="fs-2 text-shadow">@_user.Nickname</span>
                 </div>
                 <div class="text-center">
-                    <span class="text-shadow">Level @_user.Level</span>
+                    @String.Format($"{Loc["Level"]}", _user.GetLevel())
                 </div>
             </div>
 

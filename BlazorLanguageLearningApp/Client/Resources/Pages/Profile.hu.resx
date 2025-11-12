@@ -123,4 +123,7 @@
   <data name="AboutMe" xml:space="preserve">
     <value>Rólam</value>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>{0}. Szint</value>
+  </data>
 </root>

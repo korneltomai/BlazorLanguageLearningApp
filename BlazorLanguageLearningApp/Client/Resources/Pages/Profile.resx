@@ -123,4 +123,7 @@
   <data name="AboutMe" xml:space="preserve">
     <value>About me</value>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level {0}</value>
+  </data>
 </root>

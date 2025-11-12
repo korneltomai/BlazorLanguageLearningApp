@@ -147,4 +147,7 @@
   <data name="Practice" xml:space="preserve">
     <value>Practice</value>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level {0}</value>
+  </data>
 </root>

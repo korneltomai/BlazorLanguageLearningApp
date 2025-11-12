@@ -139,8 +139,6 @@ else
 
     protected async override Task OnParametersSetAsync()
     {
-        await UserService.SetCurrentUser(Username);
-
         try
         {
             await UserService.SetCurrentUser(Username);

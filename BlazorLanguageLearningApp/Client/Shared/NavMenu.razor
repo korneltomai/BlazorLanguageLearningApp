@@ -3,6 +3,7 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
+@inject UserService UserService
 @inject FolderService FolderService
 @inject SetService SetService
 @inject IStringLocalizer<NavMenu> Loc
@@ -36,28 +37,57 @@
                 </li>
                 <AuthorizeView>
                     <Authorized>
-                        <li class="nav-item">
-                            <NavLink class="nav-link py-0" href="@($"{context.User.Claims.Where(c => c.Type.Equals("username")).Select(c => c.Value).FirstOrDefault()}/sets")">
-                                <div class="d-lg-none py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
-                                    </svg>
-                                    @Loc["Sets"]
+                        @if (UserService.CurrentUser is not null)
+                        {
+                            <li class="nav-item">
+                                <NavLink class="nav-link py-0" href="@($"{context.User.Claims.Where(c => c.Type.Equals("username")).Select(c => c.Value).FirstOrDefault()}/sets")">
+                                    <div class="d-lg-none py-2" data-bs-target="#navbarMenu" data-bs-toggle="collapse">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                                        </svg>
+                                        @Loc["Sets"]
+                                    </div>
+                                    <div class="d-none d-lg-block py-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                                        </svg>
+                                        @Loc["Sets"]
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <div class="d-none d-lg-flex ms-auto me-4 text-white">
+                                <div class="d-flex align-items-center me-4">
+                                    @String.Format($"{Loc["Level"]}", UserService.CurrentUser.GetLevel())
                                 </div>
-                                <div class="d-none d-lg-block py-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                                <div class="d-flex align-items-center">
+                                    <span class="me-1">@UserService.CurrentUser.Gems</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gem" viewBox="0 0 16 16">
+                                        <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6zm11.386 3.785-1.806-2.41-.776 2.413zm-3.633.004.961-2.989H4.186l.963 2.995zM5.47 5.495 8 13.366l2.532-7.876zm-1.371-.999-.78-2.422-1.818 2.425zM1.499 5.5l5.113 6.817-2.192-6.82zm7.889 6.817 5.123-6.83-2.928.002z" />
                                     </svg>
-                                    @Loc["Sets"]
                                 </div>
-                            </NavLink>
-                        </li>
+                            </div>
+                            <li class="nav-item my-auto">
+                                <AccessControl />
+                            </li>
+                            <div class="d-flex d-lg-none justify-content-center py-2 text-white">
+                                <div class="d-flex align-items-center me-4">
+                                    @String.Format($"{Loc["Level"]}", UserService.CurrentUser.GetLevel())
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="me-1">@UserService.CurrentUser.Gems</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gem" viewBox="0 0 16 16">
+                                        <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6zm11.386 3.785-1.806-2.41-.776 2.413zm-3.633.004.961-2.989H4.186l.963 2.995zM5.47 5.495 8 13.366l2.532-7.876zm-1.371-.999-.78-2.422-1.818 2.425zM1.499 5.5l5.113 6.817-2.192-6.82zm7.889 6.817 5.123-6.83-2.928.002z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        }
                     </Authorized>
+                    <NotAuthorized>
+                        <li class="nav-item ms-auto my-auto">
+                            <AccessControl />
+                        </li>
+                    </NotAuthorized>
                 </AuthorizeView>
-
-                <li class="nav-item ms-lg-auto my-auto">
-                    <AccessControl />
-                </li>
             </ul>
 
             @if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(|flashcards|exercises))?$") && FolderService.CurrentFolder != null && SetService.CurrentSet != null)
@@ -118,11 +148,12 @@
 
     private string? _username;
 
-    protected override void OnParametersSet()
+    protected async override Task OnParametersSetAsync()
     {
         if (Regex.IsMatch(CurrentPage, @$"^{Navigation.BaseUri}\w+/sets/\d+/\d+(/(flashcards$|exercises))?$"))
         {
             _username = CurrentPage.Split('/')[3];
+            await UserService.SetCurrentUser(_username);
         }
     }
 
