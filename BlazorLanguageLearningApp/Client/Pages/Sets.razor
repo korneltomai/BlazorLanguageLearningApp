@@ -12,7 +12,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Sets> Loc
 
-@if (FolderId != default && FolderService.CurrentFolder == null)
+@if (FolderId != default &&( FolderService.CurrentFolder == null || FolderService.CurrentFolder.Id != FolderId))
 {
     <p><em>Loading...</em></p>
 }

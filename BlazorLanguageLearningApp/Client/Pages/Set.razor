@@ -11,7 +11,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<Set> Loc
 
-@if (SetService.CurrentSet == null)
+@if (SetService.CurrentSet == null || SetService.CurrentSet.Id != SetId)
 {
     <p><em>Loading...</em></p>
 }

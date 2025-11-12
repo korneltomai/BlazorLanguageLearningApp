@@ -40,7 +40,7 @@ public class ExerciseSheet
         int gemCount = 0;
         for (int exerciseCount = Exercises.Count; exerciseCount >= 10; exerciseCount -= 10)
         {
-            if (randomChance >= GetGemProbability())
+            if (randomChance <= GetGemProbability())
                 gemCount++;
         }
 

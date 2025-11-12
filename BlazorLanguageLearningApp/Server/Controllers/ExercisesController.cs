@@ -3,7 +3,6 @@ using BlazorLanguageLearningApp.Server.Helpers;
 using BlazorLanguageLearningApp.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace BlazorLanguageLearningApp.Server.Controllers;
 
@@ -86,7 +85,7 @@ public class ExercisesController : Controller
     [HttpPut("{username}/{folderId}/{setId}")]
     public async Task<ActionResult<SheetValidationResult>> ValidateExerciseSheet(string username, int folderId, int setId, List<ExerciseEntry> userAnswers)
     {
-        var user = await _context.Users.Include("Folders.Sets").FirstOrDefaultAsync(u => u.Username == username);
+        var user = await _context.Users.Include("Folders.Sets.Cards.PastAnswers").FirstOrDefaultAsync(u => u.Username == username);
         if (user == null)
             return NotFound($"User {username} does not exist!");
 
@@ -105,6 +104,22 @@ public class ExercisesController : Controller
         var validationResult = await ExerciseSheetHandler.ValidateExerciseSheet(username, setId, exerciseSheet, userAnswers);
         exerciseSheet.ValidationResult = validationResult;
         await ExerciseSheetHandler.SaveExerciseSheet(username, setId, exerciseSheet);
+
+        foreach (var exercise in exerciseSheet.Exercises)
+        {
+            var card = await _context.Cards.FirstOrDefaultAsync(c => c.Id == exercise.QuestionId);
+            if (card is null)
+                return NotFound("This card does not exist!");
+
+            card.PastAnswers.Add(new AnswerRecord(exercise.IsCorrect()));
+            card.LearntPercantage = (int)((double)card.PastAnswers.Count(a => a.Correct) / card.PastAnswers.Count * 100);
+            
+        }
+        set.LearntPercantage = (int)set.Cards.Average(c => c.LearntPercantage);
+        user.ExperiencePoints += validationResult.ExpGained;
+        user.Gems += validationResult.GemsGained;
+
+        await _context.SaveChangesAsync();
 
         return Ok(validationResult);
     }

@@ -20,7 +20,7 @@ else
         <div class="content d-flex flex-column col-lg-9 col-xxl-10">
             <BreadcrumbNavigation CurrentPage="@Navigation.Uri" />
 
-            <div class="container-fluid d-flex mt-2">
+            <div class="container-fluid d-flex mt-2 mb-sm-3">
                 <div class="col-6 col-sm-auto pe-2">
                     <div class="form-floating w-100 h-100">
                         <InputSelect class="form-select bg-primary text-light h-100" id="sideSelect" aria-label="Ask for term or definition select" @bind-Value="AskedSide">
@@ -42,7 +42,7 @@ else
                     <div class="d-flex">
                         <div class="d-none d-md-flex align-items-center">
                             <div class="arrow-container me-2 ">
-                                <Button Type="ButtonType.Button" @onclick="DecreaseIndex" Class="h-100 w-100 border border-black rounded-5">
+                                <Button Type="ButtonType.Button" @onclick="DecreaseIndex" Class="h-100 w-100 border border-black rounded-circle">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                     </svg>
@@ -65,7 +65,7 @@ else
                         </div>
                         <div class="d-none d-md-flex align-items-center">
                             <div class="arrow-container ms-2">
-                                <Button Type="ButtonType.Button" @onclick="IncreaseIndex" Class="h-100 w-100 border border-black rounded-5">
+                                <Button Type="ButtonType.Button" @onclick="IncreaseIndex" Class="h-100 w-100 border border-black rounded-circle">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
                                     </svg>

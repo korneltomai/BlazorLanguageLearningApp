@@ -114,6 +114,7 @@ public static class CardSelector
 
         return new Exercise(
             ExerciseType.Selection,
+            card.Id,
             askedSide,
             answerSide,
             possibleAnswers
@@ -147,6 +148,7 @@ public static class CardSelector
 
         return new Exercise(
             ExerciseType.TrueOrFalse,
+            card.Id,
             askedSide,
             answerSide,
             possibleAnswers
@@ -160,6 +162,7 @@ public static class CardSelector
 
         return new Exercise(
             ExerciseType.TypeIn,
+            card.Id,
             askedSide,
             answerSide,
             new()
